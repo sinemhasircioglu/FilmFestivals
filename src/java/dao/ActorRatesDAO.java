@@ -46,6 +46,21 @@ public class ActorRatesDAO {
         return actorratelist; 
     }
      
+     public ActorRates detail(int id) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        ActorRates actorrate = null;
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"ActorRates\" WHERE id=" + id + "");
+            rs.next();
+            actorrate = new ActorRates(rs.getInt("id"),rs.getInt("actorid"),rs.getInt("filmid"),rs.getInt("juryid"),rs.getInt("rate"));
+        } catch (SQLException ex) {
+            Logger.getLogger(ActorRatesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return actorrate;
+    }
+     
      public void update(ActorRates acra) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();    

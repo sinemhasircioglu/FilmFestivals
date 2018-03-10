@@ -44,6 +44,21 @@ public class ActorDAO {
         return actorlist; 
     }
     
+    public Actors detail(int id) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        Actors actor = null;
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\" WHERE id=" + id + "");
+            rs.next();
+            actor = new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"));
+        } catch (SQLException ex) {
+            Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return actor;
+    }
+    
     public void update(Actors ac) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();    

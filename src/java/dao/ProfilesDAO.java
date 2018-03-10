@@ -46,6 +46,21 @@ public class ProfilesDAO {
         return profilelist; 
     }
      
+     public Profiles detail(int id) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        Profiles profile = null;
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Profiles\" WHERE id=" + id + "");
+            rs.next();
+            profile = new Profiles(rs.getInt("id"),rs.getString("name"),rs.getDate("birthday"),rs.getInt("userid"),rs.getString("imageurl"),rs.getBoolean("gender"));
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfilesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return profile;
+    }
+     
      public void update(Profiles p) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();    
