@@ -8,7 +8,7 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:dataTable value="#{actorController.actorlist}" var="actor">
+            <h:dataTable value="#{actorController.actorlist}" var="actor" styleClass="table table-stripped">
                 <h:column>
                     <f:facet name="header">Actor Id</f:facet>
                     #{actor.id}

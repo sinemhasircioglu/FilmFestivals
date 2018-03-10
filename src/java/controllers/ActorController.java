@@ -17,6 +17,7 @@ import javax.inject.Named;
 public class ActorController implements Serializable{
     private List<Actors> actorlist;
     private ActorDAO actordao;
+    private Actors actor;
 
     public ActorController() {
         this.actorlist=new ArrayList();
@@ -24,7 +25,7 @@ public class ActorController implements Serializable{
     }
 
     public List<Actors> getActorlist() {
-        this.actorlist=this.getActordao().getActors();
+        this.actorlist=this.getActordao().list();
         return actorlist;
     }
 
@@ -38,6 +39,14 @@ public class ActorController implements Serializable{
 
     public void setActordao(ActorDAO actordao) {
         this.actordao = actordao;
+    }
+
+    public Actors getActor() {
+        return actor;
+    }
+
+    public void setActor(Actors actor) {
+        this.actor = actor;
     }
     
 }

@@ -6,19 +6,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utility.DBConnection;
 /**
  *
  * @author sinem
  */
 public class ActorDAO {
-    public List<Actors> getActors() {
+    
+    public void create(Actors ac) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("INSERT INTO public.\"Actors\"(name,gender,filmid) VALUES ('"+ac.getName()+"','"+ac.isGender()+"',"+ac.getFilmId()+")");
+        } catch (SQLException ex) {
+            Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+    public List<Actors> list() {
         List<Actors> actorlist=new ArrayList();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\""); // veritabanından veri çekerken kullanılır           
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\"");          
             while (rs.next()) {
                 Actors ac= new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"));
                 actorlist.add(ac);
@@ -28,5 +42,27 @@ public class ActorDAO {
             System.out.println(ex.getMessage());
         }
         return actorlist; 
+    }
+    
+    public void update(Actors ac) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("UPDATE public.\"Actors\" SET name='"+ac.getName()+"' , gender='"+ac.isGender()+"' , filmid="+ac.getFilmId()+"");
+        } catch (SQLException ex) {
+            Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+    
+    public void delete(Actors ac) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("DELETE FROM public.\"Actors\" WHERE id="+ac.getId()+"");
+        } catch (SQLException ex) {
+            Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }   
     }
 }

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utility.DBConnection;
 
 /**
@@ -14,7 +16,19 @@ import utility.DBConnection;
  * @author sinem
  */
 public class UserDAO {
-     public List<Users> getUsers() {
+    
+     public void create(Users u) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("INSERT INTO public.\"Users\"(email,password,profileid) VALUES ('"+u.getEmail()+"','"+u.getPassword()+"',"+u.getProfileId()+")");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+     public List<Users> list() {
         List<Users> userlist=new ArrayList();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -30,5 +44,27 @@ public class UserDAO {
             System.out.println(ex.getMessage());
         }
         return userlist; 
+    }
+     
+     public void update(Users u) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("UPDATE public.\"Users\" SET email='"+u.getEmail()+"' , password='"+u.getPassword()+"' , profileid="+u.getProfileId()+"");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+    
+    public void delete(Users u) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();    
+        try {
+            Statement st= c.createStatement();
+            st.executeUpdate("DELETE FROM public.\"Users\" WHERE id="+u.getId()+"");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }   
     }
 }
