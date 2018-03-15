@@ -17,12 +17,14 @@ import utility.DBConnection;
  */
 public class UserDAO {
 
+    private FilmDAO filmdao;
+    
     public void create(Users u) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Users\"(email,password,profileid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "'," + u.getProfileId() + ")");
+            st.executeUpdate("INSERT INTO public.\"Users\"(email,password,fileid,name,gender) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "'," + u.getFileId() + ",'"+u.getName()+"', '"+u.isGender()+"')");
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -36,7 +38,7 @@ public class UserDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\""); // veritabanından veri çekerken kullanılır           
             while (rs.next()) {
-                Users us = new Users(rs.getInt("id"), rs.getString("email"), rs.getString("password"), rs.getInt("profileid"));
+                Users us = new Users(rs.getInt("id"), rs.getString("email"), rs.getString("password"), rs.getString("name"), rs.getBoolean("gender"),rs.getInt("fileid") );
                 userlist.add(us);
             }
         } catch (SQLException ex) {
@@ -53,7 +55,7 @@ public class UserDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE id=" + id + "");
             rs.next();
-            user = new Users(rs.getInt("id"), rs.getString("email"), rs.getString("password"), rs.getInt("profileid"));
+            user = new Users(rs.getInt("id"), rs.getString("email"), rs.getString("password"), rs.getString("name"), rs.getBoolean("gender") ,rs.getInt("fileid"));
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,7 +67,7 @@ public class UserDAO {
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , profileid=" + u.getProfileId() + "");
+            st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , fileid=" + u.getFileId() + ", name='"+u.getName()+"', gender='"+u.isGender()+"' ");
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,4 +83,15 @@ public class UserDAO {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public FilmDAO getFilmdao() {
+        if(this.filmdao==null)
+            this.filmdao=new FilmDAO();
+        return filmdao;
+    }
+
+    public void setFilmdao(FilmDAO filmdao) {
+        this.filmdao = filmdao;
+    }
+    
 }

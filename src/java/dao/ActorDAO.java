@@ -15,12 +15,14 @@ import utility.DBConnection;
  */
 public class ActorDAO {
     
+    private JuryDAO jurydao;
+    
     public void create(Actors ac) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();    
         try {
             Statement st= c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Actors\"(name,gender,filmid) VALUES ('"+ac.getName()+"','"+ac.isGender()+"',"+ac.getFilmId()+")");
+            st.executeUpdate("INSERT INTO public.\"Actors\"(name,gender,filmid,fileid) VALUES ('"+ac.getName()+"','"+ac.isGender()+"',"+ac.getFilmId()+"," +ac.getFileId()+")");
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -34,7 +36,7 @@ public class ActorDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\"");          
             while (rs.next()) {
-                Actors ac= new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"));
+                Actors ac= new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"),rs.getInt("fileid"));
                 actorlist.add(ac);
             }
         } 
@@ -52,7 +54,7 @@ public class ActorDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\" WHERE id=" + id + "");
             rs.next();
-            actor = new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"));
+            actor = new Actors(rs.getInt("id"),rs.getString("name"),rs.getBoolean("gender"),rs.getInt("filmid"),rs.getInt("fileid"));
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,7 +66,7 @@ public class ActorDAO {
         Connection c = db.connect();    
         try {
             Statement st= c.createStatement();
-            st.executeUpdate("UPDATE public.\"Actors\" SET name='"+ac.getName()+"' , gender='"+ac.isGender()+"' , filmid="+ac.getFilmId()+"");
+            st.executeUpdate("UPDATE public.\"Actors\" SET name='"+ac.getName()+"' , gender='"+ac.isGender()+"' , filmid="+ac.getFilmId()+", fileid="+ac.getFileId()+"");
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }       
@@ -80,4 +82,15 @@ public class ActorDAO {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }
+
+    public JuryDAO getJurydao() {
+        if(this.jurydao==null)
+            this.jurydao=new JuryDAO();
+        return jurydao;
+    }
+
+    public void setJurydao(JuryDAO jurydao) {
+        this.jurydao = jurydao;
+    }
+    
 }

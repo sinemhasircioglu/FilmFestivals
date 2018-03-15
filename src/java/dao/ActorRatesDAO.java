@@ -22,7 +22,7 @@ public class ActorRatesDAO {
         Connection c = db.connect();    
         try {
             Statement st= c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"ActorRates\"(actorid,filmid,juryid,rate) VALUES ("+acra.getActorId()+","+acra.getFilmId()+","+acra.getJuryId()+","+acra.getRate()+")");
+            st.executeUpdate("INSERT INTO public.\"ActorRates\"(actorid,juryid,rate) VALUES ("+acra.getActorId()+","+acra.getJuryId()+","+acra.getRate()+")");
         } catch (SQLException ex) {
             Logger.getLogger(ActorRatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -36,7 +36,7 @@ public class ActorRatesDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"ActorRates\"");         
             while (rs.next()) {
-                ActorRates ac= new ActorRates(rs.getInt("id"),rs.getInt("actorid"),rs.getInt("filmid"),rs.getInt("juryid"),rs.getInt("rate"));
+                ActorRates ac= new ActorRates(rs.getInt("id"),rs.getInt("actorid"),rs.getInt("juryid"),rs.getInt("rate"));
                 actorratelist.add(ac);
             }
         } 
@@ -54,7 +54,7 @@ public class ActorRatesDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"ActorRates\" WHERE id=" + id + "");
             rs.next();
-            actorrate = new ActorRates(rs.getInt("id"),rs.getInt("actorid"),rs.getInt("filmid"),rs.getInt("juryid"),rs.getInt("rate"));
+            actorrate = new ActorRates(rs.getInt("id"),rs.getInt("actorid"),rs.getInt("juryid"),rs.getInt("rate"));
         } catch (SQLException ex) {
             Logger.getLogger(ActorRatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,7 +66,7 @@ public class ActorRatesDAO {
         Connection c = db.connect();    
         try {
             Statement st= c.createStatement();
-            st.executeUpdate("UPDATE public.\"ActorRates\" SET actorid="+acra.getActorId()+" , filmid="+acra.getFilmId()+" , juryid="+acra.getJuryId()+" , rate="+acra.getRate()+"");
+            st.executeUpdate("UPDATE public.\"ActorRates\" SET actorid="+acra.getActorId()+" , juryid="+acra.getJuryId()+" , rate="+acra.getRate()+"");
         } catch (SQLException ex) {
             Logger.getLogger(ActorRatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }       
