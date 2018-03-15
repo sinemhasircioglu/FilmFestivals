@@ -19,8 +19,6 @@ public class FilmJuryRates {
         this.rate = rate;
     }
     
-    
-
     public int getFilmid() {
         return filmid;
     }
