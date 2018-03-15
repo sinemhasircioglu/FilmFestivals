@@ -7,14 +7,12 @@ package entities;
 public class ActorRates {
     private int id;
     private int actorId;
-    private int filmId;
     private int juryId;
     private int rate;
 
-    public ActorRates(int id, int actorId, int filmId, int juryId, int rate) {
+    public ActorRates(int id, int actorId, int juryId, int rate) {
         this.id = id;
         this.actorId = actorId;
-        this.filmId = filmId;
         this.juryId = juryId;
         this.rate = rate;
     }
@@ -36,14 +34,6 @@ public class ActorRates {
 
     public void setActorId(int actorId) {
         this.actorId = actorId;
-    }
-
-    public int getFilmId() {
-        return filmId;
-    }
-
-    public void setFilmId(int filmId) {
-        this.filmId = filmId;
     }
 
     public int getJuryId() {

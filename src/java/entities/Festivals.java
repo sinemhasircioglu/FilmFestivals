@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
@@ -12,6 +14,8 @@ public class Festivals {
     private String imageUrl;
     private String description;
     private int year;
+    private List<Juries> jurylist;
+    private List<Films> filmlist;
 
     public Festivals() {
     }
@@ -71,6 +75,27 @@ public class Festivals {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public List<Juries> getJurylist() {
+        return jurylist;
+    }
+
+    public void setJurylist(List<Juries> jurylist) {
+        this.jurylist = jurylist;
+    }
+
+    public List<Films> getFilmlist() {
+        return filmlist;
+    }
+
+    public void setFilmlist(List<Films> filmlist) {
+        this.filmlist = filmlist;
+    }
+
+    @Override
+    public String toString() {
+        return "Festivals{" + "id=" + id + ", name=" + name + ", country=" + country + ", imageUrl=" + imageUrl + ", description=" + description + ", year=" + year + ", jurylist=" + jurylist + ", filmlist=" + filmlist + '}';
     }
 
 }

@@ -1,6 +1,8 @@
 
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
@@ -9,6 +11,8 @@ public class Musics {
     private int id;
     private String name;
     private int filmId;
+    private Films film;
+    private List<Juries> jurylist;
 
     public Musics() {
     }
@@ -41,6 +45,27 @@ public class Musics {
 
     public void setFilmId(int filmId) {
         this.filmId = filmId;
+    }
+
+    public Films getFilm() {
+        return film;
+    }
+
+    public void setFilm(Films film) {
+        this.film = film;
+    }
+
+    public List<Juries> getJurylist() {
+        return jurylist;
+    }
+
+    public void setJurylist(List<Juries> jurylist) {
+        this.jurylist = jurylist;
+    }
+
+    @Override
+    public String toString() {
+        return "Musics{" + "id=" + id + ", name=" + name + ", filmId=" + filmId + ", film=" + film + ", jurylist=" + jurylist + '}';
     }
     
 }
