@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
@@ -7,16 +9,14 @@ package entities;
 public class Group {
     private int id;
     private String authority;
-    private int userId;
-    private Users user;
+    private List<Users> userList;
 
     public Group() {
     }
 
-    public Group(int id, String authority, int userId) {
+    public Group(int id, String authority) {
         this.id = id;
         this.authority = authority;
-        this.userId = userId;
     }
 
     public int getId() {
@@ -35,25 +35,17 @@ public class Group {
         this.authority = authority;
     }
 
-    public int getUserId() {
-        return userId;
+    public List<Users> getUserList() {
+        return userList;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUserList(List<Users> userList) {
+        this.userList = userList;
     }
 
     @Override
     public String toString() {
-        return "Group{" + "id=" + id + ", authority=" + authority + ", userId=" + userId + ", user=" + user + '}';
+        return "Group{" + "id=" + id + ", authority=" + authority + ", userList=" + userList + '}';
     }
     
 }

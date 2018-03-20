@@ -11,7 +11,6 @@ public class Festivals {
     private int id;
     private String name;
     private String country;
-    private String imageUrl;
     private String description;
     private int year;
     private List<Juries> jurylist;
@@ -20,11 +19,10 @@ public class Festivals {
     public Festivals() {
     }
 
-    public Festivals(int id, String name, String country, String imageUrl, String description, int year) {
+    public Festivals(int id, String name, String country, String description, int year) {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.imageUrl = imageUrl;
         this.description = description;
         this.year = year;
     }
@@ -51,14 +49,6 @@ public class Festivals {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
@@ -95,7 +85,7 @@ public class Festivals {
 
     @Override
     public String toString() {
-        return "Festivals{" + "id=" + id + ", name=" + name + ", country=" + country + ", imageUrl=" + imageUrl + ", description=" + description + ", year=" + year + ", jurylist=" + jurylist + ", filmlist=" + filmlist + '}';
+        return "Festivals{" + "id=" + id + ", name=" + name + ", country=" + country + ", description=" + description + ", year=" + year + ", jurylist=" + jurylist + ", filmlist=" + filmlist + '}';
     }
 
 }

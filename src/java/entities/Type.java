@@ -1,18 +1,20 @@
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
  */
-public class Musics {
+public class Type {
     private int id;
     private String name;
-    private Films film;
+    private List<Rates> rateList;
 
-    public Musics() {
+    public Type() {
     }
 
-    public Musics(int id, String name) {
+    public Type(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -33,17 +35,17 @@ public class Musics {
         this.name = name;
     }
 
-    public Films getFilm() {
-        return film;
+    public List<Rates> getRateList() {
+        return rateList;
     }
 
-    public void setFilm(Films film) {
-        this.film = film;
+    public void setRateList(List<Rates> rateList) {
+        this.rateList = rateList;
     }
 
     @Override
     public String toString() {
-        return "Musics{" + "id=" + id + ", name=" + name + ", film=" + film + '}';
+        return "Type{" + "id=" + id + ", name=" + name + ", rateList=" + rateList + '}';
     }
- 
+
 }

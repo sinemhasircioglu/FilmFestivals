@@ -10,18 +10,15 @@ public class Directors {
 
     private int id;
     private String name;
-    private int fileId;
     private File file;
-    private List<Juries> jurylist;
-    private List<Films> filmlist;
+    private FilmDirector filmDirector;
 
     public Directors() {
     }
 
-    public Directors(int id, String name, int fileId) {
+    public Directors(int id, String name) {
         this.id = id;
         this.name= name;
-        this.fileId = fileId;
     }
 
     public int getId() {
@@ -40,14 +37,6 @@ public class Directors {
         this.name = name;
     }
 
-    public int getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(int fileId) {
-        this.fileId = fileId;
-    }
-
     public File getFile() {
         return file;
     }
@@ -56,25 +45,17 @@ public class Directors {
         this.file = file;
     }
 
-    public List<Juries> getJurylist() {
-        return jurylist;
+    public FilmDirector getFilmDirector() {
+        return filmDirector;
     }
 
-    public void setJurylist(List<Juries> jurylist) {
-        this.jurylist = jurylist;
-    }
-
-    public List<Films> getFilmlist() {
-        return filmlist;
-    }
-
-    public void setFilmlist(List<Films> filmlist) {
-        this.filmlist = filmlist;
+    public void setFilmDirector(FilmDirector filmDirector) {
+        this.filmDirector = filmDirector;
     }
 
     @Override
     public String toString() {
-        return "Directors{" + "id=" + id + ", name=" + name + ", fileId=" + fileId + ", file=" + file + ", jurylist=" + jurylist + ", filmlist=" + filmlist + '}';
+        return "Directors{" + "id=" + id + ", name=" + name + ", file=" + file + ", filmDirector=" + filmDirector + '}';
     }
-    
+
 }

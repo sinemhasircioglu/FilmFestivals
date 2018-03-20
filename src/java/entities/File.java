@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
@@ -7,11 +9,11 @@ package entities;
 public class File {
     private int id;
     private String url;
-    private Actors actor;
-    private Directors director;
-    private Films film;
-    private Juries jury;
-    private Users user;
+    private List<Actors> actorList;
+    private List<Directors> directorList;
+    private List<Films> filmList;
+    private List<Juries> juryList;
+    private List<Users> userList;
 
     public File() {
     }
@@ -37,44 +39,49 @@ public class File {
         this.url = url;
     }
 
-    public Actors getActor() {
-        return actor;
+    public List<Actors> getActorList() {
+        return actorList;
     }
 
-    public void setActor(Actors actor) {
-        this.actor = actor;
+    public void setActorList(List<Actors> actorList) {
+        this.actorList = actorList;
     }
 
-    public Directors getDirector() {
-        return director;
+    public List<Directors> getDirectorList() {
+        return directorList;
     }
 
-    public void setDirector(Directors director) {
-        this.director = director;
+    public void setDirectorList(List<Directors> directorList) {
+        this.directorList = directorList;
     }
 
-    public Films getFilm() {
-        return film;
+    public List<Films> getFilmList() {
+        return filmList;
     }
 
-    public void setFilm(Films film) {
-        this.film = film;
+    public void setFilmList(List<Films> filmList) {
+        this.filmList = filmList;
     }
 
-    public Juries getJury() {
-        return jury;
+    public List<Juries> getJuryList() {
+        return juryList;
     }
 
-    public void setJury(Juries jury) {
-        this.jury = jury;
+    public void setJuryList(List<Juries> juryList) {
+        this.juryList = juryList;
     }
 
-    public Users getUser() {
-        return user;
+    public List<Users> getUserList() {
+        return userList;
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUserList(List<Users> userList) {
+        this.userList = userList;
     }
-    
+
+    @Override
+    public String toString() {
+        return "File{" + "id=" + id + ", url=" + url + ", actorList=" + actorList + ", directorList=" + directorList + ", filmList=" + filmList + ", juryList=" + juryList + ", userList=" + userList + '}';
+    }
+
 }
