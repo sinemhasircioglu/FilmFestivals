@@ -13,8 +13,8 @@ public class Festivals {
     private String country;
     private String description;
     private int year;
-    private List<Juries> jurylist;
-    private List<Films> filmlist;
+    private List<Juries> juryList;
+    private List<Films> filmList;
 
     public Festivals() {
     }
@@ -67,25 +67,25 @@ public class Festivals {
         this.year = year;
     }
 
-    public List<Juries> getJurylist() {
-        return jurylist;
+    public List<Juries> getJuryList() {
+        return juryList;
     }
 
-    public void setJurylist(List<Juries> jurylist) {
-        this.jurylist = jurylist;
+    public void setJurylist(List<Juries> juryList) {
+        this.juryList = juryList;
     }
 
-    public List<Films> getFilmlist() {
-        return filmlist;
+    public List<Films> getFilmList() {
+        return filmList;
     }
 
-    public void setFilmlist(List<Films> filmlist) {
-        this.filmlist = filmlist;
+    public void setFilmlist(List<Films> filmList) {
+        this.filmList = filmList;
     }
 
     @Override
     public String toString() {
-        return "Festivals{" + "id=" + id + ", name=" + name + ", country=" + country + ", description=" + description + ", year=" + year + ", jurylist=" + jurylist + ", filmlist=" + filmlist + '}';
+        return "Festivals{" + "id=" + id + ", name=" + name + ", country=" + country + ", description=" + description + ", year=" + year + ", juryList=" + juryList + ", filmList=" + filmList + '}';
     }
 
 }

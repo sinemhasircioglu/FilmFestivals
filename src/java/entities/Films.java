@@ -13,9 +13,9 @@ public class Films {
     private String name;
     private String genre;
     private List<Actors> actorList;
-    private List<Musics> musiclist;
+    private List<Musics> musicList;
     private Festivals festival;
-    private File file;
+    private Multimedya multimedya;
     private FilmDirector filmDirector;
 
     public Films() {
@@ -59,12 +59,12 @@ public class Films {
         this.actorList = actorList;
     }
 
-    public List<Musics> getMusiclist() {
-        return musiclist;
+    public List<Musics> getMusicList() {
+        return musicList;
     }
 
-    public void setMusiclist(List<Musics> musiclist) {
-        this.musiclist = musiclist;
+    public void setMusiclist(List<Musics> musicList) {
+        this.musicList = musicList;
     }
 
     public Festivals getFestival() {
@@ -75,12 +75,12 @@ public class Films {
         this.festival = festival;
     }
 
-    public File getFile() {
-        return file;
+    public Multimedya getFile() {
+        return multimedya;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFile(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
     public FilmDirector getFilmDirector() {
@@ -93,7 +93,7 @@ public class Films {
 
     @Override
     public String toString() {
-        return "Films{" + "id=" + id + ", name=" + name + ", genre=" + genre + ", actorList=" + actorList + ", musiclist=" + musiclist + ", festival=" + festival + ", file=" + file + ", filmDirector=" + filmDirector + '}';
+        return "Films{" + "id=" + id + ", name=" + name + ", genre=" + genre + ", actorList=" + actorList + ", musicList=" + musicList + ", festival=" + festival + ", multimedya=" + multimedya + ", filmDirector=" + filmDirector + '}';
     }
    
 }

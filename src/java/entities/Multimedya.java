@@ -6,7 +6,7 @@ import java.util.List;
  *
  * @author sinem
  */
-public class File {
+public class Multimedya {
     private int id;
     private String url;
     private List<Actors> actorList;
@@ -15,10 +15,10 @@ public class File {
     private List<Juries> juryList;
     private List<Users> userList;
 
-    public File() {
+    public Multimedya() {
     }
 
-    public File(int id, String url) {
+    public Multimedya(int id, String url) {
         this.id = id;
         this.url = url;
     }

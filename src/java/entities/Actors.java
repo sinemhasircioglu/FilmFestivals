@@ -9,7 +9,7 @@ public class Actors {
     private String name;
     private boolean gender;
     private Films film;
-    private File file;
+    private Multimedya multimedya;
 
     public Actors(int id, String name, boolean gender) {
         this.id = id;
@@ -52,11 +52,11 @@ public class Actors {
         this.film = film;
     } 
 
-    public File getFile() {
-        return file;
+    public Multimedya getFile() {
+        return multimedya;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFile(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }    
 }

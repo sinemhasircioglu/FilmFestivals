@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.List;
-
 /**
  *
  * @author sinem
@@ -10,7 +8,7 @@ public class Directors {
 
     private int id;
     private String name;
-    private File file;
+    private Multimedya multimedya;
     private FilmDirector filmDirector;
 
     public Directors() {
@@ -37,12 +35,12 @@ public class Directors {
         this.name = name;
     }
 
-    public File getFile() {
-        return file;
+    public Multimedya getFile() {
+        return multimedya;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFile(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
     public FilmDirector getFilmDirector() {
@@ -55,7 +53,7 @@ public class Directors {
 
     @Override
     public String toString() {
-        return "Directors{" + "id=" + id + ", name=" + name + ", file=" + file + ", filmDirector=" + filmDirector + '}';
+        return "Directors{" + "id=" + id + ", name=" + name + ", multimedya=" + multimedya + ", filmDirector=" + filmDirector + '}';
     }
 
 }

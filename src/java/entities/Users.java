@@ -13,7 +13,7 @@ public class Users {
     private String password;
     private String name;
     private boolean gender;
-    private File file;
+    private Multimedya multimedya;
     private Group group;
 
     public Users() {
@@ -67,12 +67,12 @@ public class Users {
         this.gender = gender;
     }
 
-    public File getFile() {
-        return file;
+    public Multimedya getFile() {
+        return multimedya;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFile(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
     public Group getGroup() {
@@ -85,7 +85,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" + "id=" + id + ", email=" + email + ", password=" + password + ", name=" + name + ", gender=" + gender + ", file=" + file + ", group=" + group + '}';
+        return "Users{" + "id=" + id + ", email=" + email + ", password=" + password + ", name=" + name + ", gender=" + gender + ", multimedya=" + multimedya + ", group=" + group + '}';
     }
 
 }

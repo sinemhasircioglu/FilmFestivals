@@ -10,7 +10,7 @@ public class Juries {
     private int id;
     private String name;
     private Festivals festival;
-    private File file;
+    private Multimedya multimedya;
 
     public Juries() {
     }
@@ -44,17 +44,17 @@ public class Juries {
         this.festival = festival;
     }
 
-    public File getFile() {
-        return file;
+    public Multimedya getFile() {
+        return multimedya;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFile(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
     @Override
     public String toString() {
-        return "Juries{" + "id=" + id + ", name=" + name + ", festival=" + festival + ", file=" + file + '}';
+        return "Juries{" + "id=" + id + ", name=" + name + ", festival=" + festival + ", multimedya=" + multimedya + '}';
     }
 
 }
