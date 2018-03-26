@@ -39,6 +39,7 @@ public class FestivalDAO {
                 fest.setJurylist(this.getJuryDao().getFestivalJuries(fest.getId()));
                 festivalList.add(fest);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -59,7 +60,7 @@ public class FestivalDAO {
             fest.setCountry(rs.getString("country"));
             fest.setDescription(rs.getString("description"));
             fest.setYear(rs.getInt("year"));
-
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

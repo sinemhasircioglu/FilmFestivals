@@ -25,6 +25,7 @@ public class ActorDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("INSERT INTO public.\"Actors\"(name,gender) VALUES ('" + ac.getName() + "','" + ac.isGender() + "'");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -45,6 +46,7 @@ public class ActorDAO {
                 //rs.getInt("filmid"),rs.getInt("fileid")
                 actorList.add(ac);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -63,6 +65,7 @@ public class ActorDAO {
             ac.setId(rs.getInt("id"));
             ac.setName(rs.getString("name"));
             ac.setGender(rs.getBoolean("gender"));
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,6 +86,7 @@ public class ActorDAO {
                 ac.setGender(rs.getBoolean("gender"));
                 filmActors.add(ac);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -95,6 +99,7 @@ public class ActorDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("UPDATE public.\"Actors\" SET name='" + ac.getName() + "' , gender='" + ac.isGender() + "' ");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,6 +111,7 @@ public class ActorDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("DELETE FROM public.\"Actors\" WHERE id=" + ac.getId() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(ActorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

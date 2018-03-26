@@ -27,6 +27,7 @@ public class UserDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+selectedMultimedya+ ","+selectedGroup+ ")");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -51,6 +52,7 @@ public class UserDAO {
                 us.setGroup(this.getGroupDao().find(rs.getInt("groupid")));
                 userList.add(us);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -71,7 +73,7 @@ public class UserDAO {
             user.setId(rs.getInt("id"));
             user.setName(rs.getString("name"));
             user.setPassword(rs.getString("password"));
-
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,6 +97,7 @@ public class UserDAO {
                 user.setPassword(rs.getString("password"));
                 groupUsers.add(user);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -108,6 +111,7 @@ public class UserDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+selectedMultimedya+", groupid="+selectedGroup+"");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,6 +123,7 @@ public class UserDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("DELETE FROM public.\"Users\" WHERE id=" + u.getId() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

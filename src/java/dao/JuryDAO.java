@@ -23,6 +23,7 @@ public class JuryDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("INSERT INTO public.\"Juries\"(id,name) VALUES (" + j.getId() + ",'" + j.getName() + "'");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,6 +43,7 @@ public class JuryDAO {
                 //rs.getInt("festivalid"),rs.getInt("fileid")
                 juryList.add(j);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -61,6 +63,7 @@ public class JuryDAO {
                 j.setName(rs.getString("name"));
                 festivalFilms.add(j);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -80,6 +83,7 @@ public class JuryDAO {
             jury.setId(rs.getInt("id"));
             jury.setName(rs.getString("name"));
             //rs.getInt("festivalid"),rs.getInt("fileid")
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,6 +96,7 @@ public class JuryDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("UPDATE public.\"Juries\" SET name='" + u.getName() + "' ");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,6 +108,7 @@ public class JuryDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("DELETE FROM public.\"Juries\" WHERE id=" + u.getId() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

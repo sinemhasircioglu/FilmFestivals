@@ -23,11 +23,12 @@ public class DirectorDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"FilmDirector\" WHERE directorid=" + filmid+ "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"FilmDirector\" WHERE filmid=" + filmid+ "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 filmDirectors.add(this.find(rs.getInt("directorid")));
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -45,6 +46,7 @@ public class DirectorDAO {
             director = new Directors();
             director.setId(rs.getInt("id"));
             director.setName(rs.getString("name"));
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

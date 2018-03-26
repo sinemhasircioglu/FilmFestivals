@@ -25,6 +25,7 @@ public class GroupDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("INSERT INTO public.\"Group\"(authority) VALUES (" + group.getAuthority() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -44,6 +45,7 @@ public class GroupDAO {
                 group.setUserList(this.getUserDao().getGroupUsers(group.getId()));
                 groupList.add(group);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -61,6 +63,7 @@ public class GroupDAO {
             group = new Group();
             group.setId(rs.getInt("id"));
             group.setAuthority(rs.getString("authority"));
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,6 +76,7 @@ public class GroupDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("UPDATE public.\"Group\" SET authority=" + group.getAuthority() + "  ");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,6 +88,7 @@ public class GroupDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("DELETE FROM public.\"Group\" WHERE id=" + group.getId() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -31,6 +31,7 @@ public class FilmDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("INSERT INTO public.\"Films\"(name,genre) VALUES('" + film.getName() + "','" + film.getGenre() + "') ");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,6 +57,7 @@ public class FilmDAO {
                 film.setMusiclist(this.getMusicDao().getFilmMusics(film.getId()));
                 filmList.add(film);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -72,6 +74,7 @@ public class FilmDAO {
             while (rs.next()) {
                 directorFilms.add(this.find(rs.getInt("filmid")));
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -93,6 +96,7 @@ public class FilmDAO {
 
                 festivalFilms.add(film);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -112,7 +116,7 @@ public class FilmDAO {
             film.setId(rs.getInt("id"));
             film.setName(rs.getString("name"));
             film.setGenre(rs.getString("genre"));
-
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -125,6 +129,7 @@ public class FilmDAO {
         try {
             Statement st = c.createStatement();
             st.executeUpdate("DELETE FROM public.\"Films\" WHERE id=" + f.getId() + "");
+            c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

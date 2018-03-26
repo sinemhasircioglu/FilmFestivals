@@ -28,6 +28,7 @@ public class MusicDAO {
                 mu.setName(rs.getString("name"));
                 musicList.add(mu);
             }
+            c.close();
         } 
         catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -48,6 +49,7 @@ public class MusicDAO {
                 ac.setName(rs.getString("name"));
                 filmMusics.add(ac);
             }
+            c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
