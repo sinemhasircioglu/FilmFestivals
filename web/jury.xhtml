@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <h:form>
+                        <ul class="navbar-nav">
+                            <li class="nav-item active">
+                                <h:commandLink styleClass="nav-link" action="film" value="Film" />
+                            </li>
+                            <li class="nav-item active">
+                                <h:commandLink styleClass="nav-link" action="user" value="User" />
+                            </li>
+                        </ul>
+                    </h:form>
+                </div>
+            </nav>
+        </div>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-7">
+                    <h:form>
+                        <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="film">
+                            <h:column>
+                                <f:facet name="header">ID</f:facet>
+                                    #{jury.id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">NAME</f:facet>
+                                    #{jury.name}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">FESTIVAL</f:facet>
+                                    #{jury.festival.name}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">FILE</f:facet>
+                                    #{jury.multimedya.url}
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+
+                <div class="col-md-5">
+                    <h:form>
+                        <div class="form-group">
+                            empty
+                        </div>
+                    </h:form>
+                </div>
+
+            </div>
+        </div>
+    </h:body>
+</html>
+

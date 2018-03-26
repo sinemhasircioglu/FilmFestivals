@@ -1,30 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <head>
-        <title>Film</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
-    </head>
-    <body>
-        <h:form>
-            <div class="container">
+    </h:head>
+    <h:body>
+        <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
                                 <h:commandLink styleClass="nav-link" action="film" value="Film" />
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item active">
                                 <h:commandLink styleClass="nav-link" action="user" value="User" />
                             </li>
                         </ul>
                     </div>
                 </nav>
             </div>
-        </h:form>
-    </body>
+    </h:body>
 </html>
+
