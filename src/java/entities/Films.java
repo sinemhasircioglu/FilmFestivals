@@ -16,7 +16,7 @@ public class Films {
     private List<Musics> musicList;
     private Festivals festival;
     private Multimedya multimedya;
-    private FilmDirector filmDirector;
+    private List<Directors> filmDirectors;
 
     public Films() {
     }
@@ -83,17 +83,19 @@ public class Films {
         this.multimedya = multimedya;
     }
 
-    public FilmDirector getFilmDirector() {
-        return filmDirector;
+    public Multimedya getMultimedya() {
+        return multimedya;
     }
 
-    public void setFilmDirector(FilmDirector filmDirector) {
-        this.filmDirector = filmDirector;
+    public void setMultimedya(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
-    @Override
-    public String toString() {
-        return "Films{" + "id=" + id + ", name=" + name + ", genre=" + genre + ", actorList=" + actorList + ", musicList=" + musicList + ", festival=" + festival + ", multimedya=" + multimedya + ", filmDirector=" + filmDirector + '}';
+    public List<Directors> getFilmDirectors() {
+        return filmDirectors;
     }
-   
+
+    public void setFilmDirectors(List<Directors> filmDirectors) {
+        this.filmDirectors = filmDirectors;
+    }
 }

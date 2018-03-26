@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
+
 
 import entities.Films;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,36 +18,89 @@ import utility.DBConnection;
  * @author sinem
  */
 public class FilmDAO {
-    private ActorDAO actordao;
-    private UserDAO userdao;
-    private JuryDAO jurydao;
-    private MusicDAO musicdao;
-    
-    public List<Films> list() {
-        List<Films> filmlist = new ArrayList();
+
+    private ActorDAO actorDao;
+    private MusicDAO musicDao;
+    private FestivalDAO festivalDao;
+    private MultimedyaDAO multimedyaDao;
+    private DirectorDAO directorDao;
+
+    public void insert(Films film) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\"");        
+            st.executeUpdate("INSERT INTO public.\"Films\"(name,genre) VALUES('" + film.getName() + "','" + film.getGenre() + "') ");
+        } catch (SQLException ex) {
+            Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public List<Films> findAll() {
+        List<Films> filmList = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\"");
             while (rs.next()) {
                 Films film = new Films();
-                film.setFilmid(rs.getInt("id"));
-                film.setFilmname(rs.getString("name"));
-                film.setActorList(this.actordao.list());
-                film.setUserlist(this.userdao.list());
-                film.setFestivalid(rs.getInt("festivalid"));
+                film.setId(rs.getInt("id"));
+                film.setName(rs.getString("name"));
                 film.setGenre(rs.getString("genre"));
-                film.setFileId(rs.getInt("fileid"));
-                filmlist.add(film);
+
+                film.setActorList(this.getActorDao().getFilmActors(film.getId()));
+                film.setFestival(this.getFestivalDao().find(rs.getInt("festivalid")));
+                film.setFile(this.getMultimedyaDao().find(rs.getInt("fileid")));
+                film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
+                film.setMusiclist(this.getMusicDao().getFilmMusics(film.getId()));
+                filmList.add(film);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return filmlist;
+        return filmList;
     }
 
-    public Films detail(int id) {
+    public List<Films> getDirectorFilms(int directorid) {
+        List<Films> directorFilms = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"FilmDirector\" WHERE filmid=" + directorid + "");
+            while (rs.next()) {
+                directorFilms.add(this.find(rs.getInt("filmid")));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return directorFilms;
+    }
+
+    public List<Films> getFestivalFilms(int festivalid) {
+        List<Films> festivalFilms = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE festivalid=" + festivalid + "");
+            while (rs.next()) {
+                Films film = new Films();
+                film.setId(rs.getInt("id"));
+                film.setName(rs.getString("name"));
+                film.setGenre(rs.getString("genre"));
+
+                festivalFilms.add(film);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return festivalFilms;
+        
+    }
+
+    public Films find(int id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Films film = null;
@@ -59,54 +109,59 @@ public class FilmDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE id=" + id + "");
             rs.next();
             film = new Films();
-            film.setFilmid(rs.getInt("id"));
-            film.setFilmname(rs.getString("name"));
-            film.setActorList(this.getActordao().list());
-            
+            film.setId(rs.getInt("id"));
+            film.setName(rs.getString("name"));
+            film.setGenre(rs.getString("genre"));
+
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return film;
     }
 
-    public ActorDAO getActordao() {
-        if(this.actordao==null)
-            this.actordao=new ActorDAO();
-        return actordao;
+    public void delete(Films f) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("DELETE FROM public.\"Films\" WHERE id=" + f.getId() + "");
+        } catch (SQLException ex) {
+            Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void setActordao(ActorDAO actordao) {
-        this.actordao = actordao;
+    public ActorDAO getActorDao() {
+        if (this.actorDao == null) {
+            this.actorDao = new ActorDAO();
+        }
+        return actorDao;
     }
 
-    public UserDAO getUserdao() {
-        if(this.userdao==null)
-            this.userdao=new UserDAO();
-        return userdao;
+    public MusicDAO getMusicDao() {
+        if (this.musicDao == null) {
+            this.musicDao = new MusicDAO();
+        }
+        return musicDao;
     }
 
-    public void setUserdao(UserDAO userdao) {
-        this.userdao = userdao;
+    public FestivalDAO getFestivalDao() {
+        if (this.festivalDao == null) {
+            this.festivalDao = new FestivalDAO();
+        }
+        return festivalDao;
     }
 
-    public JuryDAO getJurydao() {
-        if(this.jurydao==null)
-            this.jurydao=new JuryDAO();
-        return jurydao;
+    public MultimedyaDAO getMultimedyaDao() {
+        if (this.multimedyaDao == null) {
+            this.multimedyaDao = new MultimedyaDAO();
+        }
+        return multimedyaDao;
     }
 
-    public void setJurydao(JuryDAO jurydao) {
-        this.jurydao = jurydao;
+    public DirectorDAO getDirectorDao() {
+        if (this.directorDao == null) {
+            this.directorDao = new DirectorDAO();
+        }
+        return directorDao;
     }
-
-    public MusicDAO getMusicdao() {
-        if(this.musicdao==null)
-            this.musicdao=new MusicDAO();
-        return musicdao;
-    }
-
-    public void setMusicdao(MusicDAO musicdao) {
-        this.musicdao = musicdao;
-    }
-    
 }

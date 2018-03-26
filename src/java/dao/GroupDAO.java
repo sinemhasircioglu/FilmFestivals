@@ -16,36 +16,41 @@ import utility.DBConnection;
  * @author sinem
  */
 public class GroupDAO {
-    public void create(Group group) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();    
-        try {
-            Statement st= c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Group\"(authority,userid) VALUES ("+group.getAuthority()+","+group.getUserId()+" )");
-        } catch (SQLException ex) {
-            Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }  
-    }
     
-     public List<Group> list() {
-        List<Group> grouplist=new ArrayList();
+    private UserDAO userDao;
+
+    public void create(Group group) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\"");         
+            st.executeUpdate("INSERT INTO public.\"Group\"(authority) VALUES (" + group.getAuthority() + "");
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public List<Group> findAll() {
+        List<Group> groupList = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\"");
             while (rs.next()) {
-                Group group= new Group(rs.getInt("id"),rs.getString("authority"),rs.getInt("userid"));
-                grouplist.add(group);
+                Group group = new Group();
+                group.setId(rs.getInt("id"));
+                group.setAuthority(rs.getString("authority"));
+                group.setUserList(this.getUserDao().getGroupUsers(group.getId()));
+                groupList.add(group);
             }
-        } 
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return grouplist; 
+        return groupList;
     }
-     
-     public Group detail(int id) {
+    
+    public Group find(int id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Group group = null;
@@ -53,32 +58,41 @@ public class GroupDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\" WHERE id=" + id + "");
             rs.next();
-            group = new Group(rs.getInt("id"),rs.getString("authority"),rs.getInt("userid"));
+            group = new Group();
+            group.setId(rs.getInt("id"));
+            group.setAuthority(rs.getString("authority"));
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return group;
     }
-     
-     public void update(Group group) {
+
+    public void update(Group group) {
         DBConnection db = new DBConnection();
-        Connection c = db.connect();    
+        Connection c = db.connect();
         try {
-            Statement st= c.createStatement();
-            st.executeUpdate("UPDATE public.\"Group\" SET authority="+group.getAuthority()+" , userid="+group.getUserId()+" ");
+            Statement st = c.createStatement();
+            st.executeUpdate("UPDATE public.\"Group\" SET authority=" + group.getAuthority() + "  ");
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }
     }
-    
+
     public void delete(Group group) {
         DBConnection db = new DBConnection();
-        Connection c = db.connect();    
+        Connection c = db.connect();
         try {
-            Statement st= c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Group\" WHERE id="+group.getId()+"");
+            Statement st = c.createStatement();
+            st.executeUpdate("DELETE FROM public.\"Group\" WHERE id=" + group.getId() + "");
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        }
     }
+
+    public UserDAO getUserDao() {
+        if(this.userDao==null)
+            this.userDao=new UserDAO();
+        return userDao;
+    }
+    
 }

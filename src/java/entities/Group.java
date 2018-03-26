@@ -42,10 +42,5 @@ public class Group {
     public void setUserList(List<Users> userList) {
         this.userList = userList;
     }
-
-    @Override
-    public String toString() {
-        return "Group{" + "id=" + id + ", authority=" + authority + ", userList=" + userList + '}';
-    }
-    
+ 
 }

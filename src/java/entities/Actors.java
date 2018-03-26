@@ -52,11 +52,12 @@ public class Actors {
         this.film = film;
     } 
 
-    public Multimedya getFile() {
+    public Multimedya getMultimedya() {
         return multimedya;
     }
 
-    public void setFile(Multimedya multimedya) {
+    public void setMultimedya(Multimedya multimedya) {
         this.multimedya = multimedya;
-    }    
+    }
+  
 }

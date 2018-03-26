@@ -44,14 +44,14 @@ public class Juries {
         this.festival = festival;
     }
 
-    public Multimedya getFile() {
+    public Multimedya getMultimedya() {
         return multimedya;
     }
 
-    public void setFile(Multimedya multimedya) {
+    public void setMultimedya(Multimedya multimedya) {
         this.multimedya = multimedya;
     }
-
+    
     @Override
     public String toString() {
         return "Juries{" + "id=" + id + ", name=" + name + ", festival=" + festival + ", multimedya=" + multimedya + '}';

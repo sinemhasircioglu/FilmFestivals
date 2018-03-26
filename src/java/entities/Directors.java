@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  *
  * @author sinem
@@ -9,7 +11,7 @@ public class Directors {
     private int id;
     private String name;
     private Multimedya multimedya;
-    private FilmDirector filmDirector;
+    private List<Films> directorFilms;
 
     public Directors() {
     }
@@ -43,17 +45,25 @@ public class Directors {
         this.multimedya = multimedya;
     }
 
-    public FilmDirector getFilmDirector() {
-        return filmDirector;
+    public Multimedya getMultimedya() {
+        return multimedya;
     }
 
-    public void setFilmDirector(FilmDirector filmDirector) {
-        this.filmDirector = filmDirector;
+    public void setMultimedya(Multimedya multimedya) {
+        this.multimedya = multimedya;
+    }
+
+    public List<Films> getDirectorFilms() {
+        return directorFilms;
+    }
+
+    public void setDirectorFilms(List<Films> directorFilms) {
+        this.directorFilms = directorFilms;
     }
 
     @Override
     public String toString() {
-        return "Directors{" + "id=" + id + ", name=" + name + ", multimedya=" + multimedya + ", filmDirector=" + filmDirector + '}';
+        return "Directors{" + "id=" + id + ", name=" + name + ", multimedya=" + multimedya + ", directorFilms=" + directorFilms + '}';
     }
-
+    
 }

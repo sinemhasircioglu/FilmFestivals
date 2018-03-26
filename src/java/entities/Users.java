@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.List;
 
 /**
  *
@@ -67,14 +66,6 @@ public class Users {
         this.gender = gender;
     }
 
-    public Multimedya getFile() {
-        return multimedya;
-    }
-
-    public void setFile(Multimedya multimedya) {
-        this.multimedya = multimedya;
-    }
-
     public Group getGroup() {
         return group;
     }
@@ -83,9 +74,12 @@ public class Users {
         this.group = group;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" + "id=" + id + ", email=" + email + ", password=" + password + ", name=" + name + ", gender=" + gender + ", multimedya=" + multimedya + ", group=" + group + '}';
+    public Multimedya getMultimedya() {
+        return multimedya;
+    }
+
+    public void setMultimedya(Multimedya multimedya) {
+        this.multimedya = multimedya;
     }
 
 }

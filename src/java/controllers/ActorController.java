@@ -12,28 +12,30 @@ import javax.inject.Named;
  *
  * @author sinem
  */
-@Named
+@Named(value="actorController")
 @SessionScoped
 public class ActorController implements Serializable{
-    private List<Actors> actorlist;
+    private List<Actors> actorList;
     private ActorDAO actordao;
     private Actors actor;
 
     public ActorController() {
-        this.actorlist=new ArrayList();
+        this.actorList=new ArrayList();
         this.actordao=new ActorDAO();
     }
 
-    public List<Actors> getActorlist() {
-        this.actorlist=this.getActordao().list();
-        return actorlist;
+    public List<Actors> getActorList() {
+        this.actorList=this.getActordao().findAll();
+        return actorList;
     }
 
-    public void setActorlist(List<Actors> actorlist) {
-        this.actorlist = actorlist;
+    public void setActorList(List<Actors> actorList) {
+        this.actorList = actorList;
     }
 
     public ActorDAO getActordao() {
+        if(this.actordao==null)
+            this.actordao=new ActorDAO();
         return actordao;
     }
 
