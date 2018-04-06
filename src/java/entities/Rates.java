@@ -7,7 +7,7 @@ package entities;
 public class Rates {
     private int id;
     private Type raterType;
-    private Type retedType;
+    private Type ratedType;
     private int rate;
 
     public Rates() {
@@ -34,12 +34,12 @@ public class Rates {
         this.raterType = raterType;
     }
 
-    public Type getRetedType() {
-        return retedType;
+    public Type getRatedType() {
+        return ratedType;
     }
 
-    public void setRetedType(Type retedType) {
-        this.retedType = retedType;
+    public void setRatedType(Type ratedType) {
+        this.ratedType = ratedType;
     }
 
     public int getRate() {
@@ -52,7 +52,7 @@ public class Rates {
 
     @Override
     public String toString() {
-        return "Rates{" + "id=" + id + ", raterType=" + raterType + ", retedType=" + retedType + ", rate=" + rate + '}';
+        return "Rates{" + "id=" + id + ", raterType=" + raterType + ", ratedType=" + ratedType + ", rate=" + rate + '}';
     }
     
 }

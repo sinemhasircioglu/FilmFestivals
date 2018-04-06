@@ -2,8 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
@@ -13,10 +15,19 @@
                     <h:form>
                         <ul class="navbar-nav">
                             <li class="nav-item active">
-                                <h:commandLink styleClass="nav-link" action="film" value="Film" />
+                                <h:commandLink styleClass="nav-link" action="index" value="Anasayfa" />
                             </li>
                             <li class="nav-item active">
-                                <h:commandLink styleClass="nav-link" action="user" value="User" />
+                                <h:commandLink styleClass="nav-link" action="film" value="Film" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="festival" value="Festival" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="director" value="Director" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="jury" value="Jury" />
                             </li>
                         </ul>
                     </h:form>
@@ -28,14 +39,14 @@
 
                 <div class="col-md-7">
                     <h:form>
-                        <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="film">
+                        <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="jury">
                             <h:column>
                                 <f:facet name="header">ID</f:facet>
                                     #{jury.id}
                             </h:column>
                             <h:column>
                                 <f:facet name="header">NAME</f:facet>
-                                    #{jury.name}
+                                <h:commandLink action="#{juryController.updateForm(jury)}" value="#{jury.name}"/>                                
                             </h:column>
                             <h:column>
                                 <f:facet name="header">FESTIVAL</f:facet>
@@ -45,6 +56,12 @@
                                 <f:facet name="header">FILE</f:facet>
                                     #{jury.multimedya.url}
                             </h:column>
+                            <h:column>
+                                <f:facet name="header">DELETE</f:facet>
+                                <h:form>
+                                    <h:commandButton styleClass="btn btn-sm btn-danger" action="#{juryController.delete(jury)}" value="Delete"/>
+                                </h:form>
+                            </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
@@ -52,7 +69,13 @@
                 <div class="col-md-5">
                     <h:form>
                         <div class="form-group">
-                            empty
+                            <h:inputHidden value="#{juryController.jury.id}" />
+                            <label for="inputName">Jury Name: </label>
+                            <h:inputText value="#{juryController.jury.name}" />                            
+                        </div>
+                        <div class="form-group">
+                            <h:commandButton rendered="#{juryController.jury.id == 0}" styleClass="btn btn-primary" value="Create" action="#{juryController.create}" />
+                            <h:commandButton rendered="#{juryController.jury.id != 0}" styleClass="btn btn-secondary" value="Update" action="#{juryController.update}" />
                         </div>
                     </h:form>
                 </div>

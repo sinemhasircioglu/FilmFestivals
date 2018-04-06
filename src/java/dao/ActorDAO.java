@@ -17,7 +17,7 @@ import utility.DBConnection;
  */
 public class ActorDAO {
 
-    private JuryDAO jurydao;
+    private JuryDAO juryDao;
 
     public void create(Actors ac) {
         DBConnection db = new DBConnection();
@@ -117,10 +117,10 @@ public class ActorDAO {
         }
     }
 
-    public JuryDAO getJurydao() {
-        if (this.jurydao == null) {
-            this.jurydao = new JuryDAO();
+    public JuryDAO getJuryDao() {
+        if (this.juryDao == null) {
+            this.juryDao = new JuryDAO();
         }
-        return jurydao;
+        return juryDao;
     }
 }

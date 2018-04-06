@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utility.DBConnection;
 
 /**
@@ -54,5 +56,17 @@ public class MusicDAO {
             System.out.println(ex.getMessage());
         }
         return filmMusics;
+    }
+     
+     public void delete(Musics m) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("DELETE FROM public.\"Musics\" WHERE id=" + m.getId() + "");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MusicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

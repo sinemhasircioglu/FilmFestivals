@@ -3,7 +3,6 @@ package dao;
 
 import entities.Films;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,12 +24,12 @@ public class FilmDAO {
     private MultimedyaDAO multimedyaDao;
     private DirectorDAO directorDao;
 
-    public void insert(Films film) {
+    public void insert(Films film, int selectedMultimedya, int selectedFestival, List<Integer> selectedDirectors) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Films\"(name,genre) VALUES('" + film.getName() + "','" + film.getGenre() + "') ");
+            st.executeUpdate("INSERT INTO public.\"Films\"(name,genre,fileid,festivalid) VALUES('" + film.getName() + "','" + film.getGenre() + "',"+selectedMultimedya+","+selectedFestival+") ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,39 +133,46 @@ public class FilmDAO {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void update(Films f) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("UPDATE public.\"Films\" WHERE id="+f.getId()+" SET name='" + f.getName() + "' , genre='" + f.getGenre() + "' ");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public ActorDAO getActorDao() {
-        if (this.actorDao == null) {
+        if (this.actorDao == null) 
             this.actorDao = new ActorDAO();
-        }
         return actorDao;
     }
 
     public MusicDAO getMusicDao() {
-        if (this.musicDao == null) {
+        if (this.musicDao == null) 
             this.musicDao = new MusicDAO();
-        }
         return musicDao;
     }
 
     public FestivalDAO getFestivalDao() {
-        if (this.festivalDao == null) {
+        if (this.festivalDao == null) 
             this.festivalDao = new FestivalDAO();
-        }
         return festivalDao;
     }
 
     public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) {
+        if (this.multimedyaDao == null) 
             this.multimedyaDao = new MultimedyaDAO();
-        }
         return multimedyaDao;
     }
 
     public DirectorDAO getDirectorDao() {
-        if (this.directorDao == null) {
+        if (this.directorDao == null) 
             this.directorDao = new DirectorDAO();
-        }
         return directorDao;
     }
 }

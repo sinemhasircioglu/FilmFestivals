@@ -23,6 +23,21 @@ public class FilmController implements Serializable{
         this.filmList=new ArrayList();
         this.filmDao=new FilmDAO();
     }
+    
+    public String create(){
+        this.getFilmDao().insert(this.film);
+        return "film";
+    }
+    
+    public String updateForm(Films f) {
+        this.film=f;
+        return "film";
+    }
+    
+    public String update() {
+        this.getFilmDao().update(this.film);
+        return "film";
+    }
 
     public FilmDAO getFilmDao() {
         if(this.filmDao==null)

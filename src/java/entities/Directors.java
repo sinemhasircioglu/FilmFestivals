@@ -37,14 +37,6 @@ public class Directors {
         this.name = name;
     }
 
-    public Multimedya getFile() {
-        return multimedya;
-    }
-
-    public void setFile(Multimedya multimedya) {
-        this.multimedya = multimedya;
-    }
-
     public Multimedya getMultimedya() {
         return multimedya;
     }
