@@ -12,7 +12,7 @@ public class Festivals {
     private String name;
     private String country;
     private String description;
-    private Long year;
+    private int year;
     private List<Juries> juryList;
     private List<Films> filmList;
 
@@ -48,11 +48,11 @@ public class Festivals {
         this.description = description;
     }
 
-    public Long getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(Long year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

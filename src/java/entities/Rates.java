@@ -8,7 +8,7 @@ public class Rates {
     private Long id;
     private Type raterType;
     private Type ratedType;
-    private Long rate;
+    private int rate;
 
     public Long getId() {
         return id;
@@ -34,11 +34,11 @@ public class Rates {
         this.ratedType = ratedType;
     }
 
-    public Long getRate() {
+    public int getRate() {
         return rate;
     }
 
-    public void setRate(Long rate) {
+    public void setRate(int rate) {
         this.rate = rate;
     }
 
