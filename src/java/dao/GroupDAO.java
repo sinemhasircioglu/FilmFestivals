@@ -40,7 +40,7 @@ public class GroupDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\"");
             while (rs.next()) {
                 Group group = new Group();
-                group.setId(rs.getInt("id"));
+                group.setId(rs.getLong("id"));
                 group.setAuthority(rs.getString("authority"));
                 group.setUserList(this.getUserDao().getGroupUsers(group.getId()));
                 groupList.add(group);
@@ -52,7 +52,7 @@ public class GroupDAO {
         return groupList;
     }
     
-    public Group find(int id) {
+    public Group find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Group group = null;
@@ -61,7 +61,7 @@ public class GroupDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\" WHERE id=" + id + "");
             rs.next();
             group = new Group();
-            group.setId(rs.getInt("id"));
+            group.setId(rs.getLong("id"));
             group.setAuthority(rs.getString("authority"));
             c.close();
         } catch (SQLException ex) {

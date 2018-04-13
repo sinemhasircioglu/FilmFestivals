@@ -21,7 +21,7 @@ public class UserDAO {
     private MultimedyaDAO multimedyaDao;
     private GroupDAO groupDao;
 
-    public void create(Users u, int selectedMultimedya, int selectedGroup ) {
+    public void create(Users u, Long selectedMultimedya, Long selectedGroup ) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -44,12 +44,12 @@ public class UserDAO {
                 Users us = new Users();
                 us.setEmail(rs.getString("email"));
                 us.setGender(rs.getBoolean("gender"));
-                us.setId(rs.getInt("id"));
+                us.setId(rs.getLong("id"));
                 us.setName(rs.getString("name"));
                 us.setPassword(rs.getString("password"));
 
-                us.setMultimedya(this.getMultimedyaDao().find(rs.getInt("fileid")));
-                us.setGroup(this.getGroupDao().find(rs.getInt("groupid")));
+                us.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
+                us.setGroup(this.getGroupDao().find(rs.getLong("groupid")));
                 userList.add(us);
             }
             c.close();
@@ -59,7 +59,7 @@ public class UserDAO {
         return userList;
     }
 
-    public Users find(int id) {
+    public Users find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Users user = null;
@@ -70,7 +70,7 @@ public class UserDAO {
             user = new Users();
             user.setEmail(rs.getString("email"));
             user.setGender(rs.getBoolean("gender"));
-            user.setId(rs.getInt("id"));
+            user.setId(rs.getLong("id"));
             user.setName(rs.getString("name"));
             user.setPassword(rs.getString("password"));
             c.close();
@@ -80,7 +80,7 @@ public class UserDAO {
         return user;
     }
 
-    public List<Users> getGroupUsers(int groupid) {
+    public List<Users> getGroupUsers(Long groupid) {
 
         List<Users> groupUsers = new ArrayList<>();
         DBConnection db = new DBConnection();
@@ -90,7 +90,7 @@ public class UserDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
             while (rs.next()) {
                 Users user = new Users();
-                user.setId(rs.getInt("id"));
+                user.setId(rs.getLong("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setGender(rs.getBoolean("gender"));
@@ -105,7 +105,7 @@ public class UserDAO {
 
     }
 
-    public void update(Users u,int selectedMultimedya, int selectedGroup ) {
+    public void update(Users u,Long selectedMultimedya, Long selectedGroup ) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {

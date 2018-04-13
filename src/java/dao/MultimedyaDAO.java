@@ -32,7 +32,7 @@ public class MultimedyaDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Multimedya\"");
             while (rs.next()) {
                 Multimedya med = new Multimedya();
-                med.setId(rs.getInt("id"));
+                med.setId(rs.getLong("id"));
                 med.setUrl(rs.getString("url"));
                 multimedyaList.add(med);
             }
@@ -43,7 +43,7 @@ public class MultimedyaDAO {
         return multimedyaList;
     }
     
-    public Multimedya find(int id) {
+    public Multimedya find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Multimedya multimedya = null;
@@ -53,7 +53,7 @@ public class MultimedyaDAO {
 
             if (rs.next()) {
                 multimedya = new Multimedya();
-                multimedya.setId(rs.getInt("id"));
+                multimedya.setId(rs.getLong("id"));
                 multimedya.setUrl(rs.getString("url"));
             }
             c.close();

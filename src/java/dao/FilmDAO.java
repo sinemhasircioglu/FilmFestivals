@@ -24,7 +24,7 @@ public class FilmDAO {
     private MultimedyaDAO multimedyaDao;
     private DirectorDAO directorDao;
 
-    public void insert(Films film, int selectedMultimedya, int selectedFestival, List<Integer> selectedDirectors) {
+    public void insert(Films film, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -45,13 +45,13 @@ public class FilmDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\"");
             while (rs.next()) {
                 Films film = new Films();
-                film.setId(rs.getInt("id"));
+                film.setId(rs.getLong("id"));
                 film.setName(rs.getString("name"));
                 film.setGenre(rs.getString("genre"));
 
                 film.setActorList(this.getActorDao().getFilmActors(film.getId()));
-                film.setFestival(this.getFestivalDao().find(rs.getInt("festivalid")));
-                film.setFile(this.getMultimedyaDao().find(rs.getInt("fileid")));
+                film.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
+                film.setFile(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
                 film.setMusiclist(this.getMusicDao().getFilmMusics(film.getId()));
                 filmList.add(film);
@@ -63,15 +63,15 @@ public class FilmDAO {
         return filmList;
     }
 
-    public List<Films> getDirectorFilms(int directorid) {
+    public List<Films> getDirectorFilms(Long directorid) {
         List<Films> directorFilms = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"FilmDirector\" WHERE filmid=" + directorid + "");
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"FilmDirector\" WHERE directorid=" + directorid + "");
             while (rs.next()) {
-                directorFilms.add(this.find(rs.getInt("filmid")));
+                directorFilms.add(this.find(rs.getLong("filmid")));
             }
             c.close();
         } catch (SQLException ex) {
@@ -80,7 +80,7 @@ public class FilmDAO {
         return directorFilms;
     }
 
-    public List<Films> getFestivalFilms(int festivalid) {
+    public List<Films> getFestivalFilms(Long festivalid) {
         List<Films> festivalFilms = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -88,12 +88,7 @@ public class FilmDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE festivalid=" + festivalid + "");
             while (rs.next()) {
-                Films film = new Films();
-                film.setId(rs.getInt("id"));
-                film.setName(rs.getString("name"));
-                film.setGenre(rs.getString("genre"));
-
-                festivalFilms.add(film);
+                festivalFilms.add(this.find(rs.getLong("id")));
             }
             c.close();
         } catch (SQLException ex) {
@@ -103,7 +98,7 @@ public class FilmDAO {
         
     }
 
-    public Films find(int id) {
+    public Films find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Films film = null;
@@ -112,7 +107,7 @@ public class FilmDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE id=" + id + "");
             rs.next();
             film = new Films();
-            film.setId(rs.getInt("id"));
+            film.setId(rs.getLong("id"));
             film.setName(rs.getString("name"));
             film.setGenre(rs.getString("genre"));
             c.close();

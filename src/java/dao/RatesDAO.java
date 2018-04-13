@@ -28,10 +28,10 @@ public class RatesDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\"");
             while (rs.next()) {
                 Rates rate = new Rates();
-                rate.setId(rs.getInt("id"));
+                rate.setId(rs.getLong("id"));
                 rate.setRate(rs.getInt("rate"));
-                rate.setRaterType(this.getTypeDao().find(rs.getInt("raterid")));
-                rate.setRatedType(this.getTypeDao().find(rs.getInt("raterid")));
+                rate.setRaterType(this.getTypeDao().find(rs.getLong("raterid")));
+                rate.setRatedType(this.getTypeDao().find(rs.getLong("raterid")));
                 rateList.add(rate);
             }
             c.close();
@@ -41,7 +41,7 @@ public class RatesDAO {
         return rateList;
     }
     
-    public List<Rates> getTypeRates(int typeid){
+    public List<Rates> getTypeRates(Long typeid){
         List<Rates> typeRates = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -50,7 +50,7 @@ public class RatesDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\" WHERE typeratedid="+typeid+"");
             while (rs.next()) {
                 Rates rate = new Rates();
-                rate.setId(rs.getInt("id"));
+                rate.setId(rs.getLong("id"));
                 rate.setRate(rs.getInt("rate"));         
                 typeRates.add(rate);
             }
@@ -61,7 +61,7 @@ public class RatesDAO {
         return typeRates;
     }
     
-    public Rates find(int id){
+    public Rates find(Long id){
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Rates rate = null;
@@ -70,7 +70,7 @@ public class RatesDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\" WHERE id=" + id + "");
             rs.next();
             rate = new Rates();
-            rate.setId(rs.getInt("id"));
+            rate.setId(rs.getLong("id"));
             rate.setRate(rs.getInt("rate"));
             c.close();
         } catch (SQLException ex) {

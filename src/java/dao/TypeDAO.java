@@ -28,9 +28,9 @@ public class TypeDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Type\"");
             while (rs.next()) {
                 Type type = new Type();
-                type.setId(rs.getInt("id"));
+                type.setId(rs.getLong("id"));
                 type.setName(rs.getString("name"));
-                type.setRateList(this.getRatesDao().getTypeRates(rs.getInt("typeratedid")));
+                type.setRateList(this.getRatesDao().getTypeRates(rs.getLong("typeratedid")));
                 typeList.add(type);
             }
             c.close();
@@ -40,7 +40,7 @@ public class TypeDAO {
         return typeList;
     }
 
-    public Type find(int id){
+    public Type find(Long id){
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Type type = null;
@@ -49,7 +49,7 @@ public class TypeDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Type\" WHERE id=" + id + "");
             rs.next();
             type = new Type();
-            type.setId(rs.getInt("id"));
+            type.setId(rs.getLong("id"));
             type.setName(rs.getString("name"));
             c.close();
         } catch (SQLException ex) {

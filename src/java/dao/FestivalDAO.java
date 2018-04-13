@@ -41,7 +41,7 @@ public class FestivalDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Festivals\"");
             while (rs.next()) {
                 Festivals fest = new Festivals();
-                fest.setId(rs.getInt("id"));
+                fest.setId(rs.getLong("id"));
                 fest.setName(rs.getString("name"));
                 fest.setCountry(rs.getString("country"));
                 fest.setDescription(rs.getString("description"));
@@ -58,7 +58,7 @@ public class FestivalDAO {
         return festivalList;
     }
 
-    public Festivals find(int id) {
+    public Festivals find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Festivals fest = null;
@@ -67,7 +67,7 @@ public class FestivalDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Festivals\" WHERE id=" + id + "");
             rs.next();
             fest = new Festivals();
-            fest.setId(rs.getInt("id"));
+            fest.setId(rs.getLong("id"));
             fest.setName(rs.getString("name"));
             fest.setCountry(rs.getString("country"));
             fest.setDescription(rs.getString("description"));

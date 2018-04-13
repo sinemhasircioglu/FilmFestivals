@@ -17,8 +17,6 @@ import utility.DBConnection;
  */
 public class ActorDAO {
 
-    private JuryDAO juryDao;
-
     public void create(Actors ac) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -40,7 +38,7 @@ public class ActorDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\"");
             while (rs.next()) {
                 Actors ac = new Actors();
-                ac.setId(rs.getInt("id"));
+                ac.setId(rs.getLong("id"));
                 ac.setName(rs.getString("name"));
                 ac.setGender(rs.getBoolean("gender"));
                 //rs.getInt("filmid"),rs.getInt("fileid")
@@ -53,7 +51,7 @@ public class ActorDAO {
         return actorList;
     }
 
-    public Actors find(int id) {
+    public Actors find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Actors ac = null;
@@ -62,7 +60,7 @@ public class ActorDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\" WHERE id=" + id + "");
             rs.next();
             ac = new Actors();
-            ac.setId(rs.getInt("id"));
+            ac.setId(rs.getLong("id"));
             ac.setName(rs.getString("name"));
             ac.setGender(rs.getBoolean("gender"));
             c.close();
@@ -72,7 +70,7 @@ public class ActorDAO {
         return ac;
     }
     
-    public List<Actors> getFilmActors(int filmid){
+    public List<Actors> getFilmActors(Long filmid){
         List<Actors> filmActors = new ArrayList();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -81,7 +79,7 @@ public class ActorDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Actors\" WHERE filmid="+filmid+"");
             while (rs.next()) {
                 Actors ac = new Actors();
-                ac.setId(rs.getInt("id"));
+                ac.setId(rs.getLong("id"));
                 ac.setName(rs.getString("name"));
                 ac.setGender(rs.getBoolean("gender"));
                 filmActors.add(ac);
@@ -117,10 +115,4 @@ public class ActorDAO {
         }
     }
 
-    public JuryDAO getJuryDao() {
-        if (this.juryDao == null) {
-            this.juryDao = new JuryDAO();
-        }
-        return juryDao;
-    }
 }

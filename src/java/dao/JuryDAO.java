@@ -20,7 +20,7 @@ public class JuryDAO {
     private MultimedyaDAO multimedyaDao;
     private FestivalDAO festivalDao;
 
-    public void create(Juries j, int selectedFestival, int selectedMultimedya) {
+    public void create(Juries j, Long selectedFestival, Long selectedMultimedya) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -41,10 +41,10 @@ public class JuryDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\"");
             while (rs.next()) {
                 Juries j = new Juries();
-                j.setId(rs.getInt("id"));
+                j.setId(rs.getLong("id"));
                 j.setName(rs.getString("name"));
-                j.setFestival(this.getFestivalDao().find(rs.getInt("festivalid")));
-                j.setMultimedya(this.getMultimedyaDao().find(rs.getInt("fileid")));
+                j.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
+                j.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 juryList.add(j);
             }
             c.close();
@@ -54,8 +54,8 @@ public class JuryDAO {
         return juryList;
     }
 
-    public List<Juries> getFestivalJuries(int festivalid) {
-        List<Juries> festivalFilms = new ArrayList<>();
+    public List<Juries> getFestivalJuries(Long festivalid) {
+        List<Juries> festivalJuries = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -63,19 +63,39 @@ public class JuryDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE festivalid=" + festivalid + "");
             while (rs.next()) {
                 Juries j = new Juries();
-                j.setId(rs.getInt("id"));
+                j.setId(rs.getLong("id"));
                 j.setName(rs.getString("name"));
-                festivalFilms.add(j);
+                festivalJuries.add(j);
             }
             c.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return festivalFilms;
+        return festivalJuries;
 
     }
+    
+    public List<Juries> getFileJuries(Long fileid){
+        List<Juries> fileJuries = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
+            while (rs.next()) {
+                Juries j = new Juries();
+                j.setId(rs.getLong("id"));
+                j.setName(rs.getString("name"));
+                fileJuries.add(j);
+            }
+            c.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return fileJuries;
+    }
 
-    public Juries find(int id) {
+    public Juries find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Juries jury = null;
@@ -84,7 +104,7 @@ public class JuryDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE id=" + id + "");
             rs.next();
             jury = new Juries();
-            jury.setId(rs.getInt("id"));
+            jury.setId(rs.getLong("id"));
             jury.setName(rs.getString("name"));
             c.close();
         } catch (SQLException ex) {

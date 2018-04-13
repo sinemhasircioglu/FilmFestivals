@@ -21,7 +21,7 @@ public class DirectorDAO {
     private MultimedyaDAO multimedyaDao;
     private FilmDAO filmDao;
     
-    public void create(Directors d, int selectedMultimedya){
+    public void create(Directors d, Long selectedMultimedya){
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -33,7 +33,7 @@ public class DirectorDAO {
         }
     }
     
-    public List<Directors> getFilmDirectors(int filmid){      
+    public List<Directors> getFilmDirectors(Long filmid){      
         List<Directors> filmDirectors = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -41,7 +41,7 @@ public class DirectorDAO {
             PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"FilmDirector\" WHERE filmid=" + filmid+ "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                filmDirectors.add(this.find(rs.getInt("directorid")));
+                filmDirectors.add(this.find(rs.getLong("directorid")));
             }
             c.close();
         } catch (SQLException ex) {
@@ -50,7 +50,7 @@ public class DirectorDAO {
         return filmDirectors;
     }   
     
-    public Directors find(int id) {
+    public Directors find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Directors director = null;
@@ -59,7 +59,7 @@ public class DirectorDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Directors\" WHERE id=" + id + "");
             rs.next();
             director = new Directors();
-            director.setId(rs.getInt("id"));
+            director.setId(rs.getLong("id"));
             director.setName(rs.getString("name"));
             c.close();
         } catch (SQLException ex) {
@@ -77,9 +77,9 @@ public class DirectorDAO {
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Directors director = new Directors();
-                director.setDirectorFilms(this.getFilmDao().getDirectorFilms(rs.getInt("id")));
-                director.setId(rs.getInt("id"));
-                director.setMultimedya(this.getMultimedyaDao().find(rs.getInt("fileid")));
+                director.setDirectorFilms(this.getFilmDao().getDirectorFilms(rs.getLong("id")));
+                director.setId(rs.getLong("id"));
+                director.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 director.setName(rs.getString("name"));
                 directorList.add(director);
             }

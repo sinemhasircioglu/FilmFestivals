@@ -26,7 +26,7 @@ public class MusicDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\"");          
             while (rs.next()) {
                 Musics mu= new Musics();
-                mu.setId(rs.getInt("id"));
+                mu.setId(rs.getLong("id"));
                 mu.setName(rs.getString("name"));
                 musicList.add(mu);
             }
@@ -38,7 +38,7 @@ public class MusicDAO {
         return musicList; 
     }
     
-     public List<Musics> getFilmMusics(int filmid){
+     public List<Musics> getFilmMusics(Long filmid){
         List<Musics> filmMusics = new ArrayList();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -47,7 +47,7 @@ public class MusicDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE filmid="+filmid+"");
             while (rs.next()) {
                 Musics ac = new Musics();
-                ac.setId(rs.getInt("id"));
+                ac.setId(rs.getLong("id"));
                 ac.setName(rs.getString("name"));
                 filmMusics.add(ac);
             }
