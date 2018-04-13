@@ -8,24 +8,16 @@ import java.util.List;
  */
 public class Directors {
 
-    private int id;
+    private Long id;
     private String name;
     private Multimedya multimedya;
     private List<Films> directorFilms;
 
-    public Directors() {
-    }
-
-    public Directors(int id, String name) {
-        this.id = id;
-        this.name= name;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

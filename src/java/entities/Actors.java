@@ -5,26 +5,17 @@ package entities;
  * @author sinem
  */
 public class Actors {
-    private int id;
+    private Long id;
     private String name;
     private boolean gender;
     private Films film;
     private Multimedya multimedya;
 
-    public Actors(int id, String name, boolean gender) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-    }
-
-    public Actors() {
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

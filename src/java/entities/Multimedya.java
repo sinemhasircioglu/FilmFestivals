@@ -7,7 +7,7 @@ import java.util.List;
  * @author sinem
  */
 public class Multimedya {
-    private int id;
+    private Long id;
     private String url;
     private List<Actors> actorList;
     private List<Directors> directorList;
@@ -15,19 +15,11 @@ public class Multimedya {
     private List<Juries> juryList;
     private List<Users> userList;
 
-    public Multimedya() {
-    }
-
-    public Multimedya(int id, String url) {
-        this.id = id;
-        this.url = url;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

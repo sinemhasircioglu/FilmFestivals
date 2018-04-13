@@ -7,7 +7,7 @@ package entities;
  */
 public class Users {
 
-    private int id;
+    private Long id;
     private String email;
     private String password;
     private String name;
@@ -15,22 +15,11 @@ public class Users {
     private Multimedya multimedya;
     private Group group;
 
-    public Users() {
-    }
-
-    public Users(int id, String email, String password, String name, boolean gender) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

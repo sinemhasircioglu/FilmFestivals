@@ -8,30 +8,19 @@ import java.util.List;
  */
 public class Festivals {
 
-    private int id;
+    private Long id;
     private String name;
     private String country;
     private String description;
-    private int year;
+    private Long year;
     private List<Juries> juryList;
     private List<Films> filmList;
 
-    public Festivals() {
-    }
-
-    public Festivals(int id, String name, String country, String description, int year) {
-        this.id = id;
-        this.name = name;
-        this.country = country;
-        this.description = description;
-        this.year = year;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,11 +48,11 @@ public class Festivals {
         this.description = description;
     }
 
-    public int getYear() {
+    public Long getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Long year) {
         this.year = year;
     }
 

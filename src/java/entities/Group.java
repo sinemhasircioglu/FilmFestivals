@@ -7,23 +7,15 @@ import java.util.List;
  * @author sinem
  */
 public class Group {
-    private int id;
+    private Long id;
     private String authority;
     private List<Users> userList;
 
-    public Group() {
-    }
-
-    public Group(int id, String authority) {
-        this.id = id;
-        this.authority = authority;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

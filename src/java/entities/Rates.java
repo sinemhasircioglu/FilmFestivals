@@ -5,24 +5,16 @@ package entities;
  * @author sinem
  */
 public class Rates {
-    private int id;
+    private Long id;
     private Type raterType;
     private Type ratedType;
-    private int rate;
+    private Long rate;
 
-    public Rates() {
-    }
-
-    public Rates(int id, int rate) {
-        this.id = id;
-        this.rate = rate;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,11 +34,11 @@ public class Rates {
         this.ratedType = ratedType;
     }
 
-    public int getRate() {
+    public Long getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(Long rate) {
         this.rate = rate;
     }
 

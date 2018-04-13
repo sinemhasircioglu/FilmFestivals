@@ -7,23 +7,15 @@ import java.util.List;
  * @author sinem
  */
 public class Type {
-    private int id;
+    private Long id;
     private String name;
     private List<Rates> rateList;
 
-    public Type() {
-    }
-
-    public Type(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

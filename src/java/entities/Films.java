@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Films {
 
-    private int id;
+    private Long id;
     private String name;
     private String genre;
     private List<Actors> actorList;
@@ -18,20 +18,11 @@ public class Films {
     private Multimedya multimedya;
     private List<Directors> filmDirectors;
 
-    public Films() {
-    }
-
-    public Films(int id, String name, String genre) {
-        this.id = id;
-        this.name = name;
-        this.genre = genre;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
