@@ -89,13 +89,7 @@ public class UserDAO {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
             while (rs.next()) {
-                Users user = new Users();
-                user.setId(rs.getLong("id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setGender(rs.getBoolean("gender"));
-                user.setPassword(rs.getString("password"));
-                groupUsers.add(user);
+                groupUsers.add(this.find(rs.getLong("id")));
             }
             c.close();
         } catch (SQLException ex) {
@@ -104,13 +98,32 @@ public class UserDAO {
         return groupUsers;
 
     }
+    
+    public List<Users> getFileUsers(Long fileid) {
+
+        List<Users> fileUsers = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
+            while (rs.next()) {                
+                fileUsers.add(this.find(rs.getLong("id")));
+            }
+            c.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return fileUsers;
+
+    }
 
     public void update(Users u,Long selectedMultimedya, Long selectedGroup ) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+selectedMultimedya+", groupid="+selectedGroup+"");
+            st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+selectedMultimedya+", groupid="+selectedGroup+" WHERE id="+u.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -19,12 +19,12 @@ public class GroupDAO {
     
     private UserDAO userDao;
 
-    public void create(Group group) {
+    public void create(Group group, List<Long> selectedUsers) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Group\"(authority) VALUES (" + group.getAuthority() + "");
+            st.executeUpdate("INSERT INTO public.\"Group\"(authority) VALUES (" + group.getAuthority() + ")");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,12 +70,12 @@ public class GroupDAO {
         return group;
     }
 
-    public void update(Group group) {
+    public void update(Group group,List<Long> selectedUsers) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Group\" SET authority=" + group.getAuthority() + "  ");
+            st.executeUpdate("UPDATE public.\"Group\" SET authority=" + group.getAuthority() + " WHERE id="+group.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);

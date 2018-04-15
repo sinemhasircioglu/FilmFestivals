@@ -20,7 +20,7 @@ public class FestivalDAO {
     private JuryDAO juryDao;
     private FilmDAO filmDao;
     
-    public void create(Festivals f) {
+    public void create(Festivals f,List<Long> selectedJuries, List<Long> selectedFilms) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -79,7 +79,7 @@ public class FestivalDAO {
         return fest;
     }
     
-    public void update(Festivals f) {
+    public void update(Festivals f,List<Long> selectedJuries, List<Long> selectedFilms) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {

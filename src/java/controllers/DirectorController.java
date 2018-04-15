@@ -25,11 +25,6 @@ public class DirectorController implements Serializable{
     private MultimedyaDAO multimedyaDao;
     private List<Multimedya> multimedyaList;
     
-    public DirectorController() {
-        this.directorDao = new DirectorDAO();
-        this.directorList = new ArrayList();
-    }
-
     public String updateForm(Directors d){
         this.director=d;
         return"director";

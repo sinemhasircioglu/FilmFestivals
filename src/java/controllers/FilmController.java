@@ -32,11 +32,6 @@ public class FilmController implements Serializable {
     private Long selectedFestival;
     private List<Long> selectedDirectors;
 
-    public FilmController() {
-        this.filmList = new ArrayList();
-        this.filmDao = new FilmDAO();
-    }
-
     public String create() {
         this.getFilmDao().insert(this.film, selectedMultimedya, selectedFestival, selectedDirectors);
         return "film";
@@ -62,10 +57,6 @@ public class FilmController implements Serializable {
             this.filmDao = new FilmDAO();
         }
         return filmDao;
-    }
-
-    public void setFilmDao(FilmDAO filmDao) {
-        this.filmDao = filmDao;
     }
 
     public Films getFilm() {

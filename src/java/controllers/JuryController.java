@@ -25,17 +25,20 @@ public class JuryController implements Serializable{
     private Long selectedFestival;
     private FestivalDAO festivalDao;
     private List<Festivals> festivalList;
+    
     private Long selectedMultimedya;
     private MultimedyaDAO multimedyaDao;
     private List<Multimedya> multimedyaList;
     
     public String updateForm(Juries j) {
         this.jury=j;
+        this.selectedFestival=this.jury.getFestival().getId();
+        this.selectedMultimedya=this.jury.getMultimedya().getId();
         return "jury";
     }
     
     public String update() {
-        this.getJuryDao().update(this.jury);
+        this.getJuryDao().update(this.jury, selectedFestival, selectedMultimedya);
         return "jury";
     }
     

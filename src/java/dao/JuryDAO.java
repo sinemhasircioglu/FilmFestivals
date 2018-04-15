@@ -113,12 +113,12 @@ public class JuryDAO {
         return jury;
     }
 
-    public void update(Juries j) {
+    public void update(Juries j, Long selectedFestival, Long selectedMultimedya) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Juries\" WHERE id="+j.getId()+" SET name='" + j.getName() + "' ");
+            st.executeUpdate("UPDATE public.\"Juries\" SET name='" + j.getName() + "' festivalid="+selectedFestival+" fileid="+selectedMultimedya+" WHERE id="+j.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
