@@ -5,12 +5,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
+        <title>Facelet Title</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
-        <title>Director</title>
     </h:head>
     <h:body>
         <h:form>
-          <div class="container">
+            <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
@@ -39,55 +39,51 @@
                     </div>
                 </nav>
             </div>
-            </h:form>
+        </h:form>
 
         <div class="container">
             <div class="row">
 
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <h:form>
-                        <h:dataTable styleClass="table table-striped table-hover" value="#{directorController.directorList}" var="director">
+                        <h:dataTable styleClass="table table-striped table-hover" value="#{groupController.groupList}" var="group">
                             <h:column>
                                 <f:facet name="header">ID</f:facet>
-                                    #{director.id}
+                                <h:commandLink action="#{groupController.updateForm(group)}" value="#{group.id}"/>                                    
                             </h:column>
                             <h:column>
-                                <f:facet name="header">NAME</f:facet>
-                                <h:commandLink action="#{directorController.updateForm(director)}" value="#{director.name}"/>                                
-                            </h:column>                         
-                            <h:column>
-                                <f:facet name="header">MULTIMEDYA</f:facet>
-                                #{director.multimedya.url}
+                                <f:facet name="header">AUTHORITY</f:facet>
+                                    #{group.authority}
                             </h:column>
                             <h:column>
-                                <f:facet name="header">FILMS</f:facet>
+                                <f:facet name="header">USERS</f:facet>
                                 <ul>
-                                    <ui:repeat value="#{director.directorFilms}" var="film">
-                                        <li>#{film.name}</li>
+                                    <ui:repeat value="#{group.userList}" var="user">
+                                        <li>#{user.name}</li>
                                     </ui:repeat>
                                 </ul>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DELETE</f:facet>
-                                <h:form>
-                                    <h:commandButton styleClass="btn btn-sm btn-danger" action="#{directorController.delete(director)}" value="Delete"/>
-                                </h:form>
                             </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
-                
-                <div class="col-md-5">
+
+                <div class="col-md-4">
                     <h:form>
                         <div class="form-group">
-                            <h:inputHidden value="#{directorController.director.id}" />
-                            <label for="inputName">Director Name: </label>
-                            <h:inputText value="#{directorController.director.name}" styleClass="form-control"/> 
+                            <h:inputHidden value="#{groupController.group.id}" />
                             
+                            <label for="selectUsers">USERS</label>
+                            <h:selectManyMenu style="height: 250px" id="selectUsers" value="#{groupController.selectedUsers}" styleClass="custom-select" >
+                                <f:selectItems value="#{groupController.userList}" var="user" itemValue="#{user.id}" itemLabel="#{user.name}" />
+                            </h:selectManyMenu>                       
+                            <label for="inputAuthority">AUTHORITY</label>
+                            <h:inputText value="#{groupController.group.authority}" styleClass="form-control"/>
                         </div>
                         <div class="form-group">
-                            <h:commandButton styleClass="btn btn-primary" value="Create" action="#{directorController.create}" />
-                            <h:commandButton styleClass="btn btn-secondary" value="Create" action="#{directorController.update}" />
+                            <h:commandButton rendered="#{groupController.group == null}" action="#{groupController.create}" value="Create" styleClass="btn btn-primary" />
+                            <h:commandButton rendered="#{groupController.group != null}" action="#{groupController.update}" value="Update" styleClass="btn btn-secondary" />
+                            <h:commandButton rendered="#{groupController.group != null}" action="#{groupController.delete}" value="Delete" styleClass="btn btn-danger" />
+
                         </div>
                     </h:form>
                 </div>

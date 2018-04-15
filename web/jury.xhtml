@@ -9,15 +9,15 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <h:form>
+        <h:form>
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
                                 <h:commandLink styleClass="nav-link" action="index" value="Anasayfa" />
                             </li>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <h:commandLink styleClass="nav-link" action="film" value="Film" />
                             </li>
                             <li class="nav-item">
@@ -29,58 +29,67 @@
                             <li class="nav-item">
                                 <h:commandLink styleClass="nav-link" action="jury" value="Jury" />
                             </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="group" value="Group" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="user" value="User" />
+                            </li>
                         </ul>
-                    </h:form>
-                </div>
-            </nav>
-        </div>
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-7">
-                    <h:form>
-                        <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="jury">
-                            <h:column>
-                                <f:facet name="header">ID</f:facet>
-                                    #{jury.id}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">NAME</f:facet>
-                                <h:commandLink action="#{juryController.updateForm(jury)}" value="#{jury.name}"/>                                
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">FESTIVAL</f:facet>
-                                    #{jury.festival.name}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">FILE</f:facet>
-                                    #{jury.multimedya.url}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DELETE</f:facet>
-                                <h:form>
-                                    <h:commandButton styleClass="btn btn-sm btn-danger" action="#{juryController.delete(jury)}" value="Delete"/>
-                                </h:form>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                </div>
-
-                <div class="col-md-5">
-                    <h:form>
-                        <div class="form-group">
-                            <h:inputHidden value="#{juryController.jury.id}" />
-                            <label for="inputName">Jury Name: </label>
-                            <h:inputText value="#{juryController.jury.name}" />                            
-                        </div>
-                        <div class="form-group">
-                            <h:commandButton rendered="#{juryController.jury.id == 0}" styleClass="btn btn-primary" value="Create" action="#{juryController.create}" />
-                            <h:commandButton rendered="#{juryController.jury.id != 0}" styleClass="btn btn-secondary" value="Update" action="#{juryController.update}" />
-                        </div>
-                    </h:form>
-                </div>
-
+                    </div>
+                </nav>
             </div>
+        </h:form>
+        <div class="container">
+
+            <div class="col-md-7">
+                <h:form>
+                    <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="jury">
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                            <h:commandLink action="#{juryController.updateForm(jury)}" value="#{jury.id}"/>                                  
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">NAME</f:facet>
+                                #{jury.name}                            
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">FESTIVAL</f:facet>
+                                #{jury.festival.name}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">FILE</f:facet>
+                                #{jury.multimedya.url}
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+
+            <div class="col-md-5">
+                <h:form>
+                    <div class="form-group">  
+                        <h:inputHidden value="#{juryController.jury.id}" />
+                        <label for="inputName">Jury Name: </label>
+                        <h:inputText id="inputName" styleClass="form-control" value="#{juryController.jury.name}" /> 
+                        <label for="selectFestival">Jury Festival: </label>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{juryController.selectedFestival}">
+                            <f:selectItems value="#{juryController.festivalList}" var="festival" itemValue="#{festival.id}" itemLabel="#{festival.name}"/>
+                        </h:selectOneMenu>
+                        <label for="selectMultimedya">Jury Multimedya: </label>
+                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{juryController.selectedMultimedya}">
+                            <f:selectItems value="#{juryController.multimedyaList}" var="multimedya" itemValue="#{multimedya.id}" itemLabel="#{multimedya.url}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton rendered="#{juryController.jury.id == null}" styleClass="btn btn-primary" value="Create" action="#{juryController.create}" />
+                        <h:commandButton rendered="#{juryController.jury.id != null}" styleClass="btn btn-secondary" value="Update" action="#{juryController.update}" />
+                        <h:commandButton rendered="#{juryController.jury.id != null}" styleClass="btn btn-secondary" value="Delete" action="#{juryController.delete}" />
+
+                    </div>
+                </h:form>
+            </div>
+
+
         </div>
     </h:body>
 </html>

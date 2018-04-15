@@ -5,19 +5,19 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Festival</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <h:form>
+        <h:form>
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
                                 <h:commandLink styleClass="nav-link" action="index" value="Anasayfa" />
                             </li>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <h:commandLink styleClass="nav-link" action="film" value="Film" />
                             </li>
                             <li class="nav-item">
@@ -29,71 +29,84 @@
                             <li class="nav-item">
                                 <h:commandLink styleClass="nav-link" action="jury" value="Jury" />
                             </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="group" value="Group" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="user" value="User" />
+                            </li>
                         </ul>
-                    </h:form>
-                </div>
-            </nav>
-        </div>
-
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-7">
-                    <h:form>
-                        <h:dataTable styleClass="table table-striped table-hover" value="#{festivalController.festivalList}" var="festival">
-                            <h:column>
-                                <f:facet name="header">ID</f:facet>
-                                    #{festival.id}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">NAME</f:facet>
-                                    #{festival.name}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">COUNTRY</f:facet>
-                                    #{festival.country}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DESCRIPTION</f:facet>
-                                    #{festival.description}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">JURIES</f:facet>
-                                <ul>
-                                    <ui:repeat value="#{festival.juryList}" var="jury">
-                                        <li>#{jury.name}</li>
-                                    </ui:repeat>
-                                </ul>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">FILMS</f:facet>
-                                <ul>
-                                    <ui:repeat value="#{festival.filmList}" var="film">
-                                        <li>#{film.name}</li>
-                                    </ui:repeat>
-                                </ul>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DELETE</f:facet>
-                                <h:form>
-                                    <h:commandButton styleClass="btn btn-sm btn-danger" action="#{festivalController.delete(festival)}" value="Delete"/>
-                                </h:form>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                </div>
-                <div class="col-md-5">
-                    <h:form>
-                        <div class="form-group">
-                            Festival Name: <h:inputText value="#{festivalController.festival.name}" /> <br/>
-                            Festival Country: <h:inputText value="#{festivalController.festival.country}" /> <br/>
-                            Festival Description: <h:inputText value="#{festivalController.festival.description}" /> <br/>
-                            Festival Year: <h:inputText value="#{festivalController.festival.year}" /> <br/>
-                            <h:commandButton value="Create" action="#{festivalController.create}" />
-                        </div>
-                    </h:form>
-                </div>
+                    </div>
+                </nav>
             </div>
+        </h:form>
+        <div class="container">
+
+            <div class="col-md-7">
+                <h:form>
+                    <h:dataTable styleClass="table table-striped table-hover" value="#{festivalController.festivalList}" var="festival">
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                            <h:commandLink action="#{festivalController.updateForm(festival)}" value="#{festival.id}" />                                   
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">NAME</f:facet>
+                                #{festival.name}   
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">COUNTRY</f:facet>
+                                #{festival.country}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">DESCRIPTION</f:facet>
+                                #{festival.description}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">JURIES</f:facet>
+                            <ul>
+                                <ui:repeat value="#{festival.juryList}" var="jury">
+                                    <li>#{jury.name}</li>
+                                </ui:repeat>
+                            </ul>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">FILMS</f:facet>
+                            <ul>
+                                <ui:repeat value="#{festival.filmList}" var="film">
+                                    <li>#{film.name}</li>
+                                </ui:repeat>
+                            </ul>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+            <div class="col-md-5">
+                <h:form>
+                    <div class="form-group">   
+                        <h:inputHidden value="#{festivalController.festival.id}" />
+                        
+                        <label for="inputName">Festival Name: </label>
+                        <h:inputText id="inputName" value="#{festivalController.festival.name}" styleClass="form-control"/> 
+                        <label for="inputCountry">Festival Country: </label>
+                        <h:inputText value="#{festivalController.festival.country}" styleClass="form-control"/> 
+                        <label for="inputDescription">Festival Description: </label>
+                        <h:inputText value="#{festivalController.festival.description}" styleClass="form-control"/> 
+                        <label for="inputYear">Festival Year: </label>
+                        <h:inputText value="#{festivalController.festival.year}" styleClass="form-control"/> 
+                        <label for="selectJuries" >Festival Juries: </label>
+                        <h:selectManyMenu value="#{festivalController.selectedJuries}" style="height: 100px" styleClass="custom-select form-control">
+                            <f:selectItems value="#{festivalController.juryList}" var="jury" itemValue="#{jury.id}" itemLabel="#{jury.name}"/> 
+                        </h:selectManyMenu>
+
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton rendered="#{festivalController.festival.id == null}" styleClass="btn btn-primary" value="Create" action="#{festivalController.create}" />
+                        <h:commandButton rendered="#{festivalController.festival.id != null}" styleClass="btn btn-secondary" value="Update" action="#{festivalController.update}" />
+                        <h:commandButton rendered="#{festivalController.festival.id != null}" styleClass="btn btn-danger" value="Delete" action="#{festivalController.delete}" />
+                    </div>
+                </h:form>
+            </div>
+
         </div>
     </h:body>
 </html>
