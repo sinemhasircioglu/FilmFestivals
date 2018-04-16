@@ -47,8 +47,10 @@ public class JuryController implements Serializable{
         return "jury";
     }
     
-    public String delete(Juries j) {
-        this.getJuryDao().delete(j);
+    public String delete() {
+        this.getJuryDao().delete(this.jury);
+        this.selectedFestival=null;
+        this.selectedMultimedya=null;
         return"jury";
     }
 

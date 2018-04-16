@@ -1,8 +1,10 @@
 package controllers;
 
 import dao.DirectorDAO;
+import dao.FilmDAO;
 import dao.MultimedyaDAO;
 import entities.Directors;
+import entities.Films;
 import entities.Multimedya;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +26,11 @@ public class DirectorController implements Serializable{
     private Long selectedMultimedya;
     private MultimedyaDAO multimedyaDao;
     private List<Multimedya> multimedyaList;
+    
+    private FilmDAO filmDao; 
+    private List<Films> filmList;
+    private List<Long> selectedFilms;
+
     
     public String updateForm(Directors d){
         this.director=d;
@@ -95,6 +102,28 @@ public class DirectorController implements Serializable{
 
     public void setMultimedyaList(List<Multimedya> multimedyaList) {
         this.multimedyaList = multimedyaList;
+    }   
+
+    public FilmDAO getFilmDao() {
+        if(this.filmDao==null) 
+            this.filmDao=new FilmDAO();
+        return filmDao;
     }
-    
+
+    public List<Films> getFilmList() {
+        this.filmList=this.getFilmDao().findAll();
+        return filmList;
+    }
+
+    public void setFilmList(List<Films> filmList) {
+        this.filmList = filmList;
+    }
+
+    public List<Long> getSelectedFilms() {
+        return selectedFilms;
+    }
+
+    public void setSelectedFilms(List<Long> selectedFilms) {
+        this.selectedFilms = selectedFilms;
+    }   
 }

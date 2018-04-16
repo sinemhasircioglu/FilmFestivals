@@ -37,8 +37,7 @@ public class FestivalController implements Serializable{
         this.selectedJuries=new ArrayList<>();
         for(Juries j : this.festival.getJuryList()) {
             this.selectedJuries.add(j.getId());
-        }
-        
+        }      
         this.selectedFilms=new ArrayList<>();
         for(Films film :this.festival.getFilmList()){
             this.selectedFilms.add(film.getId());
@@ -51,8 +50,8 @@ public class FestivalController implements Serializable{
         return "festival";
     }
    
-    public String delete(Festivals f) {
-        this.getFestivalDao().delete(f);
+    public String delete() {
+        this.getFestivalDao().delete(this.festival);
         return "festival";
     }
     
@@ -65,10 +64,6 @@ public class FestivalController implements Serializable{
         if(this.festivalDao==null)
             this.festivalDao=new FestivalDAO();
         return festivalDao;
-    }
-
-    public void setFestivalDao(FestivalDAO festivalDao) {
-        this.festivalDao = festivalDao;
     }
 
     public Festivals getFestival() {

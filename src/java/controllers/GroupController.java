@@ -44,7 +44,14 @@ public class GroupController implements Serializable{
         return "group";
     }
     
+    public String delete() {
+        this.getGroupDao().delete(this.group);
+        return "group";
+    }
+    
     public Group getGroup() {
+        if(this.group==null)
+            this.group=new Group();
         return group;
     }
 
