@@ -21,12 +21,22 @@ public class DirectorDAO {
     private MultimedyaDAO multimedyaDao;
     private FilmDAO filmDao;
     
-    public void create(Directors d, Long selectedMultimedya){
+    public void create(Directors d, Long selectedMultimedya, List<Long> selectedFilms){
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Directors\"(name,fileid) VALUES ('" + d.getName() + "',"+selectedMultimedya+")");
+            st.executeUpdate("INSERT INTO public.\"Directors\"(name,fileid) VALUES ('" + d.getName() + "',"+selectedMultimedya+")",Statement.RETURN_GENERATED_KEYS);
+            
+            Long directorid=null;
+            ResultSet gk=st.getGeneratedKeys();
+            if(gk.next()){
+                directorid=gk.getLong(1);
+            }
+            for(Long l : selectedFilms){
+                Statement st2=c.createStatement();
+                st2.executeUpdate("insert into director_film(directorid, filmid) values ("+directorid+","+l+")");              
+            }          
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,12 +100,12 @@ public class DirectorDAO {
         return directorList;
     }
 
-    public void update(Directors d) {
+    public void update(Directors d,Long selectedMultimedya, List<Long> selectedFilms) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Directors\" WHERE id="+d.getId()+" SET name='" + d.getName() + "' ");
+            st.executeUpdate("UPDATE public.\"Directors\" SET name='" + d.getName() + "', fileid="+selectedMultimedya+" WHERE id="+d.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,6 +134,5 @@ public class DirectorDAO {
         if(this.filmDao==null)
             this.filmDao=new FilmDAO();
         return filmDao;
-    }
-    
+    }   
 }

@@ -24,7 +24,7 @@ public class FilmDAO {
     private MultimedyaDAO multimedyaDao;
     private DirectorDAO directorDao;
 
-    public void insert(Films film, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors) {
+    public void insert(Films film, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors, List<Long> selectedActors, List<Long> selectedMusics) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -94,8 +94,24 @@ public class FilmDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return festivalFilms;
-        
+        return festivalFilms;      
+    }
+    
+    public List<Films> getMultimedyaFilms(Long fileid) {
+        List<Films> multimedyaFilms = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE fileid=" + fileid + "");
+            while (rs.next()) {
+                multimedyaFilms.add(this.find(rs.getLong("id")));
+            }
+            c.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return multimedyaFilms;      
     }
 
     public Films find(Long id) {
@@ -129,12 +145,12 @@ public class FilmDAO {
         }
     }
     
-    public void update(Films f) {
+    public void update(Films f, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors, List<Long> selectedActors, List<Long> selectedMusics) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Films\" WHERE id="+f.getId()+" SET name='" + f.getName() + "' , genre='" + f.getGenre() + "' ");
+            st.executeUpdate("UPDATE public.\"Films\" SET name='" + f.getName() + "' , genre='" + f.getGenre() + "' WHERE id="+f.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);

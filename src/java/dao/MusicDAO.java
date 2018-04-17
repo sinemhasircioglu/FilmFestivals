@@ -17,34 +17,66 @@ import utility.DBConnection;
  */
 public class MusicDAO {
     
-    public List<Musics> findAll() {
-        List<Musics> musicList=new ArrayList();
+    private FilmDAO filmDao;
+
+    public void create(Musics m, Long selectedFilm) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\"");          
+            st.executeUpdate("INSERT INTO public.\"Musics\"(name,filmid) VALUES ('" + m.getName() + "'," + selectedFilm + ")");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MusicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public List<Musics> findAll() {
+        List<Musics> musicList = new ArrayList();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\"");
             while (rs.next()) {
-                Musics mu= new Musics();
+                Musics mu = new Musics();
                 mu.setId(rs.getLong("id"));
                 mu.setName(rs.getString("name"));
+                mu.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
                 musicList.add(mu);
             }
             c.close();
-        } 
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return musicList; 
+        return musicList;
     }
     
-     public List<Musics> getFilmMusics(Long filmid){
+    public Musics find(Long id) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        Musics mu =null;
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE id="+id+"");
+            rs.next();
+            mu = new Musics();
+            mu.setId(rs.getLong("id"));
+            mu.setName(rs.getString("name"));
+            c.close();                    
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return mu;
+    }
+
+    public List<Musics> getFilmMusics(Long filmid) {
         List<Musics> filmMusics = new ArrayList();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE filmid="+filmid+"");
+            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE filmid=" + filmid + "");
             while (rs.next()) {
                 Musics ac = new Musics();
                 ac.setId(rs.getLong("id"));
@@ -57,8 +89,20 @@ public class MusicDAO {
         }
         return filmMusics;
     }
-     
-     public void delete(Musics m) {
+
+    public void update(Musics m, Long selectedFilm) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("UPDATE public.\"Musics\" SET name='" + m.getName() + "' , filmid=" + selectedFilm + " WHERE id=" + m.getId() + " ");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void delete(Musics m) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -68,5 +112,11 @@ public class MusicDAO {
         } catch (SQLException ex) {
             Logger.getLogger(MusicDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public FilmDAO getFilmDao() {
+        if(this.filmDao==null)
+            this.filmDao=new FilmDAO();
+        return filmDao;
     }
 }

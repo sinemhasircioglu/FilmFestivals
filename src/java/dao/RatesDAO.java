@@ -19,6 +19,18 @@ public class RatesDAO {
     
     private TypeDAO typeDao;
     
+        public void create(Rates r, Long selectedRaterType,Long selectedRatedType) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("INSERT INTO public.\"Rates\"(typeraterid,raterid,typeratedid,ratedid) VALUES ("+selectedRaterType+","+selectedRatedType+")");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public List<Rates> findAll() {
         List<Rates> rateList = new ArrayList<>();
         DBConnection db = new DBConnection();
@@ -79,6 +91,18 @@ public class RatesDAO {
         return rate;
     }
 
+        public void update(Rates r,Long selectedType) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("UPDATE public.\"Rates\" SET WHERE id="+r.getId()+" ");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void delete(Rates r) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -96,5 +120,5 @@ public class RatesDAO {
             this.typeDao=new TypeDAO();
         return typeDao;
     }
-    
+   
 }

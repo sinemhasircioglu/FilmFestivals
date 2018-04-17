@@ -118,7 +118,7 @@ public class JuryDAO {
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Juries\" SET name='" + j.getName() + "' festivalid="+selectedFestival+" fileid="+selectedMultimedya+" WHERE id="+j.getId()+" ");
+            st.executeUpdate("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+selectedFestival+", fileid="+selectedMultimedya+" WHERE id="+j.getId()+" ");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);

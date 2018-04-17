@@ -2,6 +2,7 @@ package dao;
 
 import entities.Multimedya;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,6 +24,18 @@ public class MultimedyaDAO {
     private JuryDAO juryDao;
     private FilmDAO filmDao;
 
+    public void create(Multimedya med, List<Long> selectedUsers) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("INSERT INTO public.\"Multimedya\"(url) VALUES (" + med.getUrl()+ ")");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public List<Multimedya> findAll() {
         List<Multimedya> multimedyaList = new ArrayList<>();
         DBConnection db = new DBConnection();
@@ -34,6 +47,11 @@ public class MultimedyaDAO {
                 Multimedya med = new Multimedya();
                 med.setId(rs.getLong("id"));
                 med.setUrl(rs.getString("url"));
+                //med.setActorList(this.getActorDao().);
+                //med.setDirectorList(this.getActorDao().);
+                //med.setFilmList(this.getFilmDao().);
+                med.setJuryList(this.getJuryDao().getFileJuries(med.getId()));
+                med.setUserList(this.getUserDao().getFileUsers(med.getId()));
                 multimedyaList.add(med);
             }
             c.close();
@@ -61,6 +79,24 @@ public class MultimedyaDAO {
             Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return multimedya;
+    }
+    
+    public void update(Multimedya med, List<Long> selectedUsers) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            PreparedStatement pst;
+            pst = c.prepareStatement("UPDATE public.\"Multimedya\" SET url=" + med.getUrl() + " WHERE id=" + med.getId() + " ");
+            pst.executeUpdate();
+
+            for (Long l : selectedUsers) {
+                pst = c.prepareStatement("UPDATE public.\"Users\" SET fileid=" +med.getId()+ " WHERE id=" +Long.valueOf(l)+ " ");
+                pst.executeUpdate();
+            }
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void delete(Multimedya m) {

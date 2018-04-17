@@ -2,6 +2,7 @@ package dao;
 
 import entities.Type;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +19,18 @@ import utility.DBConnection;
 public class TypeDAO {
     
     private RatesDAO ratesDao;
+    
+        public void create(Type type, List<Long> selectedRates) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            Statement st = c.createStatement();
+            st.executeUpdate("INSERT INTO public.\"Type\"(name) VALUES (" + type.getName() + ")");
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public List<Type> findAll() {
         List<Type> typeList = new ArrayList<>();
@@ -56,6 +69,24 @@ public class TypeDAO {
             Logger.getLogger(TypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return type;
+    }
+    
+        public void update(Type type, List<Long> selectedRates) {
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            PreparedStatement pst;
+            pst = c.prepareStatement("UPDATE public.\"Type\" SET name='" + type.getName() + "' WHERE id=" + type.getId() + " ");
+            pst.executeUpdate();
+
+            //for (Long l : selectedRates) {
+             //   pst = c.prepareStatement("UPDATE public.\"Rates\" SET groupid=" +group.getId()+ " WHERE id=" +Long.valueOf(l)+ " ");
+             //   pst.executeUpdate();
+            //}
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(TypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void delete(Type t) {

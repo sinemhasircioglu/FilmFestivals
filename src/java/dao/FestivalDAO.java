@@ -2,6 +2,7 @@ package dao;
 
 import entities.Festivals;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,13 +20,13 @@ public class FestivalDAO {
 
     private JuryDAO juryDao;
     private FilmDAO filmDao;
-    
-    public void create(Festivals f,List<Long> selectedJuries, List<Long> selectedFilms) {
+
+    public void create(Festivals f, List<Long> selectedJuries, List<Long> selectedFilms) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Festivals\"(name,country,description,year) VALUES ('" + f.getName() + "','"+f.getCountry()+"','"+f.getDescription()+"',"+f.getYear()+")");
+            st.executeUpdate("INSERT INTO public.\"Festivals\"(name,country,description,year) VALUES ('" + f.getName() + "','" + f.getCountry() + "','" + f.getDescription() + "'," + f.getYear() + ")");
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,13 +79,23 @@ public class FestivalDAO {
         }
         return fest;
     }
-    
-    public void update(Festivals f,List<Long> selectedJuries, List<Long> selectedFilms) {
+
+    public void update(Festivals f, List<Long> selectedJuries, List<Long> selectedFilms) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Festivals\" WHERE id="+f.getId()+" SET name='" + f.getName() + "' , country='" + f.getCountry() + "', description='" + f.getDescription() + "', year=" + f.getYear() + " ");
+            PreparedStatement pst;
+            pst = c.prepareStatement("UPDATE public.\"Festivals\" SET name='" + f.getName() + "' , country='" + f.getCountry() + "', description='" + f.getDescription() + "', year=" + f.getYear() + " WHERE id=" + f.getId() + " ");
+            pst.executeUpdate();
+
+            for (Long j : selectedJuries) {
+                pst = c.prepareStatement("UPDATE public.\"Juries\" SET festivalid=" + f.getId()+ " WHERE id=" + j+ " ");
+                pst.executeUpdate();
+            }
+            for (Long l : selectedFilms) {
+                pst = c.prepareStatement("UPDATE public.\"Films\" SET festivalid=" + f.getId()+ " WHERE id=" + l+ " ");
+                pst.executeUpdate();
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,8 +106,16 @@ public class FestivalDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Festivals\" WHERE id=" + f.getId() + "");
+            PreparedStatement pst;
+            pst = c.prepareStatement("DELETE FROM public.\"Juries\" WHERE festivalid=" + f.getId() + "");
+            pst.executeUpdate();
+
+            pst = c.prepareStatement("DELETE FROM public.\"Films\" WHERE festivalid=" + f.getId() + "");
+            pst.executeUpdate();
+
+            pst = c.prepareStatement("DELETE FROM public.\"Festivals\" WHERE id=" + f.getId() + "");
+            pst.executeUpdate();
+
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);

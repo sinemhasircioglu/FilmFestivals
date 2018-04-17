@@ -155,5 +155,4 @@ public class UserDAO {
         }
         return groupDao;
     }
-
 }

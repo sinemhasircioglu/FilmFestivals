@@ -2,6 +2,7 @@ package dao;
 
 import entities.Group;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,7 +17,7 @@ import utility.DBConnection;
  * @author sinem
  */
 public class GroupDAO {
-    
+
     private UserDAO userDao;
 
     public void create(Group group, List<Long> selectedUsers) {
@@ -51,7 +52,7 @@ public class GroupDAO {
         }
         return groupList;
     }
-    
+
     public Group find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
@@ -70,12 +71,16 @@ public class GroupDAO {
         return group;
     }
 
-    public void update(Group group,List<Long> selectedUsers) {
+    public void update(Group group, List<Long> selectedUsers) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
             Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Group\" SET authority=" + group.getAuthority() + " WHERE id="+group.getId()+" ");
+            st.executeUpdate("UPDATE public.\"Group\" SET authority='" + group.getAuthority() + "' WHERE id="+group.getId()+" ");
+            for (Long l : selectedUsers) {
+                Statement st2 = c.createStatement();
+                st.executeUpdate("UPDATE public.\"Users\" SET groupid=" +group.getId()+ " WHERE id=" +l+ " ");
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,8 +91,12 @@ public class GroupDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Group\" WHERE id=" + group.getId() + "");
+            PreparedStatement pst;
+            pst = c.prepareStatement("DELETE FROM public.\"Users\" WHERE groupid=" + group.getId() + "");
+            pst.executeUpdate();
+
+            pst = c.prepareStatement("DELETE FROM public.\"Group\" WHERE id=" + group.getId() + "");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,9 +104,10 @@ public class GroupDAO {
     }
 
     public UserDAO getUserDao() {
-        if(this.userDao==null)
-            this.userDao=new UserDAO();
+        if (this.userDao == null) {
+            this.userDao = new UserDAO();
+        }
         return userDao;
     }
-    
+
 }
