@@ -10,7 +10,7 @@
     </h:head>
     <h:body>
         <h:form>
-         <div class="container">
+            <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
@@ -35,83 +35,90 @@
                             <li class="nav-item">
                                 <h:commandLink styleClass="nav-link" action="user" value="User" />
                             </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="music" value="Music" />
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink styleClass="nav-link" action="actor" value="Actor" />
+                            </li>
                         </ul>
                     </div>
                 </nav>
             </div>
-            </h:form>
+        </h:form>
         <div class="container">
-            
-                <div class="col-md-8">
-                    <h:form>
-                        <h:dataTable styleClass="table table-striped table-hover" value="#{filmController.filmList}" var="film">
-                            <h:column>
-                                <f:facet name="header">ID</f:facet>
-                                    #{film.id}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">NAME</f:facet>
-                                <h:commandLink action="#{filmController.updateForm(film)}" value="#{film.name}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">GENRE</f:facet>
-                                    #{film.genre}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">FESTIVAL</f:facet>
-                                    #{film.festival.name}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">ACTORS</f:facet>
-                                <ul>
-                                    <ui:repeat value="#{film.actorList}" var="actor">
-                                        <li>#{actor.name}</li>
-                                    </ui:repeat>
-                                </ul>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">FILE</f:facet>
-                                    #{film.multimedya.url}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DIRECTORS</f:facet>
-                                <ul>
-                                    <ui:repeat value="#{film.filmDirectors}" var="director">
-                                        <li>#{director.name}</li>
-                                    </ui:repeat>
-                                </ul>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">DELETE</f:facet>
-                                <h:commandButton styleClass="btn btn-sm btn-danger" action="#{filmController.delete(film)}" value="Delete"/>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                </div>
 
-                <div class="col-md-4">
-                    <h:form>
-                        <div class="form-group">
-                            <h:inputHidden value="#{filmController.film.id}" />
-                            <label for="inputName">Film Name: </label>
-                            <h:inputText value="#{filmController.film.name}" styleClass="form-control"/> 
-                            <label for="inputGenre">Film Genre: </label>
-                            <h:inputText value="#{filmController.film.genre}" styleClass="form-control" />  
-                            <label for="selectMultimedya">Film Multimedya: </label>
-                            <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{filmController.selectedMultimedya}">
-                                <f:selectItems value="#{filmController.multimedyaList}" var="multimedya" itemValue="#{multimedya.id}" itemLabel="#{multimedya.url}"/>
-                            </h:selectOneMenu>
-                            <label for="selectJuries" >Fİlm Directors </label>
-                            <h:selectManyMenu value="#{filmController.selectedDirectors}" style="height: 200px" styleClass="custom-select form-control">
-                                <f:selectItems value="#{filmController.directorController.directorList}" var="director" itemValue="#{director.id}" itemLabel="#{director.name}"/> 
-                            </h:selectManyMenu>
-                        </div>
-                        <div class="form-group">
-                            <h:commandButton styleClass="btn btn-primary" value="Create" action="#{filmController.create}" />
-                            <h:commandButton styleClass="btn btn-secondary" value="Update" action="#{filmController.update}" />
-                        </div>
-                    </h:form>
-                </div>
+            <div class="col-md-8">
+                <h:form>
+                    <h:dataTable styleClass="table table-striped table-hover" value="#{filmController.filmList}" var="film">
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                                #{film.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">NAME</f:facet>
+                            <h:commandLink action="#{filmController.updateForm(film)}" value="#{film.name}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">GENRE</f:facet>
+                                #{film.genre}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">FESTIVAL</f:facet>
+                                #{film.festival.name}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">ACTORS</f:facet>
+                            <ul>
+                                <ui:repeat value="#{film.actorList}" var="actor">
+                                    <li>#{actor.name}</li>
+                                </ui:repeat>
+                            </ul>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">FILE</f:facet>
+                                #{film.multimedya.url}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">DIRECTORS</f:facet>
+                            <ul>
+                                <ui:repeat value="#{film.filmDirectors}" var="director">
+                                    <li>#{director.name}</li>
+                                </ui:repeat>
+                            </ul>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+
+            <div class="col-md-4">
+                <h:form>
+                    <div class="form-group">
+                        <h:inputHidden value="#{filmController.film.id}" />
+                        <label for="inputName">Film Name: </label>
+                        <h:inputText value="#{filmController.film.name}" styleClass="form-control"/> 
+                        <label for="inputGenre">Film Genre: </label>
+                        <h:inputText value="#{filmController.film.genre}" styleClass="form-control" />  
+                        <label for="selectMultimedya">Film Multimedya: </label>
+                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{filmController.selectedMultimedya}">
+                            <f:selectItems value="#{filmController.multimedyaList}" var="multimedya" itemValue="#{multimedya.id}" itemLabel="#{multimedya.url}"/>
+                        </h:selectOneMenu>
+                        <label for="selectFestival">Film Festival: </label>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{filmController.selectedFestival}">
+                            <f:selectItems value="#{filmController.festivalList}" var="festival" itemValue="#{festival.id}" itemLabel="#{festival.name}"/>
+                        </h:selectOneMenu>
+                        <label for="selectJuries" >Fİlm Directors </label>
+                        <h:selectManyMenu value="#{filmController.selectedDirectors}" style="height: 200px" styleClass="custom-select form-control">
+                            <f:selectItems value="#{filmController.directorList}" var="director" itemValue="#{director.id}" itemLabel="#{director.name}"/> 
+                        </h:selectManyMenu>
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton styleClass="btn btn-primary" value="Create" action="#{filmController.create}" />
+                        <h:commandButton styleClass="btn btn-secondary" value="Update" action="#{filmController.update}" />
+                        <h:commandButton styleClass="btn btn-danger" value="Delete" action="#{filmController.delete}" />
+                    </div>
+                </h:form>
+            </div>
 
         </div>
     </h:body>

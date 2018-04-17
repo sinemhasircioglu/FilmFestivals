@@ -5,8 +5,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Festival</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+        <title>Music</title>
     </h:head>
     <h:body>
         <h:form>
@@ -50,70 +50,44 @@
 
             <div class="col-md-7">
                 <h:form>
-                    <h:dataTable styleClass="table table-striped table-hover" value="#{festivalController.festivalList}" var="festival">
+                    <h:dataTable styleClass="table table-striped table-hover" value="#{musicController.musicList}" var="music">
                         <h:column>
                             <f:facet name="header">ID</f:facet>
-                            <h:commandLink action="#{festivalController.updateForm(festival)}" value="#{festival.id}" />                                   
+                            <h:commandLink action="#{musicController.updateForm(music)}" value="#{music.id}"/>                                  
                         </h:column>
                         <h:column>
                             <f:facet name="header">NAME</f:facet>
-                                #{festival.name}   
+                                #{music.name}                            
                         </h:column>
                         <h:column>
-                            <f:facet name="header">COUNTRY</f:facet>
-                                #{festival.country}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">DESCRIPTION</f:facet>
-                                #{festival.description}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">JURIES</f:facet>
-                            <ul>
-                                <ui:repeat value="#{festival.juryList}" var="jury">
-                                    <li>#{jury.name}</li>
-                                </ui:repeat>
-                            </ul>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">FILMS</f:facet>
-                            <ul>
-                                <ui:repeat value="#{festival.filmList}" var="film">
-                                    <li>#{film.name}</li>
-                                </ui:repeat>
-                            </ul>
+                            <f:facet name="header">FILM</f:facet>
+                                #{music.film.name}
                         </h:column>
                     </h:dataTable>
                 </h:form>
             </div>
+
             <div class="col-md-5">
                 <h:form>
-                    <div class="form-group">   
-                        <h:inputHidden value="#{festivalController.festival.id}" />
-                        
-                        <label for="inputName">Festival Name: </label>
-                        <h:inputText id="inputName" value="#{festivalController.festival.name}" styleClass="form-control"/> 
-                        <label for="inputCountry">Festival Country: </label>
-                        <h:inputText value="#{festivalController.festival.country}" styleClass="form-control"/> 
-                        <label for="inputDescription">Festival Description: </label>
-                        <h:inputText value="#{festivalController.festival.description}" styleClass="form-control"/> 
-                        <label for="inputYear">Festival Year: </label>
-                        <h:inputText value="#{festivalController.festival.year}" styleClass="form-control"/> 
-                        <label for="selectJuries" >Festival Juries: </label>
-                        <h:selectManyMenu value="#{festivalController.selectedJuries}" style="height: 100px" styleClass="custom-select form-control">
-                            <f:selectItems value="#{festivalController.juryList}" var="jury" itemValue="#{jury.id}" itemLabel="#{jury.name}"/> 
-                        </h:selectManyMenu>
-
+                    <div class="form-group">  
+                        <h:inputHidden value="#{musicController.music.id}" />
+                        <label for="inputName">Music Name: </label>
+                        <h:inputText id="inputName" styleClass="form-control" value="#{musicController.music.name}" /> 
+                        <label for="selectFestival">Music Film: </label>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{musicController.selectedFilm}">
+                            <f:selectItems value="#{musicController.filmList}" var="film" itemValue="#{film.id}" itemLabel="#{film.name}"/>
+                        </h:selectOneMenu>
                     </div>
                     <div class="form-group">
-                        <h:commandButton rendered="#{festivalController.festival.id == null}" styleClass="btn btn-primary" value="Create" action="#{festivalController.create}" />
-                        <h:commandButton rendered="#{festivalController.festival.id != null}" styleClass="btn btn-secondary" value="Update" action="#{festivalController.update}" />
-                        <h:commandButton rendered="#{festivalController.festival.id != null}" styleClass="btn btn-danger" value="Delete" action="#{festivalController.delete}" />
+                        <h:commandButton rendered="#{musicController.music.id == null}" styleClass="btn btn-primary" value="Create" action="#{musicController.create}" />
+                        <h:commandButton rendered="#{musicController.music.id != null}" styleClass="btn btn-secondary" value="Update" action="#{musicController.update}" />
+                        <h:commandButton rendered="#{musicController.music.id != null}" styleClass="btn btn-danger" value="Delete" action="#{musicController.delete}" />
+
                     </div>
                 </h:form>
             </div>
 
+
         </div>
     </h:body>
 </html>
-
