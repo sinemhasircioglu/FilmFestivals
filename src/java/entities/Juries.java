@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Objects;
+
 /**
  *
  * @author sinem
@@ -41,10 +43,29 @@ public class Juries {
     public void setMultimedya(Multimedya multimedya) {
         this.multimedya = multimedya;
     }
-    
+
     @Override
-    public String toString() {
-        return "Juries{" + "id=" + id + ", name=" + name + ", festival=" + festival + ", multimedya=" + multimedya + '}';
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Juries other = (Juries) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Objects;
+
 /**
  *
  * @author sinem
@@ -43,8 +45,28 @@ public class Rates {
     }
 
     @Override
-    public String toString() {
-        return "Rates{" + "id=" + id + ", raterType=" + raterType + ", ratedType=" + ratedType + ", rate=" + rate + '}';
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        return hash;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Rates other = (Rates) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+  
 }

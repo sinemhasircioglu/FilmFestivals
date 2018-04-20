@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Objects;
 
 /**
  *
@@ -69,6 +70,31 @@ public class Users {
 
     public void setMultimedya(Multimedya multimedya) {
         this.multimedya = multimedya;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Users other = (Users) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 
 }
