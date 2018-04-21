@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Type {
     private Long id;
     private String name;
-    private List<Rates> rateList;
+    private List<Rates> typeRates;
 
     public Long getId() {
         return id;
@@ -28,12 +28,12 @@ public class Type {
         this.name = name;
     }
 
-    public List<Rates> getRateList() {
-        return rateList;
+    public List<Rates> getTypeRates() {
+        return typeRates;
     }
 
-    public void setRateList(List<Rates> rateList) {
-        this.rateList = rateList;
+    public void setTypeRates(List<Rates> typeRates) {
+        this.typeRates = typeRates;
     }
 
     @Override

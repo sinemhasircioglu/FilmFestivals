@@ -14,8 +14,8 @@ public class Festivals {
     private String country;
     private String description;
     private int year;
-    private List<Juries> juryList;
-    private List<Films> filmList;
+    private List<Juries> festivalJuries;
+    private List<Films> festivalFilms;
 
     public Long getId() {
         return id;
@@ -57,20 +57,20 @@ public class Festivals {
         this.year = year;
     }
 
-    public List<Juries> getJuryList() {
-        return juryList;
+    public List<Juries> getFestivalJuries() {
+        return festivalJuries;
     }
 
-    public void setJurylist(List<Juries> juryList) {
-        this.juryList = juryList;
+    public void setFestivalJuries(List<Juries> festivalJuries) {
+        this.festivalJuries = festivalJuries;
     }
 
-    public List<Films> getFilmList() {
-        return filmList;
+    public List<Films> getFestivalFilms() {
+        return festivalFilms;
     }
 
-    public void setFilmlist(List<Films> filmList) {
-        this.filmList = filmList;
+    public void setFestivalFilms(List<Films> festivalFilms) {
+        this.festivalFilms = festivalFilms;
     }
 
     @Override

@@ -10,11 +10,11 @@ import java.util.Objects;
 public class Multimedya {
     private Long id;
     private String url;
-    private List<Actors> actorList;
-    private List<Directors> directorList;
-    private List<Films> filmList;
-    private List<Juries> juryList;
-    private List<Users> userList;
+    private List<Actors> multimedyaActors;
+    private List<Directors> multimedyaDirectors;
+    private List<Films> multimedyaFilms;
+    private List<Juries> multimedyaJuries;
+    private List<Users> multimedyaUsers;
 
     public Long getId() {
         return id;
@@ -32,44 +32,44 @@ public class Multimedya {
         this.url = url;
     }
 
-    public List<Actors> getActorList() {
-        return actorList;
+    public List<Actors> getMultimedyaActors() {
+        return multimedyaActors;
     }
 
-    public void setActorList(List<Actors> actorList) {
-        this.actorList = actorList;
+    public void setMultimedyaActors(List<Actors> multimedyaActors) {
+        this.multimedyaActors = multimedyaActors;
     }
 
-    public List<Directors> getDirectorList() {
-        return directorList;
+    public List<Directors> getMultimedyaDirectors() {
+        return multimedyaDirectors;
     }
 
-    public void setDirectorList(List<Directors> directorList) {
-        this.directorList = directorList;
+    public void setMultimedyaDirectors(List<Directors> multimedyaDirectors) {
+        this.multimedyaDirectors = multimedyaDirectors;
     }
 
-    public List<Films> getFilmList() {
-        return filmList;
+    public List<Films> getMultimedyaFilms() {
+        return multimedyaFilms;
     }
 
-    public void setFilmList(List<Films> filmList) {
-        this.filmList = filmList;
+    public void setMultimedyaFilms(List<Films> multimedyaFilms) {
+        this.multimedyaFilms = multimedyaFilms;
     }
 
-    public List<Juries> getJuryList() {
-        return juryList;
+    public List<Juries> getMultimedyaJuries() {
+        return multimedyaJuries;
     }
 
-    public void setJuryList(List<Juries> juryList) {
-        this.juryList = juryList;
+    public void setMultimedyaJuries(List<Juries> multimedyaJuries) {
+        this.multimedyaJuries = multimedyaJuries;
     }
 
-    public List<Users> getUserList() {
-        return userList;
+    public List<Users> getMultimedyaUsers() {
+        return multimedyaUsers;
     }
 
-    public void setUserList(List<Users> userList) {
-        this.userList = userList;
+    public void setMultimedyaUsers(List<Users> multimedyaUsers) {
+        this.multimedyaUsers = multimedyaUsers;
     }
 
     @Override

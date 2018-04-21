@@ -13,8 +13,8 @@ public class Films {
     private Long id;
     private String name;
     private String genre;
-    private List<Actors> actorList;
-    private List<Musics> musicList;
+    private List<Actors> filmActors;
+    private List<Musics> filmMusics;
     private Festivals festival;
     private Multimedya multimedya;
     private List<Directors> filmDirectors;
@@ -41,22 +41,6 @@ public class Films {
 
     public void setGenre(String genre) {
         this.genre = genre;
-    }
-
-    public List<Actors> getActorList() {
-        return actorList;
-    }
-
-    public void setActorList(List<Actors> actorList) {
-        this.actorList = actorList;
-    }
-
-    public List<Musics> getMusicList() {
-        return musicList;
-    }
-
-    public void setMusiclist(List<Musics> musicList) {
-        this.musicList = musicList;
     }
 
     public Festivals getFestival() {
@@ -89,6 +73,22 @@ public class Films {
 
     public void setFilmDirectors(List<Directors> filmDirectors) {
         this.filmDirectors = filmDirectors;
+    }
+
+    public List<Actors> getFilmActors() {
+        return filmActors;
+    }
+
+    public void setFilmActors(List<Actors> filmActors) {
+        this.filmActors = filmActors;
+    }
+
+    public List<Musics> getFilmMusics() {
+        return filmMusics;
+    }
+
+    public void setFilmMusics(List<Musics> filmMusics) {
+        this.filmMusics = filmMusics;
     }
 
     @Override
