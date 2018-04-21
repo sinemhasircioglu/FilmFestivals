@@ -79,8 +79,8 @@
                             <h:inputHidden value="#{groupController.group.id}" />
                             
                             <label for="selectUsers">USERS</label>
-                            <h:selectManyMenu style="height: 250px" id="selectUsers" value="#{groupController.selectedUsers}" styleClass="custom-select" >
-                                <f:selectItems value="#{groupController.userList}" var="user" itemValue="#{user.id}" itemLabel="#{user.name}" />
+                            <h:selectManyMenu style="height: 250px" id="selectUsers" value="#{groupController.group.userList}" styleClass="custom-select" converter="userConverter" >
+                                <f:selectItems value="#{groupController.userList}" var="user" itemValue="#{user}" itemLabel="#{user.name}" />
                             </h:selectManyMenu>                       
                             <label for="inputAuthority">AUTHORITY</label>
                             <h:inputText value="#{groupController.group.authority}" styleClass="form-control"/>

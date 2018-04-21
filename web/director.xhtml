@@ -10,7 +10,7 @@
     </h:head>
     <h:body>
         <h:form>
-          <div class="container">
+            <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
@@ -45,7 +45,7 @@
                     </div>
                 </nav>
             </div>
-            </h:form>
+        </h:form>
 
         <div class="container">
             <div class="row">
@@ -63,7 +63,7 @@
                             </h:column>                         
                             <h:column>
                                 <f:facet name="header">MULTIMEDYA</f:facet>
-                                #{director.multimedya.url}
+                                    #{director.multimedya.url}
                             </h:column>
                             <h:column>
                                 <f:facet name="header">FILMS</f:facet>
@@ -73,27 +73,32 @@
                                     </ui:repeat>
                                 </ul>
                             </h:column>
-                            <h:column>
-                                <f:facet name="header">DELETE</f:facet>
-                                <h:form>
-                                    <h:commandButton styleClass="btn btn-sm btn-danger" action="#{directorController.delete(director)}" value="Delete"/>
-                                </h:form>
-                            </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
-                
+
                 <div class="col-md-5">
                     <h:form>
                         <div class="form-group">
                             <h:inputHidden value="#{directorController.director.id}" />
                             <label for="inputName">Director Name: </label>
                             <h:inputText value="#{directorController.director.name}" styleClass="form-control"/> 
-                            
+
+                            <label for="selectMultimedya">Director Multimedya: </label>
+                            <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{directorController.director.multimedya}" converter="multimedyaConverter">
+                                <f:selectItems value="#{directorController.multimedyaList}" var="multimedya" itemValue="#{multimedya}" itemLabel="#{multimedya.url}"/>
+                            </h:selectOneMenu>
+
+                            <label for="selectDirectors" >Director Films: </label>
+                            <h:selectManyMenu value="#{directorController.director.directorFilms}" style="height: 200px" styleClass="custom-select form-control" converter="filmConverter">
+                                <f:selectItems value="#{directorController.filmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/> 
+                            </h:selectManyMenu>
+
                         </div>
                         <div class="form-group">
-                            <h:commandButton styleClass="btn btn-primary" value="Create" action="#{directorController.create}" />
-                            <h:commandButton styleClass="btn btn-secondary" value="Create" action="#{directorController.update}" />
+                            <h:commandButton rendered="#{directorController.director.id == null}" styleClass="btn btn-primary" value="Create" action="#{directorController.create}" />
+                            <h:commandButton rendered="#{directorController.director.id != null}" styleClass="btn btn-secondary" value="Update" action="#{directorController.update}" />
+                            <h:commandButton rendered="#{directorController.director.id != null}" styleClass="btn btn-danger" value="Delete" action="#{directorController.delete}" />
                         </div>
                     </h:form>
                 </div>

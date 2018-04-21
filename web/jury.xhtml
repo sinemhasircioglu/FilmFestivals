@@ -78,18 +78,18 @@
                         <label for="inputName">Jury Name: </label>
                         <h:inputText id="inputName" styleClass="form-control" value="#{juryController.jury.name}" /> 
                         <label for="selectFestival">Jury Festival: </label>
-                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{juryController.selectedFestival}">
-                            <f:selectItems value="#{juryController.festivalList}" var="festival" itemValue="#{festival.id}" itemLabel="#{festival.name}"/>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{juryController.jury.festival}" converter="festivalConverter">
+                            <f:selectItems value="#{juryController.festivalList}" var="festival" itemValue="#{festival}" itemLabel="#{festival.name}"/>
                         </h:selectOneMenu>
                         <label for="selectMultimedya">Jury Multimedya: </label>
-                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{juryController.selectedMultimedya}">
-                            <f:selectItems value="#{juryController.multimedyaList}" var="multimedya" itemValue="#{multimedya.id}" itemLabel="#{multimedya.url}"/>
+                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{juryController.jury.multimedya}" converter="multimedyaConverter">
+                            <f:selectItems value="#{juryController.multimedyaList}" var="multimedya" itemValue="#{multimedya}" itemLabel="#{multimedya.url}"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
                         <h:commandButton rendered="#{juryController.jury.id == null}" styleClass="btn btn-primary" value="Create" action="#{juryController.create}" />
                         <h:commandButton rendered="#{juryController.jury.id != null}" styleClass="btn btn-secondary" value="Update" action="#{juryController.update}" />
-                        <h:commandButton rendered="#{juryController.jury.id != null}" styleClass="btn btn-secondary" value="Delete" action="#{juryController.delete}" />
+                        <h:commandButton rendered="#{juryController.jury.id != null}" styleClass="btn btn-danger" value="Delete" action="#{juryController.delete}" />
 
                     </div>
                 </h:form>

@@ -70,8 +70,16 @@
                         <h:column>
                             <f:facet name="header">ACTORS</f:facet>
                             <ul>
-                                <ui:repeat value="#{film.actorList}" var="actor">
+                                <ui:repeat value="#{film.filmActors}" var="actor">
                                     <li>#{actor.name}</li>
+                                </ui:repeat>
+                            </ul>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">MUSICS</f:facet>
+                            <ul>
+                                <ui:repeat value="#{film.filmMusics}" var="music">
+                                    <li>#{music.name}</li>
                                 </ui:repeat>
                             </ul>
                         </h:column>
@@ -100,22 +108,30 @@
                         <label for="inputGenre">Film Genre: </label>
                         <h:inputText value="#{filmController.film.genre}" styleClass="form-control" />  
                         <label for="selectMultimedya">Film Multimedya: </label>
-                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{filmController.selectedMultimedya}">
-                            <f:selectItems value="#{filmController.multimedyaList}" var="multimedya" itemValue="#{multimedya.id}" itemLabel="#{multimedya.url}"/>
+                        <h:selectOneMenu styleClass="custom-select" id="selectMultimedya" value="#{filmController.film.multimedya}" converter="multimedyaConverter">
+                            <f:selectItems value="#{filmController.multimedyaList}" var="multimedya" itemValue="#{multimedya}" itemLabel="#{multimedya.url}"/>
                         </h:selectOneMenu>
                         <label for="selectFestival">Film Festival: </label>
-                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{filmController.selectedFestival}">
-                            <f:selectItems value="#{filmController.festivalList}" var="festival" itemValue="#{festival.id}" itemLabel="#{festival.name}"/>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{filmController.film.festival}" converter="festivalConverter">
+                            <f:selectItems value="#{filmController.festivalList}" var="festival" itemValue="#{festival}" itemLabel="#{festival.name}"/>
                         </h:selectOneMenu>
-                        <label for="selectJuries" >Fİlm Directors </label>
-                        <h:selectManyMenu value="#{filmController.selectedDirectors}" style="height: 200px" styleClass="custom-select form-control">
-                            <f:selectItems value="#{filmController.directorList}" var="director" itemValue="#{director.id}" itemLabel="#{director.name}"/> 
+                        <label for="selectDirectors" >Film Directors </label>
+                        <h:selectManyMenu value="#{filmController.film.filmDirectors}" style="height: 200px" styleClass="custom-select form-control" converter="directorConverter">
+                            <f:selectItems value="#{filmController.directorList}" var="director" itemValue="#{director}" itemLabel="#{director.name}"/> 
+                        </h:selectManyMenu>
+                        <label for="selectMusics" >Film Musics </label>
+                        <h:selectManyMenu value="#{filmController.film.filmMusics}" style="height: 200px" styleClass="custom-select form-control" converter="musicConverter">
+                            <f:selectItems value="#{filmController.musicList}" var="music" itemValue="#{music}" itemLabel="#{music.name}"/> 
+                        </h:selectManyMenu>
+                        <label for="selectActors" >Film Actors </label>
+                        <h:selectManyMenu value="#{filmController.film.filmActors}" style="height: 200px" styleClass="custom-select form-control" converter="actorConverter">
+                            <f:selectItems value="#{filmController.actorList}" var="actor" itemValue="#{actor}" itemLabel="#{actor.name}"/> 
                         </h:selectManyMenu>
                     </div>
                     <div class="form-group">
-                        <h:commandButton styleClass="btn btn-primary" value="Create" action="#{filmController.create}" />
-                        <h:commandButton styleClass="btn btn-secondary" value="Update" action="#{filmController.update}" />
-                        <h:commandButton styleClass="btn btn-danger" value="Delete" action="#{filmController.delete}" />
+                        <h:commandButton rendered="#{filmController.film.id == null}" styleClass="btn btn-primary" value="Create" action="#{filmController.create}" />
+                        <h:commandButton rendered="#{filmController.film.id != null}" styleClass="btn btn-secondary" value="Update" action="#{filmController.update}" />
+                        <h:commandButton rendered="#{filmController.film.id != null}" styleClass="btn btn-danger" value="Delete" action="#{filmController.delete}" />
                     </div>
                 </h:form>
             </div>

@@ -74,8 +74,8 @@
                         <label for="inputName">Music Name: </label>
                         <h:inputText id="inputName" styleClass="form-control" value="#{musicController.music.name}" /> 
                         <label for="selectFestival">Music Film: </label>
-                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{musicController.selectedFilm}">
-                            <f:selectItems value="#{musicController.filmList}" var="film" itemValue="#{film.id}" itemLabel="#{film.name}"/>
+                        <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{musicController.music.film}" converter="filmConverter">
+                            <f:selectItems value="#{musicController.filmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">

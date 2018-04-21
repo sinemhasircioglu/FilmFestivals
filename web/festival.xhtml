@@ -68,9 +68,13 @@
                                 #{festival.description}
                         </h:column>
                         <h:column>
+                            <f:facet name="header">YEAR</f:facet>
+                                #{festival.year}
+                        </h:column>
+                        <h:column>
                             <f:facet name="header">JURIES</f:facet>
                             <ul>
-                                <ui:repeat value="#{festival.juryList}" var="jury">
+                                <ui:repeat value="#{festival.festivalJuries}" var="jury">
                                     <li>#{jury.name}</li>
                                 </ui:repeat>
                             </ul>
@@ -78,7 +82,7 @@
                         <h:column>
                             <f:facet name="header">FILMS</f:facet>
                             <ul>
-                                <ui:repeat value="#{festival.filmList}" var="film">
+                                <ui:repeat value="#{festival.festivalFilms}" var="film">
                                     <li>#{film.name}</li>
                                 </ui:repeat>
                             </ul>
@@ -100,8 +104,12 @@
                         <label for="inputYear">Festival Year: </label>
                         <h:inputText value="#{festivalController.festival.year}" styleClass="form-control"/> 
                         <label for="selectJuries" >Festival Juries: </label>
-                        <h:selectManyMenu value="#{festivalController.selectedJuries}" style="height: 100px" styleClass="custom-select form-control">
-                            <f:selectItems value="#{festivalController.juryList}" var="jury" itemValue="#{jury.id}" itemLabel="#{jury.name}"/> 
+                        <h:selectManyMenu value="#{festivalController.festival.festivalJuries}" style="height: 100px" styleClass="custom-select form-control" converter="juryConverter" >
+                            <f:selectItems value="#{festivalController.juryList}" var="jury" itemValue="#{jury}" itemLabel="#{jury.name}"/> 
+                        </h:selectManyMenu>
+                        <label for="selectFilms" >Festival Juries: </label>
+                        <h:selectManyMenu value="#{festivalController.festival.festivalFilms}" style="height: 100px" styleClass="custom-select form-control" converter="filmConverter">
+                            <f:selectItems value="#{festivalController.filmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/> 
                         </h:selectManyMenu>
 
                     </div>
