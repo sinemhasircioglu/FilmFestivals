@@ -43,7 +43,7 @@ public class TypeDAO {
                 Type type = new Type();
                 type.setId(rs.getLong("id"));
                 type.setName(rs.getString("name"));
-                type.setRateList(this.getRatesDao().getTypeRates(rs.getLong("typeratedid")));
+                type.setRateList(this.getRatesDao().getTypeRates(rs.getLong("typeraterid")));
                 typeList.add(type);
             }
             c.close();
@@ -79,10 +79,10 @@ public class TypeDAO {
             pst = c.prepareStatement("UPDATE public.\"Type\" SET name='" + type.getName() + "' WHERE id=" + type.getId() + " ");
             pst.executeUpdate();
 
-            //for (Long l : selectedRates) {
-             //   pst = c.prepareStatement("UPDATE public.\"Rates\" SET groupid=" +group.getId()+ " WHERE id=" +Long.valueOf(l)+ " ");
-             //   pst.executeUpdate();
-            //}
+            for (Long l : selectedRates) {
+                pst = c.prepareStatement("UPDATE public.\"Rates\" SET typeraterid=" +type.getId()+ " WHERE id=" +Long.valueOf(l)+ " ");
+                pst.executeUpdate();
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(TypeDAO.class.getName()).log(Level.SEVERE, null, ex);

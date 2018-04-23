@@ -1,11 +1,11 @@
 package dao;
 
-
+import entities.Directors;
 import entities.Films;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,12 +24,22 @@ public class FilmDAO {
     private MultimedyaDAO multimedyaDao;
     private DirectorDAO directorDao;
 
-    public void insert(Films film, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors, List<Long> selectedActors, List<Long> selectedMusics) {
+    public void insert(Films film) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Films\"(name,genre,fileid,festivalid) VALUES('" + film.getName() + "','" + film.getGenre() + "',"+selectedMultimedya+","+selectedFestival+") ");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Films\"(name,genre,fileid,festivalid) VALUES('" + film.getName() + "','" + film.getGenre() + "'," + film.getMultimedya().getId() + "," + film.getFestival().getId() + ") ",PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.executeUpdate();
+
+            Long filmId = null;
+            ResultSet gk = pst.getGeneratedKeys();
+            if (gk.next()) 
+                filmId = gk.getLong(1);
+            
+            for(Directors d : film.getFilmDirectors()) {
+                PreparedStatement pst2 = c.prepareStatement("INSERT INTO public.\"FilmDirector\"(filmid,directorid) VALUES("+filmId+","+d.getId()+")");
+                pst2.executeUpdate();                
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,19 +51,19 @@ public class FilmDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Films\"");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Films film = new Films();
                 film.setId(rs.getLong("id"));
                 film.setName(rs.getString("name"));
                 film.setGenre(rs.getString("genre"));
 
-                film.setActorList(this.getActorDao().getFilmActors(film.getId()));
+                film.setFilmActors(this.getActorDao().getFilmActors(film.getId()));
                 film.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
                 film.setFile(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
-                film.setMusiclist(this.getMusicDao().getFilmMusics(film.getId()));
+                film.setFilmMusics(this.getMusicDao().getFilmMusics(film.getId()));
                 filmList.add(film);
             }
             c.close();
@@ -68,8 +78,8 @@ public class FilmDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"FilmDirector\" WHERE directorid=" + directorid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"FilmDirector\" WHERE directorid=" + directorid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 directorFilms.add(this.find(rs.getLong("filmid")));
             }
@@ -85,8 +95,8 @@ public class FilmDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE festivalid=" + festivalid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Films\" WHERE festivalid=" + festivalid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 festivalFilms.add(this.find(rs.getLong("id")));
             }
@@ -94,16 +104,16 @@ public class FilmDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return festivalFilms;      
+        return festivalFilms;
     }
-    
+
     public List<Films> getMultimedyaFilms(Long fileid) {
         List<Films> multimedyaFilms = new ArrayList<>();
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE fileid=" + fileid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Films\" WHERE fileid=" + fileid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 multimedyaFilms.add(this.find(rs.getLong("id")));
             }
@@ -111,7 +121,7 @@ public class FilmDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return multimedyaFilms;      
+        return multimedyaFilms;
     }
 
     public Films find(Long id) {
@@ -119,8 +129,8 @@ public class FilmDAO {
         Connection c = db.connect();
         Films film = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Films\" WHERE id=" + id + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Films\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             film = new Films();
             film.setId(rs.getLong("id"));
@@ -137,20 +147,30 @@ public class FilmDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Films\" WHERE id=" + f.getId() + "");
+            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"FilmDirector\" WHERE filmid=" + f.getId() + "");
+            pst.executeUpdate();
+            
+            PreparedStatement pst2 = c.prepareStatement("DELETE FROM public.\"Films\" WHERE id=" + f.getId() + "");
+            pst2.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FilmDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void update(Films f, Long selectedMultimedya, Long selectedFestival, List<Long> selectedDirectors, List<Long> selectedActors, List<Long> selectedMusics) {
+
+    public void update(Films f) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Films\" SET name='" + f.getName() + "' , genre='" + f.getGenre() + "' WHERE id="+f.getId()+" ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Films\" SET name='" + f.getName() + "' , genre='" + f.getGenre() + "' WHERE id=" + f.getId() + " ");
+            pst.executeUpdate();
+            
+            PreparedStatement pst2 = c.prepareStatement("DELETE FROM public.\"FilmDirector\" WHERE filmid=" + f.getId() + "");
+            pst2.executeUpdate();
+            for(Directors d : f.getFilmDirectors()) {
+                PreparedStatement pst3 = c.prepareStatement("INSERT INTO public.\"FilmDirector\"(filmid,directorid) VALUES("+f.getId()+","+d.getId()+")");
+                pst3.executeUpdate();                
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,32 +178,37 @@ public class FilmDAO {
     }
 
     public ActorDAO getActorDao() {
-        if (this.actorDao == null) 
+        if (this.actorDao == null) {
             this.actorDao = new ActorDAO();
+        }
         return actorDao;
     }
 
     public MusicDAO getMusicDao() {
-        if (this.musicDao == null) 
+        if (this.musicDao == null) {
             this.musicDao = new MusicDAO();
+        }
         return musicDao;
     }
 
     public FestivalDAO getFestivalDao() {
-        if (this.festivalDao == null) 
+        if (this.festivalDao == null) {
             this.festivalDao = new FestivalDAO();
+        }
         return festivalDao;
     }
 
     public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) 
+        if (this.multimedyaDao == null) {
             this.multimedyaDao = new MultimedyaDAO();
+        }
         return multimedyaDao;
     }
 
     public DirectorDAO getDirectorDao() {
-        if (this.directorDao == null) 
+        if (this.directorDao == null) {
             this.directorDao = new DirectorDAO();
+        }
         return directorDao;
     }
 }

@@ -2,9 +2,9 @@ package dao;
 
 import entities.Juries;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,12 +20,12 @@ public class JuryDAO {
     private MultimedyaDAO multimedyaDao;
     private FestivalDAO festivalDao;
 
-    public void create(Juries j, Long selectedFestival, Long selectedMultimedya) {
+    public void create(Juries j) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Juries\"(name,festivalid,fileid) VALUES ('" + j.getName() + "',"+selectedFestival+","+selectedMultimedya+")");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid,fileid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+","+j.getMultimedya().getId()+")");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -37,8 +37,8 @@ public class JuryDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\"");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
                 j.setId(rs.getLong("id"));
@@ -59,8 +59,8 @@ public class JuryDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE festivalid=" + festivalid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE festivalid=" + festivalid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
                 j.setId(rs.getLong("id"));
@@ -80,8 +80,8 @@ public class JuryDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
                 j.setId(rs.getLong("id"));
@@ -100,8 +100,8 @@ public class JuryDAO {
         Connection c = db.connect();
         Juries jury = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Juries\" WHERE id=" + id + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             jury = new Juries();
             jury.setId(rs.getLong("id"));
@@ -113,12 +113,12 @@ public class JuryDAO {
         return jury;
     }
 
-    public void update(Juries j, Long selectedFestival, Long selectedMultimedya) {
+    public void update(Juries j) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+selectedFestival+", fileid="+selectedMultimedya+" WHERE id="+j.getId()+" ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+j.getFestival().getId()+", fileid="+j.getMultimedya().getId()+" WHERE id="+j.getId()+" ");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,8 +129,8 @@ public class JuryDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Juries\" WHERE id=" + j.getId() + "");
+            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Juries\" WHERE id=" + j.getId() + "");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);

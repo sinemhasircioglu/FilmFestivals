@@ -1,11 +1,11 @@
 package dao;
 
 import entities.Group;
+import entities.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,12 +20,12 @@ public class GroupDAO {
 
     private UserDAO userDao;
 
-    public void create(Group group, List<Long> selectedUsers) {
+    public void create(Group group) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Group\"(authority) VALUES (" + group.getAuthority() + ")");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Group\"(authority) VALUES ('" + group.getAuthority() + "')");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -37,8 +37,8 @@ public class GroupDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Group\"");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Group group = new Group();
                 group.setId(rs.getLong("id"));
@@ -58,8 +58,8 @@ public class GroupDAO {
         Connection c = db.connect();
         Group group = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Group\" WHERE id=" + id + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Group\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             group = new Group();
             group.setId(rs.getLong("id"));
@@ -71,15 +71,15 @@ public class GroupDAO {
         return group;
     }
 
-    public void update(Group group, List<Long> selectedUsers) {
+    public void update(Group group) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Group\" SET authority='" + group.getAuthority() + "' WHERE id="+group.getId()+" ");
-            for (Long l : selectedUsers) {
-                Statement st2 = c.createStatement();
-                st.executeUpdate("UPDATE public.\"Users\" SET groupid=" +group.getId()+ " WHERE id=" +l+ " ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Group\" SET authority='" + group.getAuthority() + "' WHERE id="+group.getId()+" ");
+            pst.executeUpdate();           
+            for (Users u : group.getUserList()) {
+                PreparedStatement pst2 = c.prepareStatement("UPDATE public.\"Users\" SET groupid=" +group.getId()+ " WHERE id=" +u.getId()+" ");
+                pst2.executeUpdate();
             }
             c.close();
         } catch (SQLException ex) {
@@ -109,5 +109,4 @@ public class GroupDAO {
         }
         return userDao;
     }
-
 }

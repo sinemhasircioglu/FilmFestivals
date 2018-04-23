@@ -2,9 +2,9 @@ package dao;
 
 import entities.Musics;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,12 +19,12 @@ public class MusicDAO {
     
     private FilmDAO filmDao;
 
-    public void create(Musics m, Long selectedFilm) {
+    public void create(Musics m) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Musics\"(name,filmid) VALUES ('" + m.getName() + "'," + selectedFilm + ")");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Musics\"(name,filmid) VALUES ('" + m.getName() + "'," + m.getFilm().getId() + ")");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(MusicDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -36,8 +36,8 @@ public class MusicDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Musics\"");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Musics mu = new Musics();
                 mu.setId(rs.getLong("id"));
@@ -57,8 +57,8 @@ public class MusicDAO {
         Connection c = db.connect();
         Musics mu =null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE id="+id+"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Musics\" WHERE id="+id+"");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             mu = new Musics();
             mu.setId(rs.getLong("id"));
@@ -75,8 +75,8 @@ public class MusicDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Musics\" WHERE filmid=" + filmid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Musics\" WHERE filmid=" + filmid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Musics ac = new Musics();
                 ac.setId(rs.getLong("id"));
@@ -90,12 +90,12 @@ public class MusicDAO {
         return filmMusics;
     }
 
-    public void update(Musics m, Long selectedFilm) {
+    public void update(Musics m) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Musics\" SET name='" + m.getName() + "' , filmid=" + selectedFilm + " WHERE id=" + m.getId() + " ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Musics\" SET name='" + m.getName() + "' , filmid=" + m.getFilm().getId() + " WHERE id=" + m.getId() + " ");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,8 +106,8 @@ public class MusicDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Musics\" WHERE id=" + m.getId() + "");
+            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Musics\" WHERE id=" + m.getId() + "");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(MusicDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,11 +1,11 @@
 package dao;
 
 import entities.Directors;
+import entities.Films;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,21 +21,21 @@ public class DirectorDAO {
     private MultimedyaDAO multimedyaDao;
     private FilmDAO filmDao;
     
-    public void create(Directors d, Long selectedMultimedya, List<Long> selectedFilms){
+    public void create(Directors d){
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Directors\"(name,fileid) VALUES ('" + d.getName() + "',"+selectedMultimedya+")",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Directors\"(name,fileid) VALUES ('" + d.getName() + "',"+d.getMultimedya().getId()+")",PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.executeUpdate();
             
-            Long directorid=null;
-            ResultSet gk=st.getGeneratedKeys();
-            if(gk.next()){
-                directorid=gk.getLong(1);
-            }
-            for(Long l : selectedFilms){
-                Statement st2=c.createStatement();
-                st2.executeUpdate("insert into director_film(directorid, filmid) values ("+directorid+","+l+")");              
+            Long directorId = null;
+            ResultSet gk=pst.getGeneratedKeys();
+            if(gk.next())
+                directorId = gk.getLong(1);
+            
+            for(Films f : d.getDirectorFilms()){
+                PreparedStatement pst2=c.prepareStatement("INSERT INTO public.\"FilmDirector\"(filmid,directorid) VALUES("+f.getId()+","+directorId+")");
+                pst2.executeUpdate();              
             }          
             c.close();
         } catch (SQLException ex) {
@@ -58,15 +58,32 @@ public class DirectorDAO {
             System.out.println(ex.getMessage());
         }
         return filmDirectors;
-    }   
+    }  
+    
+    public List<Directors> getMultimedyaDirectors(Long fileid){      
+        List<Directors> multimedyaDirectors = new ArrayList<>();
+        DBConnection db = new DBConnection();
+        Connection c = db.connect();
+        try {
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Directors\" WHERE fileid=" + fileid+ "");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                multimedyaDirectors.add(this.find(rs.getLong("id")));
+            }
+            c.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return multimedyaDirectors;
+    }
     
     public Directors find(Long id) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         Directors director = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Directors\" WHERE id=" + id + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Directors\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             director = new Directors();
             director.setId(rs.getLong("id"));
@@ -100,12 +117,19 @@ public class DirectorDAO {
         return directorList;
     }
 
-    public void update(Directors d,Long selectedMultimedya, List<Long> selectedFilms) {
+    public void update(Directors d) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Directors\" SET name='" + d.getName() + "', fileid="+selectedMultimedya+" WHERE id="+d.getId()+" ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Directors\" SET name='" + d.getName() + "', fileid="+d.getMultimedya().getId()+" WHERE id="+d.getId()+" ");
+            pst.executeUpdate();
+            
+            PreparedStatement pst2 = c.prepareStatement("DELETE FROM public.\"FilmDirector\" WHERE directorid=" + d.getId() + "");
+            pst2.executeUpdate();
+            for(Films f : d.getDirectorFilms()) {
+                PreparedStatement pst3 = c.prepareStatement("INSERT INTO public.\"FilmDirector\"(filmid,directorid) VALUES("+f.getId()+","+d.getId()+")");
+                pst3.executeUpdate();                
+            }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,8 +140,11 @@ public class DirectorDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Directors\" WHERE id=" + d.getId() + "");
+            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"FilmDirector\" WHERE directorid=" + d.getId() + "");
+            pst.executeUpdate();
+            
+            PreparedStatement pst2 = c.prepareStatement("DELETE FROM public.\"Directors\" WHERE id=" + d.getId() + "");
+            pst2.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);

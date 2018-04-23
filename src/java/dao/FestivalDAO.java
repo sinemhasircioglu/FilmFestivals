@@ -1,11 +1,12 @@
 package dao;
 
 import entities.Festivals;
+import entities.Films;
+import entities.Juries;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,12 +22,12 @@ public class FestivalDAO {
     private JuryDAO juryDao;
     private FilmDAO filmDao;
 
-    public void create(Festivals f, List<Long> selectedJuries, List<Long> selectedFilms) {
+    public void create(Festivals f) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Festivals\"(name,country,description,year) VALUES ('" + f.getName() + "','" + f.getCountry() + "','" + f.getDescription() + "'," + f.getYear() + ")");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Festivals\"(name,country,description,year) VALUES ('" + f.getName() + "','" + f.getCountry() + "','" + f.getDescription() + "'," + f.getYear() + ")");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -38,8 +39,8 @@ public class FestivalDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Festivals\"");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Festivals\"");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Festivals fest = new Festivals();
                 fest.setId(rs.getLong("id"));
@@ -47,9 +48,8 @@ public class FestivalDAO {
                 fest.setCountry(rs.getString("country"));
                 fest.setDescription(rs.getString("description"));
                 fest.setYear(rs.getInt("year"));
-
-                fest.setFilmlist(this.getFilmDao().getFestivalFilms(fest.getId()));
-                fest.setJurylist(this.getJuryDao().getFestivalJuries(fest.getId()));
+                fest.setFestivalFilms(this.getFilmDao().getFestivalFilms(fest.getId()));
+                fest.setFestivalJuries(this.getJuryDao().getFestivalJuries(fest.getId()));
                 festivalList.add(fest);
             }
             c.close();
@@ -64,8 +64,8 @@ public class FestivalDAO {
         Connection c = db.connect();
         Festivals fest = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Festivals\" WHERE id=" + id + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Festivals\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             fest = new Festivals();
             fest.setId(rs.getLong("id"));
@@ -80,7 +80,7 @@ public class FestivalDAO {
         return fest;
     }
 
-    public void update(Festivals f, List<Long> selectedJuries, List<Long> selectedFilms) {
+    public void update(Festivals f) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
@@ -88,12 +88,12 @@ public class FestivalDAO {
             pst = c.prepareStatement("UPDATE public.\"Festivals\" SET name='" + f.getName() + "' , country='" + f.getCountry() + "', description='" + f.getDescription() + "', year=" + f.getYear() + " WHERE id=" + f.getId() + " ");
             pst.executeUpdate();
 
-            for (Long j : selectedJuries) {
-                pst = c.prepareStatement("UPDATE public.\"Juries\" SET festivalid=" + f.getId()+ " WHERE id=" + j+ " ");
+            for (Juries j : f.getFestivalJuries()) {
+                pst = c.prepareStatement("UPDATE public.\"Juries\" SET festivalid=" + f.getId()+ " WHERE id=" + j.getId()+ " ");
                 pst.executeUpdate();
             }
-            for (Long l : selectedFilms) {
-                pst = c.prepareStatement("UPDATE public.\"Films\" SET festivalid=" + f.getId()+ " WHERE id=" + l+ " ");
+            for (Films film : f.getFestivalFilms()) {
+                pst = c.prepareStatement("UPDATE public.\"Films\" SET festivalid=" + f.getId()+ " WHERE id=" + film.getId()+ " ");
                 pst.executeUpdate();
             }
             c.close();
@@ -135,5 +135,4 @@ public class FestivalDAO {
         }
         return filmDao;
     }
-
 }

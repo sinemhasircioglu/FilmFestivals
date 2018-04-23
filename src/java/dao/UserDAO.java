@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,12 +20,12 @@ public class UserDAO {
     private MultimedyaDAO multimedyaDao;
     private GroupDAO groupDao;
 
-    public void create(Users u, Long selectedMultimedya, Long selectedGroup ) {
+    public void create(Users u) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+selectedMultimedya+ ","+selectedGroup+ ")");
+            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getMultimedya().getId()+ ","+u.getGroup().getId()+ ")");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,8 +85,8 @@ public class UserDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 groupUsers.add(this.find(rs.getLong("id")));
             }
@@ -96,7 +95,6 @@ public class UserDAO {
             System.out.println(ex.getMessage());
         }
         return groupUsers;
-
     }
     
     public List<Users> getFileUsers(Long fileid) {
@@ -105,8 +103,8 @@ public class UserDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
+            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {                
                 fileUsers.add(this.find(rs.getLong("id")));
             }
@@ -115,15 +113,14 @@ public class UserDAO {
             System.out.println(ex.getMessage());
         }
         return fileUsers;
-
     }
 
-    public void update(Users u,Long selectedMultimedya, Long selectedGroup ) {
+    public void update(Users u) {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+selectedMultimedya+", groupid="+selectedGroup+" WHERE id="+u.getId()+" ");
+            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+u.getMultimedya().getId()+", groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,8 +131,8 @@ public class UserDAO {
         DBConnection db = new DBConnection();
         Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Users\" WHERE id=" + u.getId() + "");
+            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Users\" WHERE id=" + u.getId() + "");
+            pst.executeUpdate();
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
