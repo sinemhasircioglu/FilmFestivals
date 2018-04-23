@@ -25,39 +25,31 @@ public class FestivalController implements Serializable{
     
     private JuryDAO juryDao;
     private List<Juries> juryList;
-    private List<Long> selectedJuries;
     
     private FilmDAO filmDao;
     private List<Films> filmList;
-    private List<Long> selectedFilms;
   
-    public String updateForm(Festivals f){
+    public void updateForm(Festivals f){
         this.festival=f;
-        
-        this.selectedJuries=new ArrayList<>();
-        for(Juries j : this.festival.getJuryList()) {
-            this.selectedJuries.add(j.getId());
-        }      
-        this.selectedFilms=new ArrayList<>();
-        for(Films film :this.festival.getFilmList()){
-            this.selectedFilms.add(film.getId());
-        }
-        return "festival";
     }
     
-    public String update() {
-        this.getFestivalDao().update(this.festival,selectedJuries,selectedFilms);
-        return "festival";
+    public void clearForm() {
+        this.festival=new Festivals();
+    }
+    
+    public void update() {
+        this.getFestivalDao().update(this.festival);
+        this.clearForm();
     }
    
-    public String delete() {
+    public void delete() {
         this.getFestivalDao().delete(this.festival);
-        return "festival";
+        this.clearForm();
     }
     
-    public String create(){
-        this.getFestivalDao().create(this.festival,selectedJuries,selectedFilms);
-        return "festival";
+    public void create(){
+        this.getFestivalDao().create(this.festival);
+        this.clearForm();
     }
     
     public FestivalDAO getFestivalDao() {
@@ -100,14 +92,6 @@ public class FestivalController implements Serializable{
         this.juryList = juryList;
     }
 
-    public List<Long> getSelectedJuries() {
-        return selectedJuries;
-    }
-
-    public void setSelectedJuries(List<Long> selectedJuries) {
-        this.selectedJuries = selectedJuries;
-    }
-
     public FilmDAO getFilmDao() {
         if(this.filmDao==null)
             this.filmDao=new FilmDAO();
@@ -122,13 +106,4 @@ public class FestivalController implements Serializable{
     public void setFilmList(List<Films> filmList) {
         this.filmList = filmList;
     }
-
-    public List<Long> getSelectedFilms() {
-        return selectedFilms;
-    }
-
-    public void setSelectedFilms(List<Long> selectedFilms) {
-        this.selectedFilms = selectedFilms;
-    }
- 
 }

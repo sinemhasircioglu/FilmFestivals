@@ -22,36 +22,32 @@ public class JuryController implements Serializable{
     private List<Juries> juryList;
     private Juries jury;
     
-    private Long selectedFestival;
     private FestivalDAO festivalDao;
     private List<Festivals> festivalList;
     
-    private Long selectedMultimedya;
     private MultimedyaDAO multimedyaDao;
     private List<Multimedya> multimedyaList;
     
-    public String updateForm(Juries j) {
+    public void updateForm(Juries j) {
         this.jury=j;
-        this.selectedFestival=this.jury.getFestival().getId();
-        this.selectedMultimedya=this.jury.getMultimedya().getId();
-        return "jury";
     }
     
-    public String update() {
-        this.getJuryDao().update(this.jury, selectedFestival, selectedMultimedya);
-        return "jury";
+    public void clearForm() {
+        this.jury= new Juries();
+    }
+    public void update() {
+        this.getJuryDao().update(this.jury);
+        this.clearForm();
     }
     
-    public String create(){
-        this.getJuryDao().create(this.jury, selectedFestival, selectedMultimedya);
-        return "jury";
+    public void create(){
+        this.getJuryDao().create(this.jury);
+        this.clearForm();
     }
     
-    public String delete() {
+    public void delete() {
         this.getJuryDao().delete(this.jury);
-        this.selectedFestival=null;
-        this.selectedMultimedya=null;
-        return"jury";
+        this.clearForm();
     }
 
     public JuryDAO getJuryDao() {
@@ -83,14 +79,6 @@ public class JuryController implements Serializable{
         this.jury = jury;
     }
 
-    public Long getSelectedFestival() {
-        return selectedFestival;
-    }
-
-    public void setSelectedFestival(Long selectedFestival) {
-        this.selectedFestival = selectedFestival;
-    }
-
     public FestivalDAO getFestivalDao() {
         if(this.festivalDao==null)
             this.festivalDao=new FestivalDAO();
@@ -106,14 +94,6 @@ public class JuryController implements Serializable{
         this.festivalList = festivalList;
     }
 
-    public Long getSelectedMultimedya() {
-        return selectedMultimedya;
-    }
-
-    public void setSelectedMultimedya(Long selectedMultimedya) {
-        this.selectedMultimedya = selectedMultimedya;
-    }
-
     public MultimedyaDAO getMultimedyaDao() {
         if(this.multimedyaDao==null)
             this.multimedyaDao=new MultimedyaDAO();
@@ -127,6 +107,5 @@ public class JuryController implements Serializable{
 
     public void setMultimedyaList(List<Multimedya> multimedyaList) {
         this.multimedyaList = multimedyaList;
-    }
-    
+    }   
 }

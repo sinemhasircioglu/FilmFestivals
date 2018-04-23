@@ -1,14 +1,20 @@
 package controllers;
 
+import dao.ActorDAO;
+import dao.DirectorDAO;
+import dao.FestivalDAO;
 import dao.FilmDAO;
 import dao.MultimedyaDAO;
+import dao.MusicDAO;
+import entities.Actors;
+import entities.Directors;
+import entities.Festivals;
 import entities.Films;
 import entities.Multimedya;
+import entities.Musics;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -18,48 +24,84 @@ import javax.inject.Named;
 @Named(value = "filmController")
 @SessionScoped
 public class FilmController implements Serializable {
-
-    private FilmDAO filmDao;
     private Films film;
     private List<Films> filmList;
-    
-    @Inject
-    private DirectorController directorController;
-    
-    private MultimedyaDAO multimedyaDao; 
+    private FilmDAO filmDao;
+
+    private ActorDAO actorDao;
+    private MusicDAO musicDao;
+    private DirectorDAO directorDao;
+    private FestivalDAO festivalDao;
+    private MultimedyaDAO multimedyaDao;
+
+    private List<Actors> actorList;
+    private List<Musics> musicList;
+    private List<Directors> directorList;
+    private List<Festivals> festivalList;
     private List<Multimedya> multimedyaList;
-    private Long selectedMultimedya;
-    private Long selectedFestival;
-    private List<Long> selectedDirectors;
 
-    public String create() {
-        this.getFilmDao().insert(this.film, selectedMultimedya, selectedFestival, selectedDirectors);
-        return "film";
+    public void delete() {
+        this.getFilmDao().delete(this.film);
+        this.clearForm();
     }
 
-    public String updateForm(Films f) {
+    public void updateForm(Films f) {
         this.film = f;
-        return "film";
+    }
+    
+    public void clearForm() {
+        this.film= new Films();
     }
 
-    public String update() {
+    public void update() {
         this.getFilmDao().update(this.film);
-        return "film";
+        this.clearForm();
     }
 
-    public String delete(Films f) {
-        this.getFilmDao().delete(f);
-        return "film";
+    public void create() {
+        this.getFilmDao().insert(this.film);
+        this.clearForm();
     }
 
     public FilmDAO getFilmDao() {
-        if (this.filmDao == null) {
-            this.filmDao = new FilmDAO();
-        }
+        if(this.filmDao==null)
+            this.filmDao=new FilmDAO();
         return filmDao;
     }
 
+    public ActorDAO getActorDao() {
+        if(this.actorDao==null)
+            this.actorDao=new ActorDAO();
+        return actorDao;
+    }
+
+    public MusicDAO getMusicDao() {
+        if(this.musicDao==null)
+            this.musicDao=new MusicDAO();
+        return musicDao;
+    }
+
+    public DirectorDAO getDirectorDao() {
+        if(this.directorDao==null)
+            this.directorDao=new DirectorDAO();
+        return directorDao;
+    }
+
+    public FestivalDAO getFestivalDao() {
+        if(this.festivalDao==null)
+            this.festivalDao=new FestivalDAO();
+        return festivalDao;
+    }
+
+    public MultimedyaDAO getMultimedyaDao() {
+        if(this.multimedyaDao==null)
+            this.multimedyaDao=new MultimedyaDAO();
+        return multimedyaDao;
+    }
+
     public Films getFilm() {
+        if(this.film==null)
+            this.film=new Films();
         return film;
     }
 
@@ -68,7 +110,7 @@ public class FilmController implements Serializable {
     }
 
     public List<Films> getFilmList() {
-        this.filmList = this.getFilmDao().findAll();
+        this.filmList=this.getFilmDao().findAll();
         return filmList;
     }
 
@@ -76,44 +118,40 @@ public class FilmController implements Serializable {
         this.filmList = filmList;
     }
 
-    public DirectorController getDirectorController() {
-        if(this.directorController==null)
-            this.directorController=new DirectorController();
-        return directorController;
+    public List<Actors> getActorList() {
+        this.actorList=this.getActorDao().findAll();
+        return actorList;
     }
 
-    public void setDirectorController(DirectorController directorController) {
-        this.directorController = directorController;
+    public void setActorList(List<Actors> actorList) {
+        this.actorList = actorList;
     }
 
-    public Long getSelectedMultimedya() {
-        return selectedMultimedya;
+    public List<Musics> getMusicList() {
+        this.musicList=this.getMusicDao().findAll();
+        return musicList;
     }
 
-    public void setSelectedMultimedya(Long selectedMultimedya) {
-        this.selectedMultimedya = selectedMultimedya;
+    public void setMusicList(List<Musics> musicList) {
+        this.musicList = musicList;
     }
 
-    public Long getSelectedFestival() {
-        return selectedFestival;
+    public List<Directors> getDirectorList() {
+        this.directorList=this.getDirectorDao().findAll();
+        return directorList;
     }
 
-    public void setSelectedFestival(Long selectedFestival) {
-        this.selectedFestival = selectedFestival;
+    public void setDirectorList(List<Directors> directorList) {
+        this.directorList = directorList;
     }
 
-    public List<Long> getSelectedDirectors() {
-        return selectedDirectors;
+    public List<Festivals> getFestivalList() {
+        this.festivalList=this.getFestivalDao().findAll();
+        return festivalList;
     }
 
-    public void setSelectedDirectors(List<Long> selectedDirectors) {
-        this.selectedDirectors = selectedDirectors;
-    }
-
-    public MultimedyaDAO getMultimedyaDao() {
-        if(this.multimedyaDao==null)
-            this.multimedyaDao=new MultimedyaDAO();
-        return multimedyaDao;
+    public void setFestivalList(List<Festivals> festivalList) {
+        this.festivalList = festivalList;
     }
 
     public List<Multimedya> getMultimedyaList() {
@@ -124,5 +162,4 @@ public class FilmController implements Serializable {
     public void setMultimedyaList(List<Multimedya> multimedyaList) {
         this.multimedyaList = multimedyaList;
     }
-    
 }

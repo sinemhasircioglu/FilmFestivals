@@ -22,31 +22,29 @@ public class GroupController implements Serializable{
     private List<Group> groupList;
     
     private UserDAO userDao;
-    private List<Long> selectedUsers;
     private List<Users> userList;
     
-    public String create() {
-        this.getGroupDao().create(this.group,selectedUsers);
-        return "group";
+    public void create() {
+        this.getGroupDao().create(this.group);
+        this.clearForm();
     }
     
-    public String updateForm(Group g){
+    public void updateForm(Group g){
         this.group=g;
-        this.selectedUsers=new ArrayList<>();
-        for(Users u : this.group.getUserList()) {
-            this.selectedUsers.add(u.getId());
-        }
-        return "group";
     }
     
-    public String update() {
-        this.getGroupDao().update(this.group,selectedUsers);
-        return "group";
+    public void clearForm() {
+        this.group=new Group();
     }
     
-    public String delete() {
+    public void update() {
+        this.getGroupDao().update(this.group);
+        this.clearForm();
+    }
+    
+    public void delete() {
         this.getGroupDao().delete(this.group);
-        return "group";
+        this.clearForm();
     }
     
     public Group getGroup() {
@@ -79,14 +77,6 @@ public class GroupController implements Serializable{
             this.userDao = new UserDAO();
         return userDao;
     }    
-
-    public List<Long> getSelectedUsers() {
-        return selectedUsers;
-    }
-
-    public void setSelectedUsers(List<Long> selectedUsers) {
-        this.selectedUsers = selectedUsers;
-    }
 
     public List<Users> getUserList() {
         this.userList = this.getUserDao().findAll();

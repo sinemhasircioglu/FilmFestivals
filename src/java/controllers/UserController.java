@@ -23,35 +23,34 @@ public class UserController implements Serializable{
     private List<Users> userList;
 
     private GroupDAO groupDao;
-    private Long selectedGroup;
     private List<Group> groupList;
     
     private MultimedyaDAO multimedyaDao;
-    private Long selectedMultimedya;
     private List<Multimedya> multimedyaList;
    
-    public String create() {
-        this.getUserDao().create(this.user, selectedMultimedya, selectedGroup);
-        return "user";
+    public void create() {
+        this.getUserDao().create(this.user);
+        this.clearForm();
     }
     
-    public String updateForm(Users u){
+    public void updateForm(Users u){
         this.user=u;
-        this.selectedGroup=this.user.getGroup().getId();
-        this.selectedMultimedya=this.user.getMultimedya().getId();
-        return "user";
     }
     
-    public String update() {
-        this.getUserDao().update(this.user, selectedMultimedya, selectedGroup);
-        return"user";
+    public void clearForm() {
+        this.user=new Users();
     }
     
-    public String delete(Users u) {
-        this.user=u;
+    public void update() {
+        this.getUserDao().update(this.user);
+        this.clearForm();
+    }
+    
+    public void delete() {
         this.getUserDao().delete(this.user);
-        return "user";
+        this.clearForm();
     }
+    
     public Users getUser() {
         if(this.user==null)
             this.user=new Users();
@@ -83,14 +82,6 @@ public class UserController implements Serializable{
         return groupDao;
     }  
 
-    public Long getSelectedGroup() {
-        return selectedGroup;
-    }
-
-    public void setSelectedGroup(Long selectedGroup) {
-        this.selectedGroup = selectedGroup;
-    }
-
     public List<Group> getGroupList() {
         this.groupList=this.getGroupDao().findAll();
         return groupList;
@@ -104,14 +95,6 @@ public class UserController implements Serializable{
         if(this.multimedyaDao==null)
             this.multimedyaDao= new MultimedyaDAO();
         return multimedyaDao;
-    }
-
-    public Long getSelectedMultimedya() {
-        return selectedMultimedya;
-    }
-
-    public void setSelectedMultimedya(Long selectedMultimedya) {
-        this.selectedMultimedya = selectedMultimedya;
     }
 
     public List<Multimedya> getMultimedyaList() {

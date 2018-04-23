@@ -41,11 +41,10 @@ public class TypeController implements Serializable {
 
     public void updateForm(Type t) {
         this.type = t;
-        this.selectedRates = this.type.getRates().getRatedid().getRaterid();
 
         this.selectedRates = new ArrayList<>();
-        for (Rates r : this.type.getTypeRates()) {
-            this.selectedRates.add(r.getRatedid.getRaterid);
+        for (Rates r : this.type.getRateList()) {
+            this.selectedRates.add(r.getId());
         }
     }
 

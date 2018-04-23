@@ -22,27 +22,28 @@ public class MusicController implements Serializable{
  
     private FilmDAO filmDao;
     private List<Films> filmList;
-    private Long selectedFilm;
     
-    public String updateForm(Musics m) {
+    public void updateForm(Musics m) {
         this.music = m;
-        this.selectedFilm=this.music.getFilm().getId();
-        return "music";
+    }
+    
+    public void clearForm() {
+        this.music = new Musics();
     }
 
-    public String delete() {
+    public void delete() {
         this.getMusicDao().delete(this.music);
-        this.selectedFilm=null;
-        return "music";
+        this.clearForm();
     }
 
-    public String update() {
-        this.getMusicDao().update(this.music,selectedFilm);
-        return "music";
+    public void update() {
+        this.getMusicDao().update(this.music);
+        this.clearForm();
     }
 
     public void create() {
-        this.getMusicDao().create(this.music,selectedFilm);
+        this.getMusicDao().create(this.music);
+        this.clearForm();
     }
 
     public List<Musics> getMusicList() {
@@ -52,14 +53,6 @@ public class MusicController implements Serializable{
 
     public void setMusicList(List<Musics> musicList) {
         this.musicList = musicList;
-    }
-
-    public Long getSelectedFilm() {
-        return selectedFilm;
-    }
-
-    public void setSelectedFilm(Long selectedFilm) {
-        this.selectedFilm = selectedFilm;
     }
 
     public MusicDAO getMusicDao() {
