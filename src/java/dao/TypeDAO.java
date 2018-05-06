@@ -43,7 +43,7 @@ public class TypeDAO {
                 Type type = new Type();
                 type.setId(rs.getLong("id"));
                 type.setName(rs.getString("name"));
-                type.setRateList(this.getRatesDao().getTypeRates(rs.getLong("typeraterid")));
+                type.setTypeRates(this.getRatesDao().getTypeRates(rs.getLong("typeraterid")));
                 typeList.add(type);
             }
             c.close();

@@ -1,8 +1,6 @@
 package dao;
 
 import entities.Multimedya;
-import entities.Users;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utility.DBConnection;
 
 /**
  *
  * @author sinem
  */
-public class MultimedyaDAO {
+public class MultimedyaDAO extends AbstractDAO{
     
     private ActorDAO actorDao;
     private UserDAO userDao;
@@ -25,12 +22,10 @@ public class MultimedyaDAO {
     private FilmDAO filmDao;
 
     public void create(Multimedya med) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Multimedya\"(url) VALUES ('" + med.getUrl()+ "')");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Multimedya\"(url) VALUES ('" + med.getUrl()+ "')");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -38,10 +33,8 @@ public class MultimedyaDAO {
     
     public List<Multimedya> findAll() {
         List<Multimedya> multimedyaList = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Multimedya\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Multimedya\"");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Multimedya med = new Multimedya();
@@ -54,7 +47,7 @@ public class MultimedyaDAO {
                 med.setMultimedyaUsers(this.getUserDao().getFileUsers(med.getId()));
                 multimedyaList.add(med);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -62,18 +55,16 @@ public class MultimedyaDAO {
     }
     
     public Multimedya find(Long id) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         Multimedya multimedya = null;
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Multimedya\" WHERE id=" + id + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Multimedya\" WHERE id=" + id + "");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 multimedya = new Multimedya();
                 multimedya.setId(rs.getLong("id"));
                 multimedya.setUrl(rs.getString("url"));
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,25 +72,20 @@ public class MultimedyaDAO {
     }
     
     public void update(Multimedya med) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst;
-            pst = c.prepareStatement("UPDATE public.\"Multimedya\" SET url='" + med.getUrl() + "' WHERE id=" + med.getId() + " ");
+            PreparedStatement pst= this.getConnection().prepareStatement("UPDATE public.\"Multimedya\" SET url='" + med.getUrl() + "' WHERE id=" + med.getId() + " ");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(GroupDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void delete(Multimedya med) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Multimedya\" WHERE id=" + med.getId() + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("DELETE FROM public.\"Multimedya\" WHERE id=" + med.getId() + "");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -134,5 +120,4 @@ public class MultimedyaDAO {
             this.filmDao = new FilmDAO();
         return filmDao;
     }
-
 }

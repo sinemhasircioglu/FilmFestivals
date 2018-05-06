@@ -1,7 +1,6 @@
 package dao;
 
 import entities.Users;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,24 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utility.DBConnection;
 
 /**
  *
  * @author sinem
  */
-public class UserDAO {
+public class UserDAO extends AbstractDAO{
 
     private MultimedyaDAO multimedyaDao;
     private GroupDAO groupDao;
 
     public void create(Users u) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getMultimedya().getId()+ ","+u.getGroup().getId()+ ")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getMultimedya().getId()+ ","+u.getGroup().getId()+ ")");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -34,10 +30,8 @@ public class UserDAO {
 
     public List<Users> findAll() {
         List<Users> userList = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Users\"");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Users us = new Users();
@@ -51,7 +45,7 @@ public class UserDAO {
                 us.setGroup(this.getGroupDao().find(rs.getLong("groupid")));
                 userList.add(us);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -59,11 +53,9 @@ public class UserDAO {
     }
 
     public Users find(Long id) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         Users user = null;
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\" WHERE id=" + id + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Users\" WHERE id=" + id + "");
             ResultSet rs = pst.executeQuery();
             rs.next();
             user = new Users();
@@ -72,7 +64,7 @@ public class UserDAO {
             user.setId(rs.getLong("id"));
             user.setName(rs.getString("name"));
             user.setPassword(rs.getString("password"));
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -80,17 +72,14 @@ public class UserDAO {
     }
 
     public List<Users> getGroupUsers(Long groupid) {
-
         List<Users> groupUsers = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Users\" WHERE groupid=" + groupid + "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 groupUsers.add(this.find(rs.getLong("id")));
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -98,17 +87,14 @@ public class UserDAO {
     }
     
     public List<Users> getFileUsers(Long fileid) {
-
         List<Users> fileUsers = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {                
                 fileUsers.add(this.find(rs.getLong("id")));
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -116,24 +102,20 @@ public class UserDAO {
     }
 
     public void update(Users u) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+u.getMultimedya().getId()+", groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+u.getMultimedya().getId()+", groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void delete(Users u) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Users\" WHERE id=" + u.getId() + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("DELETE FROM public.\"Users\" WHERE id=" + u.getId() + "");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

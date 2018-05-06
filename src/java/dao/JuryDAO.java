@@ -1,7 +1,6 @@
 package dao;
 
 import entities.Juries;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,24 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utility.DBConnection;
 
 /**
  *
  * @author sinem
  */
-public class JuryDAO {
+public class JuryDAO extends AbstractDAO{
 
     private MultimedyaDAO multimedyaDao;
     private FestivalDAO festivalDao;
 
     public void create(Juries j) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid,fileid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+","+j.getMultimedya().getId()+")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid,fileid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+","+j.getMultimedya().getId()+")");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -34,10 +30,8 @@ public class JuryDAO {
 
     public List<Juries> findAll() {
         List<Juries> juryList = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\"");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
@@ -47,7 +41,7 @@ public class JuryDAO {
                 j.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 juryList.add(j);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -56,10 +50,8 @@ public class JuryDAO {
 
     public List<Juries> getFestivalJuries(Long festivalid) {
         List<Juries> festivalJuries = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE festivalid=" + festivalid + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" WHERE festivalid=" + festivalid + "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
@@ -67,7 +59,7 @@ public class JuryDAO {
                 j.setName(rs.getString("name"));
                 festivalJuries.add(j);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -77,10 +69,8 @@ public class JuryDAO {
     
     public List<Juries> getFileJuries(Long fileid){
         List<Juries> fileJuries = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();
@@ -88,7 +78,7 @@ public class JuryDAO {
                 j.setName(rs.getString("name"));
                 fileJuries.add(j);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -96,17 +86,15 @@ public class JuryDAO {
     }
 
     public Juries find(Long id) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         Juries jury = null;
         try {
-            PreparedStatement pst = c.prepareStatement("SELECT * FROM public.\"Juries\" WHERE id=" + id + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" WHERE id=" + id + "");
             ResultSet rs = pst.executeQuery();
             rs.next();
             jury = new Juries();
             jury.setId(rs.getLong("id"));
             jury.setName(rs.getString("name"));
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -114,24 +102,20 @@ public class JuryDAO {
     }
 
     public void update(Juries j) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+j.getFestival().getId()+", fileid="+j.getMultimedya().getId()+" WHERE id="+j.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+j.getFestival().getId()+", fileid="+j.getMultimedya().getId()+" WHERE id="+j.getId()+" ");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void delete(Juries j) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            PreparedStatement pst = c.prepareStatement("DELETE FROM public.\"Juries\" WHERE id=" + j.getId() + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("DELETE FROM public.\"Juries\" WHERE id=" + j.getId() + "");
             pst.executeUpdate();
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
