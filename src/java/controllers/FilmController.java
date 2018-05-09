@@ -25,7 +25,7 @@ import javax.inject.Named;
 @SessionScoped
 public class FilmController implements Serializable {
     private Films film;
-    private List<Films> filmList;
+    private List<Films> fullFilmList;
     private FilmDAO filmDao;
 
     private ActorDAO actorDao;
@@ -39,6 +39,10 @@ public class FilmController implements Serializable {
     private List<Directors> directorList;
     private List<Festivals> festivalList;
     private List<Multimedya> multimedyaList;
+    
+     private int page = 1;
+    private int pageSize = 3;
+    private List<Films> filmList;
 
     public void delete() {
         this.getFilmDao().delete(this.film);
@@ -63,6 +67,26 @@ public class FilmController implements Serializable {
         this.clearForm();
     }
 
+        public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getFilmDao().findAll().size() / (double) pageSize);
+    }
+    
     public FilmDAO getFilmDao() {
         if(this.filmDao==null)
             this.filmDao=new FilmDAO();
@@ -110,7 +134,7 @@ public class FilmController implements Serializable {
     }
 
     public List<Films> getFilmList() {
-        this.filmList=this.getFilmDao().findAll();
+        this.filmList=this.getFilmDao().findAll(page,pageSize);
         return filmList;
     }
 
@@ -161,5 +185,30 @@ public class FilmController implements Serializable {
 
     public void setMultimedyaList(List<Multimedya> multimedyaList) {
         this.multimedyaList = multimedyaList;
+    }
+
+    public List<Films> getFullFilmList() {
+        this.fullFilmList= this.getFilmDao().findAll();
+        return fullFilmList;
+    }
+
+    public void setFullFilmList(List<Films> fullFilmList) {
+        this.fullFilmList = fullFilmList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

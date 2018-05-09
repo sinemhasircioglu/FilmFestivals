@@ -13,20 +13,25 @@ import javax.inject.Named;
  *
  * @author sinem
  */
-@Named(value="musicController")
+@Named(value = "musicController")
 @SessionScoped
-public class MusicController implements Serializable{
-    private List<Musics> musicList;
+public class MusicController implements Serializable {
+
+    private List<Musics> fullMusicList;
     private MusicDAO musicDao;
     private Musics music;
- 
+
     private FilmDAO filmDao;
     private List<Films> filmList;
-    
+
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Musics> musicList;
+
     public void updateForm(Musics m) {
         this.music = m;
     }
-    
+
     public void clearForm() {
         this.music = new Musics();
     }
@@ -46,8 +51,28 @@ public class MusicController implements Serializable{
         this.clearForm();
     }
 
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getMusicDao().findAll().size() / (double) pageSize);
+    }
+
     public List<Musics> getMusicList() {
-        this.musicList=this.getMusicDao().findAll();
+        this.musicList = this.getMusicDao().findAll(page,pageSize);
         return musicList;
     }
 
@@ -56,8 +81,9 @@ public class MusicController implements Serializable{
     }
 
     public MusicDAO getMusicDao() {
-        if(this.musicDao==null)
-            this.musicDao=new MusicDAO();
+        if (this.musicDao == null) {
+            this.musicDao = new MusicDAO();
+        }
         return musicDao;
     }
 
@@ -73,17 +99,43 @@ public class MusicController implements Serializable{
     }
 
     public FilmDAO getFilmDao() {
-        if(this.filmDao==null)
-            this.filmDao=new FilmDAO();
+        if (this.filmDao == null) {
+            this.filmDao = new FilmDAO();
+        }
         return filmDao;
     }
 
     public List<Films> getFilmList() {
-        this.filmList=this.getFilmDao().findAll();
+        this.filmList = this.getFilmDao().findAll();
         return filmList;
     }
 
     public void setFilmList(List<Films> filmList) {
         this.filmList = filmList;
+    }
+
+    public List<Musics> getFullMusicList() {
+        this.fullMusicList=this.getMusicDao().findAll();
+        return fullMusicList;
+    }
+
+    public void setFullMusicList(List<Musics> fullMusicList) {
+        this.fullMusicList = fullMusicList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

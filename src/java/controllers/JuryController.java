@@ -2,10 +2,8 @@ package controllers;
 
 import dao.FestivalDAO;
 import dao.JuryDAO;
-import dao.MultimedyaDAO;
 import entities.Festivals;
 import entities.Juries;
-import entities.Multimedya;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
@@ -19,14 +17,15 @@ import javax.inject.Named;
 @SessionScoped
 public class JuryController implements Serializable{
     private JuryDAO juryDao;
-    private List<Juries> juryList;
+    private List<Juries> fullJuryList;
     private Juries jury;
     
     private FestivalDAO festivalDao;
     private List<Festivals> festivalList;
-    
-    private MultimedyaDAO multimedyaDao;
-    private List<Multimedya> multimedyaList;
+        
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Juries> juryList;
     
     public void updateForm(Juries j) {
         this.jury=j;
@@ -50,6 +49,25 @@ public class JuryController implements Serializable{
         this.clearForm();
     }
 
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getJuryDao().findAll().size() / (double) pageSize);
+    }
     public JuryDAO getJuryDao() {
         if(this.juryDao==null)
             this.juryDao=new JuryDAO();
@@ -61,7 +79,7 @@ public class JuryController implements Serializable{
     }
 
     public List<Juries> getJuryList() {
-        this.juryList=this.getJuryDao().findAll();
+        this.juryList=this.getJuryDao().findAll(page,pageSize);
         return juryList;
     }
 
@@ -94,18 +112,28 @@ public class JuryController implements Serializable{
         this.festivalList = festivalList;
     }
 
-    public MultimedyaDAO getMultimedyaDao() {
-        if(this.multimedyaDao==null)
-            this.multimedyaDao=new MultimedyaDAO();
-        return multimedyaDao;
+    public List<Juries> getFullJuryList() {
+        this.fullJuryList=this.getJuryDao().findAll();
+        return fullJuryList;
     }
 
-    public List<Multimedya> getMultimedyaList() {
-        this.multimedyaList=this.getMultimedyaDao().findAll();
-        return multimedyaList;
+    public void setFullJuryList(List<Juries> fullJuryList) {
+        this.fullJuryList = fullJuryList;
     }
 
-    public void setMultimedyaList(List<Multimedya> multimedyaList) {
-        this.multimedyaList = multimedyaList;
-    }   
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }

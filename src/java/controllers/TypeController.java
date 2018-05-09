@@ -18,12 +18,16 @@ import javax.inject.Named;
 @SessionScoped
 public class TypeController implements Serializable {
     private Type type;
-    private List<Type> typeList;
+    private List<Type> fullTypeList;
     private TypeDAO typeDao;
 
     private List<Long> selectedRates;
     private RatesDAO ratesDao;
     private List<Rates> ratesList;
+    
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Type> typeList;
 
     public String create() {
         this.getTypeDao().create(this.type, selectedRates);
@@ -43,9 +47,29 @@ public class TypeController implements Serializable {
         this.type = t;
 
         this.selectedRates = new ArrayList<>();
-        for (Rates r : this.type.getRateList()) {
+        for (Rates r : this.type.getTypeRates()) {
             this.selectedRates.add(r.getId());
         }
+    }
+    
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getTypeDao().findAll().size() / (double) pageSize);
     }
 
     public Type getType() {
@@ -59,7 +83,7 @@ public class TypeController implements Serializable {
     }
 
     public List<Type> getTypeList() {
-        this.typeList=this.getTypeDao().findAll();
+        this.typeList=this.getTypeDao().findAll(page,pageSize);
         return typeList;
     }
 
@@ -95,4 +119,29 @@ public class TypeController implements Serializable {
     public void setRatesList(List<Rates> ratesList) {
         this.ratesList = ratesList;
     }   
+
+    public List<Type> getFullTypeList() {
+        this.fullTypeList=this.getTypeDao().findAll();
+        return fullTypeList;
+    }
+
+    public void setFullTypeList(List<Type> fullTypeList) {
+        this.fullTypeList = fullTypeList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }

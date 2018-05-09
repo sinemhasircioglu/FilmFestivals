@@ -1,10 +1,8 @@
 package controllers;
 
 import dao.GroupDAO;
-import dao.MultimedyaDAO;
 import dao.UserDAO;
 import entities.Group;
-import entities.Multimedya;
 import entities.Users;
 import java.io.Serializable;
 import java.util.List;
@@ -20,13 +18,14 @@ import javax.inject.Named;
 public class UserController implements Serializable{
     private Users user;
     private UserDAO userDao;
-    private List<Users> userList;
+    private List<Users> fullUserList;
 
     private GroupDAO groupDao;
     private List<Group> groupList;
-    
-    private MultimedyaDAO multimedyaDao;
-    private List<Multimedya> multimedyaList;
+        
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Users> userList;
    
     public void create() {
         this.getUserDao().create(this.user);
@@ -51,6 +50,26 @@ public class UserController implements Serializable{
         this.clearForm();
     }
     
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getUserDao().findAll().size() / (double) pageSize);
+    }
+    
     public Users getUser() {
         if(this.user==null)
             this.user=new Users();
@@ -68,7 +87,7 @@ public class UserController implements Serializable{
     }
 
     public List<Users> getUserList() {
-        this.userList = this.getUserDao().findAll();
+        this.userList = this.getUserDao().findAll(page,pageSize);
         return userList;
     }
 
@@ -91,18 +110,28 @@ public class UserController implements Serializable{
         this.groupList = groupList;
     }
 
-    public MultimedyaDAO getMultimedyaDao() {
-        if(this.multimedyaDao==null)
-            this.multimedyaDao= new MultimedyaDAO();
-        return multimedyaDao;
+    public List<Users> getFullUserList() {
+        this.fullUserList=this.getUserDao().findAll();
+        return fullUserList;
     }
 
-    public List<Multimedya> getMultimedyaList() {
-        this.multimedyaList=this.getMultimedyaDao().findAll();
-        return multimedyaList;
+    public void setFullUserList(List<Users> fullUserList) {
+        this.fullUserList = fullUserList;
     }
 
-    public void setMultimedyaList(List<Multimedya> multimedyaList) {
-        this.multimedyaList = multimedyaList;
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

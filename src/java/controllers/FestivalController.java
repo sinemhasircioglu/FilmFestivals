@@ -21,7 +21,7 @@ import javax.inject.Named;
 public class FestivalController implements Serializable{
     private FestivalDAO festivalDao;
     private Festivals festival;
-    private List<Festivals> festivalList;
+    private List<Festivals> fullFestivalList;
     
     private JuryDAO juryDao;
     private List<Juries> juryList;
@@ -29,6 +29,9 @@ public class FestivalController implements Serializable{
     private FilmDAO filmDao;
     private List<Films> filmList;
   
+     private int page = 1;
+    private int pageSize = 3;
+    private List<Festivals> festivalList;
     public void updateForm(Festivals f){
         this.festival=f;
     }
@@ -52,6 +55,25 @@ public class FestivalController implements Serializable{
         this.clearForm();
     }
     
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getFestivalDao().findAll().size() / (double) pageSize);
+    }
     public FestivalDAO getFestivalDao() {
         if(this.festivalDao==null)
             this.festivalDao=new FestivalDAO();
@@ -69,7 +91,7 @@ public class FestivalController implements Serializable{
     }
 
     public List<Festivals> getFestivalList() {
-        this.festivalList=this.getFestivalDao().findAll();
+        this.festivalList=this.getFestivalDao().findAll(page,pageSize);
         return festivalList;
     }
 
@@ -105,5 +127,30 @@ public class FestivalController implements Serializable{
 
     public void setFilmList(List<Films> filmList) {
         this.filmList = filmList;
+    }
+
+    public List<Festivals> getFullFestivalList() {
+        this.fullFestivalList = this.getFestivalDao().findAll();
+        return fullFestivalList;
+    }
+
+    public void setFullFestivalList(List<Festivals> fullFestivalList) {
+        this.fullFestivalList = fullFestivalList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

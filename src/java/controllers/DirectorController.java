@@ -2,10 +2,8 @@ package controllers;
 
 import dao.DirectorDAO;
 import dao.FilmDAO;
-import dao.MultimedyaDAO;
 import entities.Directors;
 import entities.Films;
-import entities.Multimedya;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
@@ -19,14 +17,15 @@ import javax.inject.Named;
 @SessionScoped
 public class DirectorController implements Serializable {
     private DirectorDAO directorDao;
-    private List<Directors> directorList;
+    private List<Directors> fullDirectorList;
     private Directors director;
-
-    private MultimedyaDAO multimedyaDao;
-    private List<Multimedya> multimedyaList;
 
     private FilmDAO filmDao;
     private List<Films> filmList;
+    
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Directors> directorList;
 
     public void updateForm(Directors d) {
         this.director = d;
@@ -50,6 +49,26 @@ public class DirectorController implements Serializable {
         this.getDirectorDao().delete(this.director);
         this.clearForm();
     }
+    
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getDirectorDao().findAll().size() / (double) pageSize);
+    }
 
     public DirectorDAO getDirectorDao() {
         if (this.directorDao == null) {
@@ -63,7 +82,7 @@ public class DirectorController implements Serializable {
     }
 
     public List<Directors> getDirectorList() {
-        this.directorList = this.getDirectorDao().findAll();
+        this.directorList = this.getDirectorDao().findAll(page,pageSize);
         return directorList;
     }
 
@@ -81,21 +100,6 @@ public class DirectorController implements Serializable {
         this.director = director;
     }
 
-    public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) 
-            this.multimedyaDao = new MultimedyaDAO();
-        return multimedyaDao;
-    }
-
-    public List<Multimedya> getMultimedyaList() {
-        this.multimedyaList = this.getMultimedyaDao().findAll();
-        return multimedyaList;
-    }
-
-    public void setMultimedyaList(List<Multimedya> multimedyaList) {
-        this.multimedyaList = multimedyaList;
-    }
-
     public FilmDAO getFilmDao() {
         if (this.filmDao == null) 
             this.filmDao = new FilmDAO();
@@ -110,4 +114,29 @@ public class DirectorController implements Serializable {
     public void setFilmList(List<Films> filmList) {
         this.filmList = filmList;
     }
+
+    public List<Directors> getFullDirectorList() {
+        this.fullDirectorList = this.getDirectorDao().findAll();
+        return fullDirectorList;
+    }
+
+    public void setFullDirectorList(List<Directors> fullDirectorList) {
+        this.fullDirectorList = fullDirectorList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }   
 }

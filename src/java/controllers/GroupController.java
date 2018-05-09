@@ -5,7 +5,6 @@ import dao.UserDAO;
 import entities.Group;
 import entities.Users;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -19,10 +18,14 @@ import javax.inject.Named;
 public class GroupController implements Serializable{
     private Group group;
     private GroupDAO groupDao;
-    private List<Group> groupList;
+    private List<Group> fullGroupList;
     
     private UserDAO userDao;
     private List<Users> userList;
+    
+     private int page = 1;
+    private int pageSize = 3;
+    private List<Group> groupList;
     
     public void create() {
         this.getGroupDao().create(this.group);
@@ -47,6 +50,25 @@ public class GroupController implements Serializable{
         this.clearForm();
     }
     
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getGroupDao().findAll().size() / (double) pageSize);
+    }
     public Group getGroup() {
         if(this.group==null)
             this.group=new Group();
@@ -64,7 +86,7 @@ public class GroupController implements Serializable{
     }
 
     public List<Group> getGroupList() {
-        this.groupList=this.getGroupDao().findAll();
+        this.groupList=this.getGroupDao().findAll(page,pageSize);
         return groupList;
     }
 
@@ -85,5 +107,30 @@ public class GroupController implements Serializable{
 
     public void setUserList(List<Users> userList) {
         this.userList = userList;
+    }
+
+    public List<Group> getFullGroupList() {
+        this.fullGroupList=this.getGroupDao().findAll();
+        return fullGroupList;
+    }
+
+    public void setFullGroupList(List<Group> fullGroupList) {
+        this.fullGroupList = fullGroupList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

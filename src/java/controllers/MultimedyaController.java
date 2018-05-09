@@ -16,20 +16,18 @@ import javax.inject.Named;
 @SessionScoped
 public class MultimedyaController implements Serializable{
     private Multimedya multimedya;
-    private List<Multimedya> multimedyaList;
+    private List<Multimedya> fullMultimedyaList;
     private MultimedyaDAO multimedyaDao;
     
     @Inject
     private FilmController filmController;
     @Inject
-    private UserController userController;
-    @Inject
-    private JuryController juryController;
-    @Inject
     private ActorController actorController;
-    @Inject
-    private DirectorController directorController;  
     
+    private int page = 1;
+    private int pageSize = 3;
+    private List<Multimedya> multimedyaList;
+  
     public void updateForm(Multimedya m) {
         this.multimedya=m;
     }
@@ -51,6 +49,25 @@ public class MultimedyaController implements Serializable{
         this.getMultimedyaDao().delete(this.multimedya);
         this.clearForm();
     }
+    public void previous() {
+        if (this.page == 1) {
+            this.page = this.pageCount();
+        } else {
+            this.page--;
+        }
+    }
+
+    public void next() {
+        if (this.page == this.pageCount()) {
+            this.page = 1;
+        } else {
+            this.page++;
+        }
+    }
+
+    public int pageCount() {
+        return (int) Math.ceil(this.getMultimedyaDao().findAll().size() / (double) pageSize);
+    }
 
     public Multimedya getMultimedya() {
         if (this.multimedya == null) {
@@ -64,7 +81,7 @@ public class MultimedyaController implements Serializable{
     }
 
     public List<Multimedya> getMultimedyaList() {
-        this.multimedyaList=this.getMultimedyaDao().findAll();
+        this.multimedyaList=this.getMultimedyaDao().findAll(page,pageSize);
         return multimedyaList;
     }
 
@@ -85,27 +102,34 @@ public class MultimedyaController implements Serializable{
         return filmController;
     }
 
-    public UserController getUserController() {
-        if(this.userController==null)
-            this.userController=new UserController();
-        return userController;
-    }
-
-    public JuryController getJuryController() {
-        if(this.juryController==null)
-            this.juryController=new JuryController();
-        return juryController;
-    }
-
     public ActorController getActorController() {
         if(this.actorController==null)
             this.actorController=new ActorController();
         return actorController;
     }
 
-    public DirectorController getDirectorController() {
-        if(this.directorController==null)
-            this.directorController=new DirectorController();
-        return directorController;
+    public List<Multimedya> getFullMultimedyaList() {
+        this.fullMultimedyaList=this.getMultimedyaDao().findAll();
+        return fullMultimedyaList;
+    }
+
+    public void setFullMultimedyaList(List<Multimedya> fullMultimedyaList) {
+        this.fullMultimedyaList = fullMultimedyaList;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }
