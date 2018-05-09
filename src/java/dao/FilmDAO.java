@@ -45,7 +45,34 @@ public class FilmDAO extends AbstractDAO{
     public List<Films> findAll() {
         List<Films> filmList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Films\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Films\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Films film = new Films();
+                film.setId(rs.getLong("id"));
+                film.setName(rs.getString("name"));
+                film.setGenre(rs.getString("genre"));
+
+                film.setFilmActors(this.getActorDao().getFilmActors(film.getId()));
+                film.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
+                film.setFile(this.getMultimedyaDao().find(rs.getLong("fileid")));
+                film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
+                film.setFilmMusics(this.getMusicDao().getFilmMusics(film.getId()));
+                filmList.add(film);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return filmList;
+    }
+    
+    public List<Films> findAll(int page, int pageSize) {
+        List<Films> filmList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Films\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Films film = new Films();

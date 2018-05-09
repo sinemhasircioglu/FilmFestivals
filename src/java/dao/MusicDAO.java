@@ -30,7 +30,28 @@ public class MusicDAO extends AbstractDAO{
     public List<Musics> findAll() {
         List<Musics> musicList = new ArrayList();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Musics\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Musics\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Musics mu = new Musics();
+                mu.setId(rs.getLong("id"));
+                mu.setName(rs.getString("name"));
+                mu.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
+                musicList.add(mu);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return musicList;
+    }
+    
+    public List<Musics> findAll(int page, int pageSize) {
+        List<Musics> musicList = new ArrayList();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Musics\" LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Musics mu = new Musics();

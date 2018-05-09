@@ -1,15 +1,13 @@
 package dao;
 
 import entities.Rates;
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utility.DBConnection;
 
 /**
  *
@@ -21,9 +19,9 @@ public class RatesDAO extends AbstractDAO {
 
     public void create(Rates r, Long selectedRaterType, Long selectedRatedType) {
         try {
-            Statement st = this.getConnection().createStatement();
-            st.executeUpdate("INSERT INTO public.\"Rates\"(typeraterid,raterid,typeratedid,ratedid) VALUES (" + selectedRaterType + "," + selectedRatedType + ")");
-            st.close();
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Rates\"(typeraterid,raterid,typeratedid,ratedid) VALUES (" + selectedRaterType + "," + selectedRatedType + ")");
+            pst.executeUpdate();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -31,11 +29,9 @@ public class RatesDAO extends AbstractDAO {
 
     public List<Rates> findAll() {
         List<Rates> rateList = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Rates\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Rates rate = new Rates();
                 rate.setId(rs.getLong("id"));
@@ -44,7 +40,29 @@ public class RatesDAO extends AbstractDAO {
                 rate.setRatedType(this.getTypeDao().find(rs.getLong("raterid")));
                 rateList.add(rate);
             }
-            c.close();
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return rateList;
+    }
+    
+    public List<Rates> findAll(int page, int pageSize) {
+        List<Rates> rateList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Rates\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Rates rate = new Rates();
+                rate.setId(rs.getLong("id"));
+                rate.setRate(rs.getInt("rate"));
+                rate.setRaterType(this.getTypeDao().find(rs.getLong("raterid")));
+                rate.setRatedType(this.getTypeDao().find(rs.getLong("raterid")));
+                rateList.add(rate);
+            }
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -53,18 +71,16 @@ public class RatesDAO extends AbstractDAO {
 
     public List<Rates> getTypeRates(Long typeid) {
         List<Rates> typeRates = new ArrayList<>();
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\" WHERE typeratedid=" + typeid + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Rates\" WHERE typeratedid=" + typeid + "");
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Rates rate = new Rates();
                 rate.setId(rs.getLong("id"));
                 rate.setRate(rs.getInt("rate"));
                 typeRates.add(rate);
             }
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -72,17 +88,15 @@ public class RatesDAO extends AbstractDAO {
     }
 
     public Rates find(Long id) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         Rates rate = null;
         try {
-            Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM public.\"Rates\" WHERE id=" + id + "");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Rates\" WHERE id=" + id + "");
+            ResultSet rs = pst.executeQuery();
             rs.next();
             rate = new Rates();
             rate.setId(rs.getLong("id"));
             rate.setRate(rs.getInt("rate"));
-            c.close();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,24 +104,20 @@ public class RatesDAO extends AbstractDAO {
     }
 
     public void update(Rates r, Long selectedType) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("UPDATE public.\"Rates\" SET WHERE id=" + r.getId() + " ");
-            c.close();
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Rates\" SET WHERE id=" + r.getId() + " ");
+            pst.executeUpdate();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void delete(Rates r) {
-        DBConnection db = new DBConnection();
-        Connection c = db.connect();
         try {
-            Statement st = c.createStatement();
-            st.executeUpdate("DELETE FROM public.\"Rates\" WHERE id=" + r.getId() + "");
-            c.close();
+            PreparedStatement pst = this.getConnection().prepareStatement("DELETE FROM public.\"Rates\" WHERE id=" + r.getId() + "");
+            pst.executeUpdate();
+            pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,5 +129,4 @@ public class RatesDAO extends AbstractDAO {
         }
         return typeDao;
     }
-
 }

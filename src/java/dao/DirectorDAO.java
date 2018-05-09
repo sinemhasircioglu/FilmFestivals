@@ -88,7 +88,29 @@ public class DirectorDAO extends AbstractDAO{
     public List<Directors> findAll() {
         List<Directors> directorList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Directors\" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Directors\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Directors director = new Directors();
+                director.setDirectorFilms(this.getFilmDao().getDirectorFilms(rs.getLong("id")));
+                director.setId(rs.getLong("id"));
+                director.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
+                director.setName(rs.getString("name"));
+                directorList.add(director);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return directorList;
+    }
+    
+    public List<Directors> findAll(int page, int pageSize) {
+        List<Directors> directorList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Directors\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Directors director = new Directors();

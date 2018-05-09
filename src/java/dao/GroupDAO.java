@@ -31,7 +31,28 @@ public class GroupDAO extends AbstractDAO{
     public List<Group> findAll() {
         List<Group> groupList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Group\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Group\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Group group = new Group();
+                group.setId(rs.getLong("id"));
+                group.setAuthority(rs.getString("authority"));
+                group.setUserList(this.getUserDao().getGroupUsers(group.getId()));
+                groupList.add(group);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return groupList;
+    }
+    
+    public List<Group> findAll(int page, int pageSize) {
+        List<Group> groupList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Group\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Group group = new Group();

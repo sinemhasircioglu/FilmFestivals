@@ -34,7 +34,32 @@ public class MultimedyaDAO extends AbstractDAO{
     public List<Multimedya> findAll() {
         List<Multimedya> multimedyaList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Multimedya\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Multimedya\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Multimedya med = new Multimedya();
+                med.setId(rs.getLong("id"));
+                med.setUrl(rs.getString("url"));
+                med.setMultimedyaActors(this.getActorDao().getMultimedyaActors(med.getId()));
+                med.setMultimedyaDirectors(this.getDirectorDao().getMultimedyaDirectors(med.getId()));
+                med.setMultimedyaFilms(this.getFilmDao().getMultimedyaFilms(med.getId()));
+                med.setMultimedyaJuries(this.getJuryDao().getFileJuries(med.getId()));
+                med.setMultimedyaUsers(this.getUserDao().getFileUsers(med.getId()));
+                multimedyaList.add(med);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return multimedyaList;
+    }
+    
+    public List<Multimedya> findAll(int page, int pageSize) {
+        List<Multimedya> multimedyaList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Multimedya\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Multimedya med = new Multimedya();

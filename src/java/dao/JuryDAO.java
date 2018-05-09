@@ -31,7 +31,29 @@ public class JuryDAO extends AbstractDAO{
     public List<Juries> findAll() {
         List<Juries> juryList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Juries j = new Juries();
+                j.setId(rs.getLong("id"));
+                j.setName(rs.getString("name"));
+                j.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
+                j.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
+                juryList.add(j);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return juryList;
+    }
+    
+    public List<Juries> findAll(int page, int pageSize) {
+        List<Juries> juryList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Juries j = new Juries();

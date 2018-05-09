@@ -31,7 +31,30 @@ public class ActorDAO extends AbstractDAO{
     public List<Actors> findAll() {
         List<Actors> actorList = new ArrayList();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Actors\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Actors\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Actors ac = new Actors();
+                ac.setId(rs.getLong("id"));
+                ac.setName(rs.getString("name"));
+                ac.setGender(rs.getBoolean("gender"));
+                ac.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
+                ac.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
+                actorList.add(ac);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return actorList;
+    }
+    
+    public List<Actors> findAll(int page,int pageSize) {
+        List<Actors> actorList = new ArrayList();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Actors\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+"");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Actors ac = new Actors();

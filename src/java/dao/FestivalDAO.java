@@ -33,7 +33,32 @@ public class FestivalDAO extends AbstractDAO{
     public List<Festivals> findAll() {
         List<Festivals> festivalList = new ArrayList<>();
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Festivals\"");
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Festivals\" ORDER BY id ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Festivals fest = new Festivals();
+                fest.setId(rs.getLong("id"));
+                fest.setName(rs.getString("name"));
+                fest.setCountry(rs.getString("country"));
+                fest.setDescription(rs.getString("description"));
+                fest.setYear(rs.getInt("year"));
+                fest.setFestivalFilms(this.getFilmDao().getFestivalFilms(fest.getId()));
+                fest.setFestivalJuries(this.getJuryDao().getFestivalJuries(fest.getId()));
+                festivalList.add(fest);
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return festivalList;
+    }
+    
+    public List<Festivals> findAll(int page, int pageSize) {
+        List<Festivals> festivalList = new ArrayList<>();
+        int start=0;
+        start= (page-1)*pageSize;
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Festivals\" ORDER BY id LIMIT "+pageSize+" OFFSET "+start+" ");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Festivals fest = new Festivals();
