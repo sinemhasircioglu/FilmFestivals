@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/admin/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h:form id="group-table">
+                                <h:dataTable styleClass="table table-striped table-hover" value="#{groupController.groupList}" var="group">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                        <h:commandLink action="#{groupController.updateForm(group)}" value="#{group.id}"> 
+                                            <f:ajax execute="group-table" render="group-form " />
+                                        </h:commandLink>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">AUTHORITY</f:facet>
+                                            #{group.authority}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">USERS</f:facet>
+                                        <ul>
+                                            <ui:repeat value="#{group.userList}" var="user">
+                                                <li>#{user.name}</li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </h:column>                               
+                                </h:dataTable>
+                                <div class="btn-group">
+                                    <h:commandButton styleClass="btn btn-info" value="Pre" action="#{groupController.previous}" />
+                                    <h:commandButton styleClass="btn btn-info" value="Next" action="#{groupController.next}" />
+                                </div>
+                            </h:form>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h:form id="group-form">
+                                <div class="form-group">
+                                    <h:inputHidden value="#{groupController.group.id}" />                         
+                                    <label for="selectUsers">USERS</label>
+                                    <h:selectManyMenu style="height: 250px" id="selectUsers" value="#{groupController.group.userList}" styleClass="custom-select" converter="userConverter" >
+                                        <f:selectItems value="#{groupController.userList}" var="user" itemValue="#{user}" itemLabel="#{user.name}" />
+                                    </h:selectManyMenu>                       
+                                    <label for="inputAuthority">AUTHORITY</label>
+                                    <h:inputText value="#{groupController.group.authority}" styleClass="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton rendered="#{groupController.group.id == null}" action="#{groupController.create}" value="Create" styleClass="btn btn-primary" >
+                                        <f:ajax execute="group-form" render="group-form group-table" />
+                                    </h:commandButton>
+                                    <h:commandButton rendered="#{groupController.group.id != null}" action="#{groupController.update}" value="Update" styleClass="btn btn-secondary" >
+                                        <f:ajax execute="group-form" render="group-form group-table" />
+                                    </h:commandButton>
+                                    <h:commandButton rendered="#{groupController.group.id != null}" action="#{groupController.delete}" value="Delete" styleClass="btn btn-danger" >
+                                        <f:ajax execute="group-form" render="group-form group-table" />
+                                    </h:commandButton>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

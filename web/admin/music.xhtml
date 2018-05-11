@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+        <title>Music</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/admin/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="col-md-7">
+                        <h:form id="music-table">
+                            <h:dataTable styleClass="table table-striped table-hover" value="#{musicController.musicList}" var="music">
+                                <h:column>
+                                    <f:facet name="header">ID</f:facet>
+                                    <h:commandLink action="#{musicController.updateForm(music)}" value="#{music.id}"> 
+                                        <f:ajax execute="music-table" render="music-form" />
+                                </h:commandLink>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">NAME</f:facet>
+                                        #{music.name}                            
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">FILM</f:facet>
+                                        #{music.film.name}
+                                </h:column>                               
+                            </h:dataTable>
+                            <div class="btn-group">
+                                <h:commandButton styleClass="btn btn-info" value="Pre" action="#{musicController.previous}" />
+                                <h:commandButton styleClass="btn btn-info" value="Next" action="#{musicController.next}" />
+                            </div>
+                        </h:form>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h:form id="music-form">
+                            <div class="form-group">  
+                                <h:inputHidden value="#{musicController.music.id}" />
+                                <label for="inputName">Music Name: </label>
+                                <h:inputText id="inputName" styleClass="form-control" value="#{musicController.music.name}" /> 
+                                <label for="selectFilm">Music Film: </label>
+                                <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{musicController.music.film}" converter="filmConverter">
+                                    <f:selectItems value="#{musicController.filmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton rendered="#{musicController.music.id == null}" styleClass="btn btn-primary" value="Create" action="#{musicController.create}" >
+                                    <f:ajax execute="music-form" render="music-form music-table" />
+                                </h:commandButton>
+                                <h:commandButton rendered="#{musicController.music.id != null}" styleClass="btn btn-secondary" value="Update" action="#{musicController.update}" >
+                                    <f:ajax execute="music-form" render="music-form music-table" />
+                                </h:commandButton>
+                                <h:commandButton rendered="#{musicController.music.id != null}" styleClass="btn btn-danger" value="Delete" action="#{musicController.delete}" >
+                                    <f:ajax execute="music-form" render="music-form music-table" />
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

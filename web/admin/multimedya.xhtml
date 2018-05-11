@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Multimedya</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/admin/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="col-md-7">
+                        <h:form id="multimedya-table">
+                            <h:dataTable styleClass="table table-striped table-hover" value="#{multimedyaController.fullMultimedyaList}" var="multimedya">
+                                <h:column>
+                                    <f:facet name="header">ID</f:facet>
+                                    <h:commandLink action="#{multimedyaController.updateForm(multimedya)}" value="#{multimedya.id}" >
+                                        <f:ajax execute="multimedya-table" render="multimedya-form" />
+                                    </h:commandLink>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">NAME</f:facet>
+                                        #{multimedya.name}   
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">PATH</f:facet>
+                                        #{multimedya.path}   
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">TYPE</f:facet>
+                                        #{multimedya.type}   
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">FILM</f:facet>
+                                        #{multimedya.film.name}
+                                </h:column> 
+                                <h:column>
+                                    <f:facet name="header" > Document</f:facet>
+                                    <h:panelGroup rendered="#{multimedya.type.contains('image')}">
+                                        <h:graphicImage value="file/#{multimedya.name}" width="50" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{multimedya.type.contains('application')}">
+                                        <a href="file/#{multimedya.name}" >#{multimedya.name}</a>
+                                    </h:panelGroup>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="col-md-5">
+                        <h:form id="multimedya-form" enctype="multipart/form-data">
+                            <div class="form-group">   
+                                <h:inputHidden value="#{multimedyaController.multimedya.id}" />                           
+                                <label for="selectFilm">Multimedya Film: </label>
+                                <h:selectOneMenu styleClass="custom-select" id="selectFilm" value="#{multimedyaController.multimedya.film}" converter="filmConverter">
+                                    <f:selectItems value="#{multimedyaController.filmController.fullFilmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/>
+                                </h:selectOneMenu>
+                                <label>File</label>
+                                <h:inputFile value="#{multimedyaController.part}" styleClass="custom-file"/>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton action="#{multimedyaController.upload}" value="Upload" styleClass="btn btn-primary">
+                                    <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+                                </h:commandButton>
+                                <h:commandButton rendered="#{multimedyaController.multimedya.id != null}" styleClass="btn btn-secondary" value="Update" action="#{multimedyaController.update}" >
+                                    <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+                                </h:commandButton>
+                                <h:commandButton rendered="#{multimedyaController.multimedya.id != null}" styleClass="btn btn-danger" value="Delete" action="#{multimedyaController.delete}" >
+                                    <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
