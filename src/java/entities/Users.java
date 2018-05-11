@@ -13,7 +13,6 @@ public class Users {
     private String password;
     private String name;
     private boolean gender;
-    private Multimedya multimedya;
     private Group group;
 
     public Long getId() {
@@ -62,14 +61,6 @@ public class Users {
 
     public void setGroup(Group group) {
         this.group = group;
-    }
-
-    public Multimedya getMultimedya() {
-        return multimedya;
-    }
-
-    public void setMultimedya(Multimedya multimedya) {
-        this.multimedya = multimedya;
     }
 
     @Override

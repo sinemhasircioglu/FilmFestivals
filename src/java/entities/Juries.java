@@ -10,7 +10,6 @@ public class Juries {
     private Long id;
     private String name;
     private Festivals festival;
-    private Multimedya multimedya;
 
     public Long getId() {
         return id;
@@ -34,14 +33,6 @@ public class Juries {
 
     public void setFestival(Festivals festival) {
         this.festival = festival;
-    }
-
-    public Multimedya getMultimedya() {
-        return multimedya;
-    }
-
-    public void setMultimedya(Multimedya multimedya) {
-        this.multimedya = multimedya;
     }
 
     @Override

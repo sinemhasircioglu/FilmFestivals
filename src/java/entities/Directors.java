@@ -11,7 +11,6 @@ public class Directors {
 
     private Long id;
     private String name;
-    private Multimedya multimedya;
     private List<Films> directorFilms;
 
     public Long getId() {
@@ -28,14 +27,6 @@ public class Directors {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Multimedya getMultimedya() {
-        return multimedya;
-    }
-
-    public void setMultimedya(Multimedya multimedya) {
-        this.multimedya = multimedya;
     }
 
     public List<Films> getDirectorFilms() {

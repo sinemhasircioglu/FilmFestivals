@@ -7,7 +7,6 @@ import java.util.Objects;
  *
  * @author sinem
  */
-
 public class Films {
 
     private Long id;
@@ -15,9 +14,9 @@ public class Films {
     private String genre;
     private List<Actors> filmActors;
     private List<Musics> filmMusics;
-    private Festivals festival;
-    private Multimedya multimedya;
+    private List<Multimedya> filmMultimedyas;
     private List<Directors> filmDirectors;
+    private Festivals festival;
 
     public Long getId() {
         return id;
@@ -51,20 +50,12 @@ public class Films {
         this.festival = festival;
     }
 
-    public Multimedya getFile() {
-        return multimedya;
+    public List<Multimedya> getFilmMultimedyas() {
+        return filmMultimedyas;
     }
 
-    public void setFile(Multimedya multimedya) {
-        this.multimedya = multimedya;
-    }
-
-    public Multimedya getMultimedya() {
-        return multimedya;
-    }
-
-    public void setMultimedya(Multimedya multimedya) {
-        this.multimedya = multimedya;
+    public void setFilmMultimedyas(List<Multimedya> filmMultimedyas) {
+        this.filmMultimedyas = filmMultimedyas;
     }
 
     public List<Directors> getFilmDirectors() {

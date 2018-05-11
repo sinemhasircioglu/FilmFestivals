@@ -11,7 +11,6 @@ public class Actors {
     private String name;
     private boolean gender;
     private Films film;
-    private Multimedya multimedya;
 
     public Long getId() {
         return id;
@@ -44,15 +43,7 @@ public class Actors {
     public void setFilm(Films film) {
         this.film = film;
     } 
-
-    public Multimedya getMultimedya() {
-        return multimedya;
-    }
-
-    public void setMultimedya(Multimedya multimedya) {
-        this.multimedya = multimedya;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;
