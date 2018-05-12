@@ -10,6 +10,22 @@
         <ui:composition template="/frontend/template/layout.xhtml">
             <ui:define name="content">
                 <h1> Register </h1>
+                <h:form>
+                    <div class="form-group">
+                        <h:inputHidden value="#{userController.user.id}" />
+
+                        <label for="inputName">NAME</label>
+                        <h:inputText id="inputName" value="#{userController.user.name}" styleClass="form-control" />                       
+                        <label for="inputEmail">EMAIL</label>
+                        <h:inputText value="#{userController.user.email}" styleClass="form-control"/>
+                        <label for="inputPassword">PASSWORD</label>
+                        <h:inputSecret value="#{userController.user.password}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton action="#{userController.register}" value="Register" styleClass="btn btn-primary"/>
+                    </div>
+                    
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>
