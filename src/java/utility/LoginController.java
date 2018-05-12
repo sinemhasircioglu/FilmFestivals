@@ -3,6 +3,8 @@ package utility;
 import entities.Users;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 /**
@@ -15,13 +17,13 @@ public class LoginController implements Serializable {
     private Users user;
 
     public String login() {
-        /* 
-        kullanıcı email ve password kontrolu
-        var ise sessionAttribute ile valid_user
-        
-        */
-        
-        return "";
+        if(this.user.getEmail().equals("deneme") && this.user.getPassword().equals("deneme")) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("valid_user", this.user);
+            return "/admin/index?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Hatalı kullanıcı adı veya şifre"));
+            return "/frontend/login?faces-redirect=true";
+        }
     }
     
     public Users getUser() {

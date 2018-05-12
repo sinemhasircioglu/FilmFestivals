@@ -23,18 +23,26 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        
-        String url = req.getRequestURI();        
+
+        String url = req.getRequestURI();
         Users u = (Users) req.getSession().getAttribute("valid_user");
-        
+
         if (u == null) {
-            if(url.contains("admin") || url.contains("logout")) {
-                
+            if (url.contains("admin") || url.contains("logout")) {
+                res.sendRedirect(req.getContextPath()+"/login.xhtml");
+            } else {
+                chain.doFilter(request, response);
             }
-            
         } else {
-            
-        }      
+            if (url.contains("register") || url.contains("login")) {
+                res.sendRedirect(req.getContextPath()+"/admin/index.xhtml");
+            } else if (url.contains("logout")) {
+                req.getSession().invalidate();
+                res.sendRedirect(req.getContextPath()+"/frontend/index.xhtml");
+            } else {
+                chain.doFilter(request, response);
+            }
+        }
     }
 
     @Override
