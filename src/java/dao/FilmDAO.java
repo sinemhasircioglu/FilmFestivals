@@ -24,7 +24,7 @@ public class FilmDAO extends AbstractDAO{
 
     public void insert(Films film) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Films\"(name,genre,fileid,festivalid) VALUES('" + film.getName() + "','" + film.getGenre() + "'," + film.getMultimedya().getId() + "," + film.getFestival().getId() + ") ",PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Films\"(name,genre,festivalid) VALUES('" + film.getName() + "','" + film.getGenre() + "'," + film.getFestival().getId() + ") ",PreparedStatement.RETURN_GENERATED_KEYS);
             pst.executeUpdate();
 
             Long filmId = null;
@@ -55,7 +55,6 @@ public class FilmDAO extends AbstractDAO{
 
                 film.setFilmActors(this.getActorDao().getFilmActors(film.getId()));
                 film.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
-                film.setFile(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
                 film.setFilmMusics(this.getMusicDao().getFilmMusics(film.getId()));
                 filmList.add(film);
@@ -82,7 +81,6 @@ public class FilmDAO extends AbstractDAO{
 
                 film.setFilmActors(this.getActorDao().getFilmActors(film.getId()));
                 film.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
-                film.setFile(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 film.setFilmDirectors(this.getDirectorDao().getFilmDirectors(film.getId()));
                 film.setFilmMusics(this.getMusicDao().getFilmMusics(film.getId()));
                 filmList.add(film);
@@ -122,21 +120,6 @@ public class FilmDAO extends AbstractDAO{
             System.out.println(ex.getMessage());
         }
         return festivalFilms;
-    }
-
-    public List<Films> getMultimedyaFilms(Long fileid) {
-        List<Films> multimedyaFilms = new ArrayList<>();
-        try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Films\" WHERE fileid=" + fileid + "");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                multimedyaFilms.add(this.find(rs.getLong("id")));
-            }
-            pst.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return multimedyaFilms;
     }
 
     public Films find(Long id) {

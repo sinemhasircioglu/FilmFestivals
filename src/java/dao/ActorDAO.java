@@ -16,11 +16,10 @@ import java.util.logging.Logger;
 public class ActorDAO extends AbstractDAO{
 
     private FilmDAO filmDao;
-    private MultimedyaDAO multimedyaDao;
     
     public void create(Actors ac) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Actors\"(name,fileid,filmid) VALUES ('" + ac.getName() + "', "+ac.getMultimedya().getId()+ ","+ac.getFilm().getId()+ ")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Actors\"(name,filmid) VALUES ('" + ac.getName() + "', "+ac.getFilm().getId()+ ")");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -39,7 +38,6 @@ public class ActorDAO extends AbstractDAO{
                 ac.setName(rs.getString("name"));
                 ac.setGender(rs.getBoolean("gender"));
                 ac.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
-                ac.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 actorList.add(ac);
             }
             pst.close();
@@ -62,7 +60,6 @@ public class ActorDAO extends AbstractDAO{
                 ac.setName(rs.getString("name"));
                 ac.setGender(rs.getBoolean("gender"));
                 ac.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
-                ac.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 actorList.add(ac);
             }
             pst.close();
@@ -108,28 +105,9 @@ public class ActorDAO extends AbstractDAO{
         return filmActors;
     }
     
-    public List<Actors> getMultimedyaActors(Long fileid){
-        List<Actors> multimedyaActors = new ArrayList();
-        try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Actors\" WHERE fileid="+fileid+"");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Actors ac = new Actors();
-                ac.setId(rs.getLong("id"));
-                ac.setName(rs.getString("name"));
-                ac.setGender(rs.getBoolean("gender"));
-                multimedyaActors.add(ac);
-            }
-            pst.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return multimedyaActors;
-    }
-    
     public void update(Actors ac) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Actors\" SET name='" + ac.getName() + "' , gender='" + ac.isGender() + "',fileid="+ac.getMultimedya().getId()+",filmid="+ac.getFilm().getId()+" WHERE id="+ac.getId()+"");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Actors\" SET name='" + ac.getName() + "' , gender='" + ac.isGender() + "',filmid="+ac.getFilm().getId()+" WHERE id="+ac.getId()+"");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -151,11 +129,5 @@ public class ActorDAO extends AbstractDAO{
         if(this.filmDao==null)
             this.filmDao=new FilmDAO();
         return filmDao;
-    }
-
-    public MultimedyaDAO getMultimedyaDao() {
-        if(this.multimedyaDao==null)
-            this.multimedyaDao=new MultimedyaDAO();
-        return multimedyaDao;
     }
 }

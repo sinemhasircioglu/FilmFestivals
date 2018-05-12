@@ -15,12 +15,11 @@ import java.util.logging.Logger;
  */
 public class JuryDAO extends AbstractDAO{
 
-    private MultimedyaDAO multimedyaDao;
     private FestivalDAO festivalDao;
 
     public void create(Juries j) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid,fileid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+","+j.getMultimedya().getId()+")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+" ");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -38,7 +37,6 @@ public class JuryDAO extends AbstractDAO{
                 j.setId(rs.getLong("id"));
                 j.setName(rs.getString("name"));
                 j.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
-                j.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 juryList.add(j);
             }
             pst.close();
@@ -60,7 +58,6 @@ public class JuryDAO extends AbstractDAO{
                 j.setId(rs.getLong("id"));
                 j.setName(rs.getString("name"));
                 j.setFestival(this.getFestivalDao().find(rs.getLong("festivalid")));
-                j.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 juryList.add(j);
             }
             pst.close();
@@ -88,24 +85,6 @@ public class JuryDAO extends AbstractDAO{
         return festivalJuries;
 
     }
-    
-    public List<Juries> getFileJuries(Long fileid){
-        List<Juries> fileJuries = new ArrayList<>();
-        try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Juries\" WHERE fileid=" + fileid + "");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Juries j = new Juries();
-                j.setId(rs.getLong("id"));
-                j.setName(rs.getString("name"));
-                fileJuries.add(j);
-            }
-            pst.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return fileJuries;
-    }
 
     public Juries find(Long id) {
         Juries jury = null;
@@ -125,7 +104,7 @@ public class JuryDAO extends AbstractDAO{
 
     public void update(Juries j) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+j.getFestival().getId()+", fileid="+j.getMultimedya().getId()+" WHERE id="+j.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Juries\" SET name='" + j.getName() + "' ,festivalid="+j.getFestival().getId()+" WHERE id="+j.getId()+" ");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -141,13 +120,6 @@ public class JuryDAO extends AbstractDAO{
         } catch (SQLException ex) {
             Logger.getLogger(JuryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) {
-            this.multimedyaDao = new MultimedyaDAO();
-        }
-        return multimedyaDao;
     }
 
     public FestivalDAO getFestivalDao() {

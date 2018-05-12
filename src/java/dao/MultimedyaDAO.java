@@ -14,16 +14,12 @@ import java.util.logging.Logger;
  * @author sinem
  */
 public class MultimedyaDAO extends AbstractDAO{
-    
-    private ActorDAO actorDao;
-    private UserDAO userDao;
-    private DirectorDAO directorDao;
-    private JuryDAO juryDao;
+
     private FilmDAO filmDao;
 
     public void create(Multimedya med) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Multimedya\"(url) VALUES ('" + med.getUrl()+ "')");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Multimedya\"(name,path,type,filmid) VALUES ('" + med.getName()+ "','" + med.getPath()+ "','" + med.getType()+ "'," + med.getFilm().getId() + ")");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -39,12 +35,10 @@ public class MultimedyaDAO extends AbstractDAO{
             while (rs.next()) {
                 Multimedya med = new Multimedya();
                 med.setId(rs.getLong("id"));
-                med.setUrl(rs.getString("url"));
-                med.setMultimedyaActors(this.getActorDao().getMultimedyaActors(med.getId()));
-                med.setMultimedyaDirectors(this.getDirectorDao().getMultimedyaDirectors(med.getId()));
-                med.setMultimedyaFilms(this.getFilmDao().getMultimedyaFilms(med.getId()));
-                med.setMultimedyaJuries(this.getJuryDao().getFileJuries(med.getId()));
-                med.setMultimedyaUsers(this.getUserDao().getFileUsers(med.getId()));
+                med.setName(rs.getString("name"));
+                med.setPath(rs.getString("path"));
+                med.setType(rs.getString("type"));
+                med.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
                 multimedyaList.add(med);
             }
             pst.close();
@@ -64,12 +58,10 @@ public class MultimedyaDAO extends AbstractDAO{
             while (rs.next()) {
                 Multimedya med = new Multimedya();
                 med.setId(rs.getLong("id"));
-                med.setUrl(rs.getString("url"));
-                med.setMultimedyaActors(this.getActorDao().getMultimedyaActors(med.getId()));
-                med.setMultimedyaDirectors(this.getDirectorDao().getMultimedyaDirectors(med.getId()));
-                med.setMultimedyaFilms(this.getFilmDao().getMultimedyaFilms(med.getId()));
-                med.setMultimedyaJuries(this.getJuryDao().getFileJuries(med.getId()));
-                med.setMultimedyaUsers(this.getUserDao().getFileUsers(med.getId()));
+                med.setName(rs.getString("name"));
+                med.setPath(rs.getString("path"));
+                med.setType(rs.getString("type"));
+                med.setFilm(this.getFilmDao().find(rs.getLong("filmid")));
                 multimedyaList.add(med);
             }
             pst.close();
@@ -87,7 +79,9 @@ public class MultimedyaDAO extends AbstractDAO{
             if (rs.next()) {
                 multimedya = new Multimedya();
                 multimedya.setId(rs.getLong("id"));
-                multimedya.setUrl(rs.getString("url"));
+                multimedya.setName(rs.getString("name"));
+                multimedya.setPath(rs.getString("path"));
+                multimedya.setType(rs.getString("type"));
             }
             pst.close();
         } catch (SQLException ex) {
@@ -98,7 +92,7 @@ public class MultimedyaDAO extends AbstractDAO{
     
     public void update(Multimedya med) {
         try {
-            PreparedStatement pst= this.getConnection().prepareStatement("UPDATE public.\"Multimedya\" SET url='" + med.getUrl() + "' WHERE id=" + med.getId() + " ");
+            PreparedStatement pst= this.getConnection().prepareStatement("UPDATE public.\"Multimedya\" SET name='" + med.getName() + "',path='" + med.getPath() + "',type='" + med.getType() + "', filmid="+med.getFilm().getId()+" WHERE id=" + med.getId() + " ");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -114,30 +108,6 @@ public class MultimedyaDAO extends AbstractDAO{
         } catch (SQLException ex) {
             Logger.getLogger(MultimedyaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public ActorDAO getActorDao() {
-        if (this.actorDao == null) 
-            this.actorDao = new ActorDAO();
-        return actorDao;
-    }
-
-    public UserDAO getUserDao() {
-        if(this.userDao==null)
-            this.userDao=new UserDAO();
-        return userDao;
-    }
-
-    public DirectorDAO getDirectorDao() {
-        if (this.directorDao == null) 
-            this.directorDao = new DirectorDAO();
-        return directorDao;
-    }
-
-    public JuryDAO getJuryDao() {
-        if (this.juryDao == null) 
-            this.juryDao = new JuryDAO();
-        return juryDao;
     }
 
     public FilmDAO getFilmDao() {

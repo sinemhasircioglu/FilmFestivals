@@ -15,12 +15,21 @@ import java.util.logging.Logger;
  */
 public class UserDAO extends AbstractDAO{
 
-    private MultimedyaDAO multimedyaDao;
     private GroupDAO groupDao;
 
     public void create(Users u) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,fileid,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getMultimedya().getId()+ ","+u.getGroup().getId()+ ")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getGroup().getId()+ ")");
+            pst.executeUpdate();
+            pst.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void register(Users u) {
+        try {
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "')");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -40,8 +49,6 @@ public class UserDAO extends AbstractDAO{
                 us.setId(rs.getLong("id"));
                 us.setName(rs.getString("name"));
                 us.setPassword(rs.getString("password"));
-
-                us.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 us.setGroup(this.getGroupDao().find(rs.getLong("groupid")));
                 userList.add(us);
             }
@@ -66,8 +73,6 @@ public class UserDAO extends AbstractDAO{
                 us.setId(rs.getLong("id"));
                 us.setName(rs.getString("name"));
                 us.setPassword(rs.getString("password"));
-
-                us.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 us.setGroup(this.getGroupDao().find(rs.getLong("groupid")));
                 userList.add(us);
             }
@@ -111,25 +116,10 @@ public class UserDAO extends AbstractDAO{
         }
         return groupUsers;
     }
-    
-    public List<Users> getFileUsers(Long fileid) {
-        List<Users> fileUsers = new ArrayList<>();
-        try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Users\" WHERE fileid=" + fileid + "");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {                
-                fileUsers.add(this.find(rs.getLong("id")));
-            }
-            pst.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return fileUsers;
-    }
 
     public void update(Users u) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' ,fileid="+u.getMultimedya().getId()+", groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' , groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -145,13 +135,6 @@ public class UserDAO extends AbstractDAO{
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) {
-            this.multimedyaDao = new MultimedyaDAO();
-        }
-        return multimedyaDao;
     }
 
     public GroupDAO getGroupDao() {

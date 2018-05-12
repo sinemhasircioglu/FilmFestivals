@@ -16,12 +16,11 @@ import java.util.logging.Logger;
  */
 public class DirectorDAO extends AbstractDAO{
     
-    private MultimedyaDAO multimedyaDao;
     private FilmDAO filmDao;
     
     public void create(Directors d){
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Directors\"(name,fileid) VALUES ('" + d.getName() + "',"+d.getMultimedya().getId()+")",PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Directors\"(name) VALUES ('" + d.getName() + "')",PreparedStatement.RETURN_GENERATED_KEYS);
             pst.executeUpdate();
             
             Long directorId = null;
@@ -53,22 +52,7 @@ public class DirectorDAO extends AbstractDAO{
         }
         return filmDirectors;
     }  
-    
-    public List<Directors> getMultimedyaDirectors(Long fileid){      
-        List<Directors> multimedyaDirectors = new ArrayList<>();
-        try {
-            PreparedStatement pst = this.getConnection().prepareStatement("SELECT * FROM public.\"Directors\" WHERE fileid=" + fileid+ "");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                multimedyaDirectors.add(this.find(rs.getLong("id")));
-            }
-            pst.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return multimedyaDirectors;
-    }
-    
+     
     public Directors find(Long id) {
         Directors director = null;
         try {
@@ -94,7 +78,6 @@ public class DirectorDAO extends AbstractDAO{
                 Directors director = new Directors();
                 director.setDirectorFilms(this.getFilmDao().getDirectorFilms(rs.getLong("id")));
                 director.setId(rs.getLong("id"));
-                director.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 director.setName(rs.getString("name"));
                 directorList.add(director);
             }
@@ -116,7 +99,6 @@ public class DirectorDAO extends AbstractDAO{
                 Directors director = new Directors();
                 director.setDirectorFilms(this.getFilmDao().getDirectorFilms(rs.getLong("id")));
                 director.setId(rs.getLong("id"));
-                director.setMultimedya(this.getMultimedyaDao().find(rs.getLong("fileid")));
                 director.setName(rs.getString("name"));
                 directorList.add(director);
             }
@@ -129,7 +111,7 @@ public class DirectorDAO extends AbstractDAO{
 
     public void update(Directors d) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Directors\" SET name='" + d.getName() + "', fileid="+d.getMultimedya().getId()+" WHERE id="+d.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Directors\" SET name='" + d.getName() + "' WHERE id="+d.getId()+" ");
             pst.executeUpdate();
             
             PreparedStatement pst2 = this.getConnection().prepareStatement("DELETE FROM public.\"FilmDirector\" WHERE directorid=" + d.getId() + "");
@@ -155,12 +137,6 @@ public class DirectorDAO extends AbstractDAO{
         } catch (SQLException ex) {
             Logger.getLogger(DirectorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public MultimedyaDAO getMultimedyaDao() {
-        if(this.multimedyaDao==null)
-            this.multimedyaDao=new MultimedyaDAO();
-        return multimedyaDao;
     }
 
     public FilmDAO getFilmDao() {
