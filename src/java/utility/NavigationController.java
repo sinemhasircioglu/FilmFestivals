@@ -17,6 +17,6 @@ public class NavigationController implements Serializable{
     }    
     
     public String goToAdminPage(String page) {
-        return "/admin/"+page+"?faces-redirect=true";
+        return "/admin/"+page+"/"+page+"?faces-redirect=true";
     } 
 }
