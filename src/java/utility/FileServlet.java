@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sinem
  */
-@WebServlet(name = "FileServlet", urlPatterns = {"/admin/file/*"})
+@WebServlet(name = "FileServlet", urlPatterns = {"/admin/file/*","/admin/multimedya/file/*"})
 public class FileServlet extends HttpServlet {
 
     private String uploadPath;
