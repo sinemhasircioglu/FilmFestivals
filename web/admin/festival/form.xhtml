@@ -9,7 +9,8 @@
         <div class="form-group">   
             <h:inputHidden value="#{festivalController.festival.id}" />                    
             <label for="inputName">Festival Name: </label>
-            <h:inputText id="inputName" value="#{festivalController.festival.name}" styleClass="form-control"/> 
+            <h:inputText id="inputName" value="#{festivalController.festival.name}" validator="#{festivalController.validateName}" styleClass="form-control"/> 
+            <h:messages for="inputName" style="color: red" showSummary="true"/>
             <label for="inputCountry">Festival Country: </label>
             <h:inputText value="#{festivalController.festival.country}" styleClass="form-control"/> 
             <label for="inputDescription">Festival Description: </label>
@@ -33,7 +34,7 @@
                 <f:ajax execute="festival-form" render="festival-form festival-table" />
             </h:commandButton>
             <h:commandButton rendered="#{festivalController.festival.id != null}" styleClass="btn btn-danger" value="Delete" action="#{festivalController.delete}" >
-                <f:ajax execute="festival-form" render="festival-form festival-table" />
+                <f:ajax execute="festival-form" render="festival-table" />
             </h:commandButton>
         </div>
     </h:form>

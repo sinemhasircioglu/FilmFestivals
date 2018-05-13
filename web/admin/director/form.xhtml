@@ -9,7 +9,8 @@
         <div class="form-group">
             <h:inputHidden value="#{directorController.director.id}" />
             <label for="inputName">Director Name: </label>
-            <h:inputText value="#{directorController.director.name}" styleClass="form-control"/> 
+            <h:inputText id="inputName" value="#{directorController.director.name}" styleClass="form-control" validator="#{directorController.validateName}"/> 
+            <h:messages for="inputName" style="color: red" showSummary="true"/>
             <label for="selectDirectors" >Director Films: </label>
             <h:selectManyMenu value="#{directorController.director.directorFilms}" style="height: 200px" styleClass="custom-select form-control" converter="filmConverter">
                 <f:selectItems value="#{directorController.filmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/> 
