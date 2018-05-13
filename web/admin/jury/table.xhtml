@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="jury-table">
+        <h:dataTable styleClass="table table-striped table-hover" value="#{juryController.juryList}" var="jury">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                <h:commandLink action="#{juryController.updateForm(jury)}" value="#{jury.id}"> 
+                    <f:ajax execute="jury-table" render="jury-form" />
+                </h:commandLink>
+            </h:column>
+            <h:column>
+                <f:facet name="header">NAME</f:facet>
+                    #{jury.name}                            
+            </h:column>
+            <h:column>
+                <f:facet name="header">FESTIVAL</f:facet>
+                    #{jury.festival.name}
+            </h:column>                                                                
+        </h:dataTable>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="multimedya-form" enctype="multipart/form-data">
+        <div class="form-group">   
+            <h:inputHidden value="#{multimedyaController.multimedya.id}" />                           
+            <label for="selectFilm">Multimedya Film: </label>
+            <h:selectOneMenu styleClass="custom-select" id="selectFilm" value="#{multimedyaController.multimedya.film}" converter="filmConverter">
+                <f:selectItems value="#{multimedyaController.filmController.fullFilmList}" var="film" itemValue="#{film}" itemLabel="#{film.name}"/>
+            </h:selectOneMenu>
+            <label>File</label>
+            <h:inputFile value="#{multimedyaController.part}" styleClass="custom-file"/>
+        </div>
+        <div class="form-group">
+            <h:commandButton action="#{multimedyaController.upload}" value="Upload" styleClass="btn btn-primary">
+                <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+            </h:commandButton>
+            <h:commandButton rendered="#{multimedyaController.multimedya.id != null}" styleClass="btn btn-secondary" value="Update" action="#{multimedyaController.update}" >
+                <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+            </h:commandButton>
+            <h:commandButton rendered="#{multimedyaController.multimedya.id != null}" styleClass="btn btn-danger" value="Delete" action="#{multimedyaController.delete}" >
+                <f:ajax execute="multimedya-form" render="multimedya-form multimedya-table" />
+            </h:commandButton>
+        </div>
+    </h:form>
+</ui:composition>

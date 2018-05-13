@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="filmTable">
+        <h:dataTable styleClass="table table-striped table-hover" value="#{filmController.filmList}" var="film">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                    #{film.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">NAME</f:facet>
+                <h:commandLink action="#{filmController.updateForm(film)}" value="#{film.name}">
+                    <f:ajax execute="filmTable" render="filmForm " />
+                </h:commandLink>
+            </h:column>
+            <h:column>
+                <f:facet name="header">GENRE</f:facet>
+                    #{film.genre}
+            </h:column>
+            <h:column>
+                <f:facet name="header">FESTIVAL</f:facet>
+                    #{film.festival.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">ACTORS</f:facet>
+                <ul>
+                    <ui:repeat value="#{film.filmActors}" var="actor">
+                        <li>#{actor.name}</li>
+                    </ui:repeat>
+                </ul>
+            </h:column>
+            <h:column>
+                <f:facet name="header">MUSICS</f:facet>
+                <ul>
+                    <ui:repeat value="#{film.filmMusics}" var="music">
+                        <li>#{music.name}</li>
+                    </ui:repeat>
+                </ul>
+            </h:column>
+            <h:column>
+                <f:facet name="header">DIRECTORS</f:facet>
+                <ul>
+                    <ui:repeat value="#{film.filmDirectors}" var="director">
+                        <li>#{director.name}</li>
+                    </ui:repeat>
+                </ul>
+            </h:column>                              
+        </h:dataTable>
+    </h:form>
+</ui:composition>

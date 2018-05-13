@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="multimedya-table">
+        <h:dataTable styleClass="table table-striped table-hover" value="#{multimedyaController.fullMultimedyaList}" var="multimedya">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                <h:commandLink action="#{multimedyaController.updateForm(multimedya)}" value="#{multimedya.id}" >
+                    <f:ajax execute="multimedya-table" render="multimedya-form" />
+                </h:commandLink>
+            </h:column>
+            <h:column>
+                <f:facet name="header">NAME</f:facet>
+                    #{multimedya.name}   
+            </h:column>
+            <h:column>
+                <f:facet name="header">PATH</f:facet>
+                    #{multimedya.path}   
+            </h:column>
+            <h:column>
+                <f:facet name="header">TYPE</f:facet>
+                    #{multimedya.type}   
+            </h:column>
+            <h:column>
+                <f:facet name="header">FILM</f:facet>
+                    #{multimedya.film.name}
+            </h:column> 
+            <h:column>
+                <f:facet name="header" > Document</f:facet>
+                <h:panelGroup rendered="#{multimedya.type.contains('image')}">
+                    <h:graphicImage value="file/#{multimedya.name}" width="50" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{multimedya.type.contains('application')}">
+                    <a href="file/#{multimedya.name}" >#{multimedya.name}</a>
+                </h:panelGroup>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+</ui:composition>

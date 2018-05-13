@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="filmForm">
+        <div class="form-group">
+            <h:inputHidden value="#{filmController.film.id}" />
+            <label for="inputName">Film Name: </label>
+            <h:inputText value="#{filmController.film.name}" styleClass="form-control"/> 
+            <label for="inputGenre">Film Genre: </label>
+            <h:inputText value="#{filmController.film.genre}" styleClass="form-control" />                         
+            <label for="selectFestival">Film Festival: </label>
+            <h:selectOneMenu styleClass="custom-select" id="selectFestival" value="#{filmController.film.festival}" converter="festivalConverter">
+                <f:selectItems value="#{filmController.festivalList}" var="festival" itemValue="#{festival}" itemLabel="#{festival.name}"/>
+            </h:selectOneMenu>
+            <label for="selectDirectors" >Film Directors </label>
+            <h:selectManyMenu value="#{filmController.film.filmDirectors}" style="height: 200px" styleClass="custom-select form-control" converter="directorConverter">
+                <f:selectItems value="#{filmController.directorList}" var="director" itemValue="#{director}" itemLabel="#{director.name}"/> 
+            </h:selectManyMenu>
+            <label for="selectMusics" >Film Musics </label>
+            <h:selectManyMenu value="#{filmController.film.filmMusics}" style="height: 200px" styleClass="custom-select form-control" converter="musicConverter">
+                <f:selectItems value="#{filmController.musicList}" var="music" itemValue="#{music}" itemLabel="#{music.name}"/> 
+            </h:selectManyMenu>
+            <label for="selectActors" >Film Actors </label>
+            <h:selectManyMenu value="#{filmController.film.filmActors}" style="height: 200px" styleClass="custom-select form-control" converter="actorConverter">
+                <f:selectItems value="#{filmController.actorList}" var="actor" itemValue="#{actor}" itemLabel="#{actor.name}"/> 
+            </h:selectManyMenu>
+        </div>
+        <div class="form-group">
+            <h:commandButton rendered="#{filmController.film.id == null}" styleClass="btn btn-primary" value="Create" action="#{filmController.create}" >
+                <f:ajax execute="filmForm" render="filmForm filmTable" />
+            </h:commandButton>
+            <h:commandButton rendered="#{filmController.film.id != null}" styleClass="btn btn-secondary" value="Update" action="#{filmController.update}" >
+                <f:ajax execute="filmForm" render="filmForm filmTable" />
+            </h:commandButton>
+            <h:commandButton rendered="#{filmController.film.id != null}" styleClass="btn btn-danger" value="Delete" action="#{filmController.delete}" >
+                <f:ajax execute="filmForm" render="filmForm filmTable" />
+            </h:commandButton>
+        </div>
+    </h:form>
+</ui:composition>
