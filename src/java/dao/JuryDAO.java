@@ -19,7 +19,7 @@ public class JuryDAO extends AbstractDAO{
 
     public void create(Juries j) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Juries\"(name,festivalid) VALUES ('" + j.getName() + "',"+j.getFestival().getId()+" )");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {

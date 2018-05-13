@@ -117,18 +117,11 @@ public class FestivalDAO extends AbstractDAO{
         }
     }
 
-    public void delete(Festivals f) {
+    public void delete(Festivals fest) {
         try {
             PreparedStatement pst;
-            pst = this.getConnection().prepareStatement("DELETE FROM public.\"Juries\" WHERE festivalid=" + f.getId() + "");
+            pst = this.getConnection().prepareStatement("DELETE FROM public.\"Festivals\" WHERE id=" + fest.getId() + "");
             pst.executeUpdate();
-
-            pst = this.getConnection().prepareStatement("DELETE FROM public.\"Films\" WHERE festivalid=" + f.getId() + "");
-            pst.executeUpdate();
-
-            pst = this.getConnection().prepareStatement("DELETE FROM public.\"Festivals\" WHERE id=" + f.getId() + "");
-            pst.executeUpdate();
-
             pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(FestivalDAO.class.getName()).log(Level.SEVERE, null, ex);

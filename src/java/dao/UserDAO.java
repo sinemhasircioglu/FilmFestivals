@@ -19,7 +19,7 @@ public class UserDAO extends AbstractDAO{
 
     public void create(Users u) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name,gender,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "', '" + u.isGender() + "' ,"+u.getGroup().getId()+ ")");
+            PreparedStatement pst = this.getConnection().prepareStatement("INSERT INTO public.\"Users\"(email,password,name,groupid) VALUES ('" + u.getEmail() + "','" + u.getPassword() + "','" + u.getName() + "' ,"+u.getGroup().getId()+ ")");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
@@ -45,7 +45,6 @@ public class UserDAO extends AbstractDAO{
             while (rs.next()) {
                 Users us = new Users();
                 us.setEmail(rs.getString("email"));
-                us.setGender(rs.getBoolean("gender"));
                 us.setId(rs.getLong("id"));
                 us.setName(rs.getString("name"));
                 us.setPassword(rs.getString("password"));
@@ -69,7 +68,6 @@ public class UserDAO extends AbstractDAO{
             while (rs.next()) {
                 Users us = new Users();
                 us.setEmail(rs.getString("email"));
-                us.setGender(rs.getBoolean("gender"));
                 us.setId(rs.getLong("id"));
                 us.setName(rs.getString("name"));
                 us.setPassword(rs.getString("password"));
@@ -91,7 +89,6 @@ public class UserDAO extends AbstractDAO{
             rs.next();
             user = new Users();
             user.setEmail(rs.getString("email"));
-            user.setGender(rs.getBoolean("gender"));
             user.setId(rs.getLong("id"));
             user.setName(rs.getString("name"));
             user.setPassword(rs.getString("password"));
@@ -119,7 +116,7 @@ public class UserDAO extends AbstractDAO{
 
     public void update(Users u) {
         try {
-            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "', gender='" + u.isGender() + "' , groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
+            PreparedStatement pst = this.getConnection().prepareStatement("UPDATE public.\"Users\" SET email='" + u.getEmail() + "' , password='" + u.getPassword() + "' , name='" + u.getName() + "' , groupid="+u.getGroup().getId()+" WHERE id="+u.getId()+" ");
             pst.executeUpdate();
             pst.close();
         } catch (SQLException ex) {
