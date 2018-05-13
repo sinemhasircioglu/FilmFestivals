@@ -12,7 +12,6 @@ public class Users {
     private String email;
     private String password;
     private String name;
-    private boolean gender;
     private Group group;
 
     public Long getId() {
@@ -46,15 +45,6 @@ public class Users {
     public void setName(String name) {
         this.name = name;
     }
-
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
     public Group getGroup() {
         return group;
     }
@@ -87,5 +77,4 @@ public class Users {
         }
         return true;
     }
-
 }
