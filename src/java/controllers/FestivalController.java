@@ -10,6 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 /**
@@ -55,6 +59,16 @@ public class FestivalController implements Serializable{
         this.clearForm();
     }
     
+    public boolean validateName(FacesContext fc, UIComponent c, Object value) throws ValidatorException {
+        String name = (String) value;
+        if (name.length() < 8 || name.length() > 25) {
+            String msg = "Name 8 ile 25 karakter arasında olmalıdır";
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+        } else {
+            return true;
+        }
+    }
+    
     public void previous() {
         if (this.page == 1) {
             this.page = this.pageCount();
@@ -74,6 +88,7 @@ public class FestivalController implements Serializable{
     public int pageCount() {
         return (int) Math.ceil(this.getFestivalDao().findAll().size() / (double) pageSize);
     }
+    
     public FestivalDAO getFestivalDao() {
         if(this.festivalDao==null)
             this.festivalDao=new FestivalDAO();

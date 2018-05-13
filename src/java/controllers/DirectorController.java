@@ -7,6 +7,10 @@ import entities.Films;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 /**
@@ -48,6 +52,16 @@ public class DirectorController implements Serializable {
     public void delete() {
         this.getDirectorDao().delete(this.director);
         this.clearForm();
+    }
+    
+    public boolean validateName(FacesContext fc, UIComponent c, Object value) throws ValidatorException {
+        String name = (String) value;
+        if (name.length() < 8 || name.length() > 25) {
+            String msg = "Name 8 ile 25 karakter arasında olmalıdır";
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+        } else {
+            return true;
+        }
     }
     
     public void previous() {

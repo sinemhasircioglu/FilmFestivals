@@ -40,7 +40,7 @@ public class FilmController implements Serializable {
     private List<Festivals> festivalList;
     private List<Multimedya> multimedyaList;
     
-     private int page = 1;
+    private int page = 1;
     private int pageSize = 3;
     private List<Films> filmList;
 

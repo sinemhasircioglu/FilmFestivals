@@ -2,20 +2,24 @@ package controllers;
 
 import dao.ActorDAO;
 import dao.FilmDAO;
-import dao.MultimedyaDAO;
 import entities.Actors;
 import entities.Films;
-import entities.Multimedya;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.FacesValidator;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 /**
  *
  * @author sinem
  */
-@Named(value = "actorController")
+@Named
+@FacesValidator("actorController")
 @SessionScoped
 public class ActorController implements Serializable {
 
@@ -25,9 +29,6 @@ public class ActorController implements Serializable {
 
     private FilmDAO filmDao;
     private List<Films> filmList;
-
-    private MultimedyaDAO multimedyaDao;
-    private List<Multimedya> multimedyaList;
 
     private int page = 1;
     private int pageSize = 3;
@@ -51,9 +52,9 @@ public class ActorController implements Serializable {
     public void updateForm(Actors a) {
         this.actor = a;
     }
-    
+
     public void clearForm() {
-        this.actor=new Actors();
+        this.actor = new Actors();
     }
 
     public void previous() {
@@ -74,6 +75,16 @@ public class ActorController implements Serializable {
 
     public int pageCount() {
         return (int) Math.ceil(this.getActorDao().findAll().size() / (double) pageSize);
+    }
+
+    public boolean validateName(FacesContext fc, UIComponent c, Object value) throws ValidatorException {
+        String name = (String) value;
+        if (name.length() < 8 || name.length() > 25) {
+            String msg = "Name 8 ile 25 karakter arasında olmalıdır";
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+        } else {
+            return true;
+        }
     }
 
     public Actors getActor() {
@@ -110,13 +121,6 @@ public class ActorController implements Serializable {
         return filmDao;
     }
 
-    public MultimedyaDAO getMultimedyaDao() {
-        if (this.multimedyaDao == null) {
-            this.multimedyaDao = new MultimedyaDAO();
-        }
-        return multimedyaDao;
-    }
-
     public List<Films> getFilmList() {
         this.filmList = this.getFilmDao().findAll();
         return filmList;
@@ -124,15 +128,6 @@ public class ActorController implements Serializable {
 
     public void setFilmList(List<Films> filmList) {
         this.filmList = filmList;
-    }
-
-    public List<Multimedya> getMultimedyaList() {
-        this.multimedyaList = this.getMultimedyaDao().findAll();
-        return multimedyaList;
-    }
-
-    public void setMultimedyaList(List<Multimedya> multimedyaList) {
-        this.multimedyaList = multimedyaList;
     }
 
     public List<Actors> getFullActorList() {
@@ -159,5 +154,4 @@ public class ActorController implements Serializable {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
-
 }

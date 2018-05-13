@@ -7,6 +7,10 @@ import entities.Users;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 /**
@@ -32,6 +36,11 @@ public class UserController implements Serializable{
         this.clearForm();
     }
     
+    public void register() {
+        this.getUserDao().register(this.user);
+        this.clearForm();
+    }
+    
     public void updateForm(Users u){
         this.user=u;
     }
@@ -48,6 +57,16 @@ public class UserController implements Serializable{
     public void delete() {
         this.getUserDao().delete(this.user);
         this.clearForm();
+    }
+    
+    public boolean validateName(FacesContext fc,UIComponent com, Object value) throws ValidatorException {
+        String name= (String) value;
+        if(name.length()<8 || name.length()>25) {
+            String msg ="Name 8 ile 25 karakter arasında olmalıdır";
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,msg,msg);
+            throw new ValidatorException(m);
+        }
+        return true;
     }
     
     public void previous() {
