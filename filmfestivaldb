@@ -1,0 +1,847 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.1
+-- Dumped by pg_dump version 10.1
+
+-- Started on 2018-08-09 13:26:27
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12924)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2939 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 203 (class 1259 OID 49353)
+-- Name: ActorRates_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "ActorRates_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "ActorRates_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 49355)
+-- Name: Actor_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Actor_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Actor_Id_seq" OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 202 (class 1259 OID 49335)
+-- Name: Actors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Actors" (
+    id integer DEFAULT nextval('"Actor_Id_seq"'::regclass) NOT NULL,
+    name character varying(255) NOT NULL,
+    gender boolean,
+    filmid integer
+);
+
+
+ALTER TABLE "Actors" OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 49380)
+-- Name: Actors_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Actors_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Actors_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 49357)
+-- Name: DirectorRates_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "DirectorRates_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "DirectorRates_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 49384)
+-- Name: Directors_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Directors_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Directors_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 49317)
+-- Name: Directors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Directors" (
+    id integer DEFAULT nextval('"Directors_Id_seq"'::regclass) NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE "Directors" OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 49361)
+-- Name: Festivals_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Festivals_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Festivals_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 49311)
+-- Name: Festivals; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Festivals" (
+    id integer DEFAULT nextval('"Festivals_Id_seq"'::regclass) NOT NULL,
+    name character varying(100) NOT NULL,
+    country character varying(30),
+    description character varying(255),
+    year integer
+);
+
+
+ALTER TABLE "Festivals" OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 49810)
+-- Name: FilmDirector; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "FilmDirector" (
+    id integer NOT NULL,
+    filmid integer,
+    directorid integer
+);
+
+
+ALTER TABLE "FilmDirector" OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 49813)
+-- Name: FilmDirector_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "FilmDirector_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "FilmDirector_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2940 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: FilmDirector_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "FilmDirector_id_seq" OWNED BY "FilmDirector".id;
+
+
+--
+-- TOC entry 207 (class 1259 OID 49363)
+-- Name: FilmJuryRates_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "FilmJuryRates_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "FilmJuryRates_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 49367)
+-- Name: FilmUserRates_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "FilmUserRates_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "FilmUserRates_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 49365)
+-- Name: Films_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Films_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Films_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 49308)
+-- Name: Films; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Films" (
+    id integer DEFAULT nextval('"Films_Id_seq"'::regclass) NOT NULL,
+    name character varying(75) NOT NULL,
+    festivalid integer NOT NULL,
+    genre character varying(30)
+);
+
+
+ALTER TABLE "Films" OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 49717)
+-- Name: Group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Group" (
+    id integer NOT NULL,
+    authority character varying
+);
+
+
+ALTER TABLE "Group" OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 49723)
+-- Name: Group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Group_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Group_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2941 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: Group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Group_id_seq" OWNED BY "Group".id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 49369)
+-- Name: Juries_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Juries_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Juries_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 49326)
+-- Name: Juries; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Juries" (
+    id integer DEFAULT nextval('"Juries_Id_seq"'::regclass) NOT NULL,
+    name character varying(50) NOT NULL,
+    festivalid integer NOT NULL
+);
+
+
+ALTER TABLE "Juries" OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 49833)
+-- Name: Multimedya_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Multimedya_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Multimedya_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 49746)
+-- Name: Multimedya; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Multimedya" (
+    id integer DEFAULT nextval('"Multimedya_id_seq"'::regclass) NOT NULL,
+    filmid integer,
+    name character varying,
+    type character varying,
+    path character varying
+);
+
+
+ALTER TABLE "Multimedya" OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 49371)
+-- Name: MusicRates_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "MusicRates_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "MusicRates_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 198 (class 1259 OID 49314)
+-- Name: Musics; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Musics" (
+    name character varying(50) NOT NULL,
+    filmid integer NOT NULL,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE "Musics" OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 49373)
+-- Name: Musics_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Musics_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Musics_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 57961)
+-- Name: Musics_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Musics_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Musics_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2942 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: Musics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Musics_id_seq" OWNED BY "Musics".id;
+
+
+--
+-- TOC entry 213 (class 1259 OID 49375)
+-- Name: Profiles_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Profiles_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Profiles_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 49836)
+-- Name: Rates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Rates_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Rates_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 49803)
+-- Name: Rates; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Rates" (
+    id integer DEFAULT nextval('"Rates_id_seq"'::regclass) NOT NULL,
+    typeraterid integer,
+    raterid integer,
+    ratedid integer,
+    rate integer,
+    typeratedid integer
+);
+
+
+ALTER TABLE "Rates" OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 49839)
+-- Name: Type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Type_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Type_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 49800)
+-- Name: Type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Type" (
+    id integer DEFAULT nextval('"Type_id_seq"'::regclass) NOT NULL,
+    name character varying(255)
+);
+
+
+ALTER TABLE "Type" OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 49377)
+-- Name: Users_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Users_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Users_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 49332)
+-- Name: Users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Users" (
+    id integer DEFAULT nextval('"Users_Id_seq"'::regclass) NOT NULL,
+    email character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    name character varying,
+    groupid integer
+);
+
+
+ALTER TABLE "Users" OWNER TO postgres;
+
+--
+-- TOC entry 2768 (class 2604 OID 49815)
+-- Name: FilmDirector id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "FilmDirector" ALTER COLUMN id SET DEFAULT nextval('"FilmDirector_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2764 (class 2604 OID 49725)
+-- Name: Group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Group" ALTER COLUMN id SET DEFAULT nextval('"Group_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2759 (class 2604 OID 57963)
+-- Name: Musics id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Musics" ALTER COLUMN id SET DEFAULT nextval('"Musics_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2786 (class 2606 OID 49350)
+-- Name: Actors Actors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Actors"
+    ADD CONSTRAINT "Actors_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2778 (class 2606 OID 49388)
+-- Name: Directors Directors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Directors"
+    ADD CONSTRAINT "Directors_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2773 (class 2606 OID 49395)
+-- Name: Festivals Festivals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Festivals"
+    ADD CONSTRAINT "Festivals_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2799 (class 2606 OID 49832)
+-- Name: FilmDirector FilmDirector_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "FilmDirector"
+    ADD CONSTRAINT "FilmDirector_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2770 (class 2606 OID 49416)
+-- Name: Films Films_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Films"
+    ADD CONSTRAINT "Films_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2789 (class 2606 OID 49730)
+-- Name: Group Group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Group"
+    ADD CONSTRAINT "Group_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2780 (class 2606 OID 49430)
+-- Name: Juries Juries_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Juries"
+    ADD CONSTRAINT "Juries_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2795 (class 2606 OID 49809)
+-- Name: Rates Rates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Rates"
+    ADD CONSTRAINT "Rates_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2793 (class 2606 OID 49807)
+-- Name: Type Type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Type"
+    ADD CONSTRAINT "Type_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2783 (class 2606 OID 49461)
+-- Name: Users Users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Users"
+    ADD CONSTRAINT "Users_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2776 (class 2606 OID 57969)
+-- Name: Musics music-pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Musics"
+    ADD CONSTRAINT "music-pk" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2791 (class 2606 OID 49750)
+-- Name: Multimedya pk_file_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Multimedya"
+    ADD CONSTRAINT pk_file_id PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2787 (class 1259 OID 57928)
+-- Name: fk_filmid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_filmid ON "Actors" USING btree (filmid);
+
+
+--
+-- TOC entry 2800 (class 1259 OID 57940)
+-- Name: fki_fk_directorid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_directorid ON "FilmDirector" USING btree (directorid);
+
+
+--
+-- TOC entry 2771 (class 1259 OID 49579)
+-- Name: fki_fk_festivalid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_festivalid ON "Films" USING btree (festivalid);
+
+
+--
+-- TOC entry 2801 (class 1259 OID 57934)
+-- Name: fki_fk_filmid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_filmid ON "FilmDirector" USING btree (filmid);
+
+
+--
+-- TOC entry 2784 (class 1259 OID 57958)
+-- Name: fki_fk_groupid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_groupid ON "Users" USING btree (groupid);
+
+
+--
+-- TOC entry 2796 (class 1259 OID 57952)
+-- Name: fki_fk_typeratedid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_typeratedid ON "Rates" USING btree (typeratedid);
+
+
+--
+-- TOC entry 2797 (class 1259 OID 57946)
+-- Name: fki_fk_typeraterid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fk_typeraterid ON "Rates" USING btree (typeraterid);
+
+
+--
+-- TOC entry 2781 (class 1259 OID 49596)
+-- Name: fki_fkf_festivalid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fkf_festivalid ON "Juries" USING btree (festivalid);
+
+
+--
+-- TOC entry 2774 (class 1259 OID 49614)
+-- Name: fki_fkm_filmid; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_fkm_filmid ON "Musics" USING btree (filmid);
+
+
+--
+-- TOC entry 2811 (class 2606 OID 57935)
+-- Name: FilmDirector fk_directorid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "FilmDirector"
+    ADD CONSTRAINT fk_directorid FOREIGN KEY (directorid) REFERENCES "Directors"(id);
+
+
+--
+-- TOC entry 2804 (class 2606 OID 49656)
+-- Name: Juries fk_festivalid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Juries"
+    ADD CONSTRAINT fk_festivalid FOREIGN KEY (festivalid) REFERENCES "Festivals"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2802 (class 2606 OID 49676)
+-- Name: Films fk_festivalid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Films"
+    ADD CONSTRAINT fk_festivalid FOREIGN KEY (festivalid) REFERENCES "Festivals"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2803 (class 2606 OID 49701)
+-- Name: Musics fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Musics"
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (filmid) REFERENCES "Films"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2806 (class 2606 OID 57923)
+-- Name: Actors fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Actors"
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (filmid) REFERENCES "Films"(id);
+
+
+--
+-- TOC entry 2810 (class 2606 OID 57929)
+-- Name: FilmDirector fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "FilmDirector"
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (filmid) REFERENCES "Films"(id);
+
+
+--
+-- TOC entry 2807 (class 2606 OID 57971)
+-- Name: Multimedya fk_filmid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Multimedya"
+    ADD CONSTRAINT fk_filmid FOREIGN KEY (filmid) REFERENCES "Films"(id);
+
+
+--
+-- TOC entry 2805 (class 2606 OID 57953)
+-- Name: Users fk_groupid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Users"
+    ADD CONSTRAINT fk_groupid FOREIGN KEY (groupid) REFERENCES "Group"(id);
+
+
+--
+-- TOC entry 2809 (class 2606 OID 57947)
+-- Name: Rates fk_typeratedid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Rates"
+    ADD CONSTRAINT fk_typeratedid FOREIGN KEY (typeratedid) REFERENCES "Type"(id);
+
+
+--
+-- TOC entry 2808 (class 2606 OID 57941)
+-- Name: Rates fk_typeraterid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Rates"
+    ADD CONSTRAINT fk_typeraterid FOREIGN KEY (typeraterid) REFERENCES "Type"(id);
+
+
+-- Completed on 2018-08-09 13:26:27
+
+--
+-- PostgreSQL database dump complete
+--
+
